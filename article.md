@@ -38,7 +38,7 @@ statement. It uses no patient data, is not clinical validation, and does not
 describe a medical device or clinical decision support product.
 
 <figure class="diagram-figure">
-  <img src="{{ '/assets/decision-pga-diagnostic-loop.svg' | relative_url }}" alt="Decision-PGA diagnostic loop from probability observations to geometry metrics, decision state, and workflow action.">
+  <img src="{{ '/assets/decision-pga-diagnostic-loop.svg?v=20260518-web-figure' | relative_url }}" alt="Decision-PGA diagnostic loop from probability observations to geometry metrics, decision state, and workflow action.">
   <figcaption>
     Decision-PGA treats repeated probability-like observations as a cloud, maps
     that cloud through probability-simplex geometry, and returns a diagnostic

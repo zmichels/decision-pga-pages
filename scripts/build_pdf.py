@@ -58,7 +58,11 @@ def table_to_html(lines: list[str]) -> str:
 
 def figure_to_html(block: str) -> str:
     svg_uri = (ROOT / "assets" / "decision-pga-diagnostic-loop.svg").resolve().as_uri()
-    block = re.sub(r"\{\{\s*'/assets/decision-pga-diagnostic-loop.svg'\s*\|\s*relative_url\s*\}\}", svg_uri, block)
+    block = re.sub(
+        r"\{\{\s*'/assets/decision-pga-diagnostic-loop\.svg(?:\?v=[^']*)?'\s*\|\s*relative_url\s*\}\}",
+        svg_uri,
+        block,
+    )
     return block
 
 
