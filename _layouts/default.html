@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title }} | {{ site.title }}</title>
+    <meta name="description" content="{{ page.description | default: site.description }}">
+    <link rel="stylesheet" href="{{ '/assets/styles.css' | relative_url }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="{{ '/' | relative_url }}">Decision-PGA</a>
+      <nav aria-label="Primary navigation">
+        <a href="{{ '/article/' | relative_url }}">Article</a>
+        <a href="{{ '/publication-plan/' | relative_url }}">Plan</a>
+        <a href="{{ '/releases/v0.1-publication/' | relative_url }}">Release Notes</a>
+        <a href="{{ '/assets/decision-pga-healthcare-decision-state-diagnostics.pdf' | relative_url }}">PDF</a>
+      </nav>
+    </header>
+    <main class="page">
+      {{ content }}
+    </main>
+    <footer class="site-footer">
+      <p>
+        Personal technical perspective. No patient data. Not clinical validation.
+        Not an institutional statement or endorsement.
+      </p>
+    </footer>
+  </body>
+</html>
+

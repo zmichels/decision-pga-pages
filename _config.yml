@@ -1,0 +1,10 @@
+title: Decision-PGA Publication
+description: Decision-state diagnostics for healthcare AI workflows.
+url: "https://zmichels.github.io"
+baseurl: "/decision-pga-pages"
+markdown: kramdown
+permalink: pretty
+exclude:
+  - scripts/
+  - README.md
+
