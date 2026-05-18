@@ -42,10 +42,10 @@
     <text x="840" y="169" text-anchor="middle" font-size="13" fill="#5d687a">proceed, clarify,</text>
     <text x="840" y="188" text-anchor="middle" font-size="13" fill="#5d687a">retrieve, replan</text>
   </g>
+  <path d="M 840 220 L 840 318 L 132 318 L 132 232" fill="none" stroke="#b7d1d8" stroke-width="2.5" stroke-dasharray="8 8" stroke-linejoin="round" marker-end="url(#arrow)"/>
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
-    <rect x="293" y="263" width="374" height="48" rx="24" fill="#e8f1f3" stroke="#b7d1d8"/>
-    <text x="480" y="292" text-anchor="middle" font-size="15" font-weight="700" fill="#174a59">Diagnostic state: stable, ambiguous, diffuse, sensitive, or drifting</text>
+    <rect x="238" y="252" width="484" height="46" rx="10" fill="#ffffff" stroke="#b7d1d8"/>
+    <text x="480" y="281" text-anchor="middle" font-size="15" font-weight="700" fill="#174a59">Diagnostic state: stable, ambiguous, diffuse, sensitive, or drifting</text>
   </g>
-  <path d="M 840 220 C 840 318 132 318 132 230" fill="none" stroke="#b7d1d8" stroke-width="2.5" stroke-dasharray="8 8" marker-end="url(#arrow)"/>
-  <text x="480" y="342" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#5d687a">Workflow outcomes can create new observations for the next diagnostic pass.</text>
+  <text x="480" y="345" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#5d687a">Workflow outcomes can create new observations for the next diagnostic pass.</text>
 </svg>
