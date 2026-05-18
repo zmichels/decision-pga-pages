@@ -88,6 +88,15 @@ h1 {
   letter-spacing: 0;
 }
 
+.article-meta {
+  margin: -0.25rem 0 2.25rem;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.45;
+  text-align: left;
+}
+
 h2 {
   margin-top: 2.8rem;
   padding-top: 0.35rem;

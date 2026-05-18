@@ -7,6 +7,11 @@ permalink: /article/
 
 # Decision-PGA and the Need for Decision-State Diagnostics
 
+<p class="article-meta">
+  Zachary D. Michels, PhD<br>
+  May 18, 2026
+</p>
+
 ## A Prototype Vocabulary for Uncertainty Shape in Agentic AI Workflows
 
 AI systems are moving from one-shot answer generation toward workflow
