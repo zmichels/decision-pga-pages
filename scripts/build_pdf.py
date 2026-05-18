@@ -179,6 +179,7 @@ def render_html(article_html: str) -> str:
         background: white;
         font-family: Arial, Helvetica, sans-serif;
         font-size: 10.6pt;
+        font-weight: 400;
         line-height: 1.48;
         text-rendering: optimizeLegibility;
       }}
