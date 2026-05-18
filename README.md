@@ -15,6 +15,7 @@ broader release.
 - `assets/decision-pga-diagnostic-loop.svg` - explanatory diagram
 - `assets/decision-pga-decision-state-diagnostics.pdf` - PDF preview
 - `releases/v0.1-publication.md` - release staging notes
+- `scripts/build_pdf.py` - Chrome-based publication PDF generator
 
 Local prior drafts are kept under `drafts/`, which is intentionally ignored by
 git so removed institutional wording does not re-enter the public repository.
@@ -29,6 +30,15 @@ clinical decision support product.
 
 ```bash
 python3 scripts/validate_publication.py
+```
+
+## Rebuild PDF
+
+The PDF is generated from `article.md` with a local Chrome/Chromium print
+renderer so page breaks and margins are handled by a browser layout engine.
+
+```bash
+python3 scripts/build_pdf.py
 ```
 
 ## License
