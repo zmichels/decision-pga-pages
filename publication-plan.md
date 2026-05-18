@@ -69,7 +69,8 @@ for next week's publication.
 Day 1:
 
 - finalize article title, thesis, and healthcare scope;
-- confirm caveats around Mayo Clinic, patient data, and clinical validation.
+- confirm caveats around institutional endorsement, patient data, and clinical
+  validation.
 
 Day 2:
 
@@ -109,7 +110,8 @@ Day 7:
 - Do not claim clinical validation.
 - Do not include patient data, private workflow details, or protected health
   information.
-- Do not imply Mayo Clinic endorsement or deployment.
+- Do not imply employer, institutional, or healthcare-system endorsement or
+  deployment.
 - Do not describe Decision-PGA as a medical device, diagnosis tool, treatment
   recommendation system, or clinical decision support product.
 - Do state that the code is a research prototype and diagnostic scaffold.

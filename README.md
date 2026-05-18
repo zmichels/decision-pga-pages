@@ -1,7 +1,7 @@
 # Decision-PGA Publication Site
 
 This repository is the public GitHub Pages staging site for the article
-**Decision-State Diagnostics for Healthcare AI**.
+**Decision-PGA and the Need for Decision-State Diagnostics**.
 
 It intentionally separates the public publication surface from the private
 Decision-PGA prototype repository while the code is still being readied for a
@@ -12,8 +12,12 @@ broader release.
 - `index.md` - landing page for GitHub Pages
 - `article.md` - canonical article draft
 - `publication-plan.md` - no-cost one-week publication route
-- `assets/decision-pga-healthcare-decision-state-diagnostics.pdf` - PDF preview
+- `assets/decision-pga-diagnostic-loop.svg` - explanatory diagram
+- `assets/decision-pga-decision-state-diagnostics.pdf` - PDF preview
 - `releases/v0.1-publication.md` - release staging notes
+
+Local prior drafts are kept under `drafts/`, which is intentionally ignored by
+git so removed institutional wording does not re-enter the public repository.
 
 ## Guardrails
 
@@ -31,4 +35,3 @@ python3 scripts/validate_publication.py
 
 Unless otherwise noted, article text and site content are shared under the
 Creative Commons Attribution 4.0 International license. See `LICENSE.md`.
-

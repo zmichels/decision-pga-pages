@@ -145,6 +145,24 @@ li {
   color: #3d321c;
 }
 
+.diagram-figure {
+  margin: 2rem 0;
+}
+
+.diagram-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  background: var(--wash);
+}
+
+.diagram-figure figcaption {
+  margin-top: 0.7rem;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -215,4 +233,3 @@ pre {
     justify-content: flex-start;
   }
 }
-

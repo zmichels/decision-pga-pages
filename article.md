@@ -1,128 +1,116 @@
 ---
 layout: default
-title: Decision-State Diagnostics for Healthcare AI
-description: Why agentic clinical systems need more than confidence scores.
+title: Decision-PGA and the Need for Decision-State Diagnostics
+description: A prototype vocabulary for uncertainty shape in agentic AI workflows.
 permalink: /article/
 ---
 
-# Decision-State Diagnostics for Healthcare AI
+# Decision-PGA and the Need for Decision-State Diagnostics
 
-## Why Agentic Clinical Systems Need More Than Confidence Scores
+## A Prototype Vocabulary for Uncertainty Shape in Agentic AI Workflows
 
-Healthcare AI is moving quickly from passive summarization toward systems that
-retrieve evidence, extract structured data, triage messages, recommend next
-steps, and coordinate work across clinical and administrative settings. That
-shift changes the uncertainty problem. It is no longer enough to ask whether a
-model is confident in a final answer. A healthcare workflow often needs to ask
-what kind of decision state the system is in.
+AI systems are moving from one-shot answer generation toward workflow
+participation. They retrieve evidence, extract data, route tasks, call tools,
+compare options, and recommend next actions. That shift changes the uncertainty
+problem. It is no longer enough to ask whether a model is confident in a final
+answer. A workflow often needs to know what kind of decision state the system is
+in before it acts.
 
 Is the next action stable enough to proceed? Is the uncertainty concentrated
-between two plausible choices? Is it diffuse across many alternatives? Is the
-system sensitive to a boundary condition? Has the decision state shifted over a
-multi-step trajectory?
+between two plausible choices? Is it scattered across many alternatives? Is the
+system sensitive to a small boundary change? Has the decision state drifted over
+a multi-step trajectory?
 
-Decision-PGA is a prototype framework for studying those questions. It analyzes
+Decision-PGA is a prototype method for studying those questions. It analyzes
 clouds of categorical probability vectors on the probability simplex using
-Fisher-Rao/square-root geometry, then maps the resulting dispersion shape into
-states such as stable, binary ambiguity, diffuse uncertainty, boundary
-sensitivity, and regime shift. In plain language: it tries to describe the
-shape of uncertainty around a decision, not merely the size of that
-uncertainty.
+Fisher-Rao/square-root geometry, then describes the shape of the resulting
+uncertainty. The aim is not to replace task evaluation or human review. The aim
+is to make a decision state easier to inspect, compare, and route.
 
-This article is a personal technical perspective, not an institutional statement.
-It is motivated by high-accountability healthcare environments, including
-academic medical centers such as Mayo Clinic, where AI is actively being
-explored for clinical, operational, and research workflows. It does not
-represent Mayo Clinic policy or endorsement. The work described here uses no patient data, is not clinical validation, and is not a medical device or clinical decision support product.
+This article is a personal technical perspective, not an institutional
+statement. It uses no patient data, is not clinical validation, and does not
+describe a medical device or clinical decision support product.
 
-## Why healthcare is a natural stress test
+<figure class="diagram-figure">
+  <img src="{{ '/assets/decision-pga-diagnostic-loop.svg' | relative_url }}" alt="Decision-PGA diagnostic loop from probability observations to geometry metrics, decision state, and workflow action.">
+  <figcaption>
+    Decision-PGA treats repeated probability-like observations as a cloud, maps
+    that cloud through probability-simplex geometry, and returns a diagnostic
+    state that can inform the next workflow action.
+  </figcaption>
+</figure>
 
-Healthcare is full of decisions that are too consequential for a single opaque
-confidence score:
+## The gap between confidence and action
 
-- A patient-message assistant must decide whether to answer, clarify, route to
-  a nurse, route to a physician, retrieve chart context, or escalate.
-- A guideline or policy assistant must decide whether the retrieved evidence is
-  coherent, stale, conflicting, or insufficient.
-- A document-extraction system must decide whether a medication dose, prior
-  authorization field, referral detail, lab value, or discharge instruction is
-  stable enough to enter a structured record.
-- A clinical trial matching workflow must decide whether eligibility criteria
-  are clearly met, clearly unmet, ambiguous, or missing.
-- A coding or revenue-cycle assistant must decide whether extracted evidence
-  supports a code, conflicts with another source, or needs human review.
-- A care-management agent must decide whether to proceed with a plan step,
-  gather more evidence, ask a clarifying question, or replan.
+Many AI tools already expose useful signals: confidence scores, token
+probabilities, calibrated probabilities, retrieval scores, agreement rates,
+human review flags, and task-specific benchmarks. Those signals matter. The gap
+appears when a system must decide what to do next.
 
-These are not all clinical diagnosis tasks. Many are operational or
-administrative. But they share a common structure: a system is choosing among
-candidate actions, labels, sources, or extracted values under uncertainty. That
-is exactly the space where a decision-state diagnostic can be useful.
+Consider a workflow that can answer, ask a clarifying question, retrieve more
+evidence, route to a reviewer, abstain, or replan. Two cases can have similar
+entropy but require different responses. In one case, almost all uncertainty may
+lie between two options. In another, the probability mass may be scattered
+across many actions. A scalar score may say "uncertain" in both cases. A
+decision-state diagnostic tries to preserve more of the shape:
 
-## The regulatory and governance backdrop
+- a tight cloud suggests the candidate decision is stable within the tested
+  context;
+- an elongated two-choice cloud suggests targeted clarification or comparison;
+- a diffuse cloud suggests missing context or insufficient evidence;
+- a boundary-sensitive cloud suggests assumptions or thresholds should be
+  inspected;
+- a drifting cloud suggests segmentation, replanning, or escalation.
 
-Healthcare AI is not an abstract future category. The FDA maintains a public
-resource of AI-enabled medical devices authorized for marketing in the United
-States:
-https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-and-machine-learning-aiml-enabled-medical-devices.
-The FDA also has guidance on Clinical Decision Support software and how some
-software functions fit within or outside device regulation:
+The practical question is modest but important: can we build diagnostic tools
+that help AI workflows choose safer and more useful next actions under
+uncertainty?
+
+## Why healthcare is a useful application lens
+
+Healthcare is not the only place this matters, but it is a useful lens because
+the workflows are high-accountability, document-heavy, and full of decisions
+where "low confidence" is too vague to be operationally helpful.
+
+Examples worth studying include:
+
+- message or request triage, where candidate actions might include answer,
+  clarify, route, schedule, retrieve context, or escalate;
+- policy and guideline retrieval, where sources may be relevant but incomplete,
+  outdated, or in tension;
+- medical document extraction, where uncertainty may reflect two plausible
+  values, source-span ambiguity, table-row confusion, or OCR sensitivity;
+- trial matching and eligibility review, where some criteria are clearly met,
+  some are missing, and some conflict across sources;
+- operational agents that coordinate multi-step work and may drift as they
+  gather context.
+
+These examples should be treated as research and evaluation targets, not as
+claims of deployment readiness. A diagnostic can describe the shape of a
+decision state; it does not determine clinical truth, prove safety, or replace
+domain review.
+
+The broader public context supports caution. The FDA maintains information on
+AI-enabled medical devices and clinical decision support software:
+https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-enabled-medical-devices
+and
 https://www.fda.gov/medical-devices/software-medical-device-samd/clinical-decision-support-software-frequently-asked-questions-faqs.
-
-The ONC HTI-1 final rule adds transparency requirements for predictive
-decision support interventions in certified health IT:
+The ONC HTI-1 rule addresses transparency for predictive decision support
+interventions in certified health IT:
 https://healthit.gov/regulations/hti-rules/hti-1-final-rule/. The WHO has
 published guidance on ethics and governance of AI for health:
 https://www.who.int/publications/i/item/9789240029200.
 
-Healthcare institutions are also visibly building AI capacity. Public Mayo
-Clinic pages describe AI as a major area of medical innovation:
-https://www.mayoclinic.org/giving-to-mayo-clinic/our-priorities/artificial-intelligence.
-The Mayo Clinic Platform page describes work around secure, de-identified
-clinical data and digital health innovation:
-https://www.mayoclinic.org/giving-to-mayo-clinic/our-priorities/mayo-clinic-platform.
-
-These sources point in the same direction: healthcare AI needs transparency,
-validation, governance, and practical control surfaces. Decision-PGA is not a
-regulatory framework. But it aims at a technical gap underneath many governance
-questions: how can an AI workflow expose the state of its own decisions in a
-readable, testable way?
-
-## Confidence is not enough
-
-Suppose a system must choose between several next actions:
-
-- answer now;
-- ask a clarifying question;
-- retrieve more evidence;
-- route to a clinician;
-- abstain;
-- replan.
-
-Two cases can have similar entropy but require different responses. In one
-case, almost all uncertainty may lie between two options, such as answer now
-versus ask one specific clarifying question. In another, the probability mass
-may be scattered across many actions, suggesting that the system does not have
-enough context to know what kind of move is appropriate.
-
-A scalar confidence score may say "uncertain" in both cases. A decision-state
-diagnostic tries to say more:
-
-- tight cloud: proceed may be reasonable;
-- elongated two-label cloud: clarify between top options;
-- diffuse cloud: gather more evidence;
-- boundary-sensitive cloud: inspect assumptions or sensitivity;
-- drifting cloud: segment the task or replan.
-
-This distinction matters in healthcare because the next action is part of the
-safety case. The same uncertainty score should not always produce the same
-workflow response.
+The point is not that Decision-PGA solves these governance questions. It does
+not. The point is that governance and evaluation need inspectable technical
+signals, and decision-state diagnostics may become one useful category of such
+signals.
 
 ## What Decision-PGA does
 
 Decision-PGA starts with repeated probability-like observations over candidate
-labels. Those labels might be actions, extracted field values, evidence
-clusters, review outcomes, or routing decisions. The current prototype then:
+labels. The labels might be actions, extracted field values, evidence clusters,
+routing choices, or review outcomes. The current prototype then:
 
 1. Normalizes probability vectors.
 2. Maps them to the positive unit sphere with the square-root transform.
@@ -130,140 +118,115 @@ clusters, review outcomes, or routing decisions. The current prototype then:
 4. Log-maps samples into a tangent space.
 5. Computes a dispersion tensor and eigensystem.
 6. Reports shape metrics such as total dispersion, PC1 fraction, anisotropy
-   ratio, margin, label-switching, and half-window geodesic drift.
+   ratio, margin, label switching, and half-window geodesic drift.
 
-The practical output is not just a metric table. It is an action-oriented
-diagnostic contract:
+That produces a compact diagnostic contract:
 
 | State | Possible workflow interpretation |
 | --- | --- |
-| Stable | Proceed, assuming the task is within scope. |
-| Binary ambiguity | Ask a targeted question or compare the top candidates. |
-| Diffuse uncertainty | Gather more evidence or broaden context. |
-| Boundary sensitive | Inspect sensitivity, constraints, or assumptions. |
+| Stable | Proceed if the task is in scope and other checks pass. |
+| Binary ambiguity | Ask a targeted question or compare top candidates. |
+| Diffuse uncertainty | Gather evidence or broaden context. |
+| Boundary sensitive | Inspect assumptions, thresholds, or constraints. |
 | Regime shift | Segment the task, replan, or escalate. |
 
-This is still a research scaffold. It must be tested against baselines such as
-entropy, margin, switch rate, agreement, and task-specific accuracy. But the
-core idea is simple: if healthcare AI systems are going to act in workflows,
-they need diagnostics for the state of their decisions.
+This contract is intentionally small. It is meant to be usable by software
+systems, not just by notebooks. A local command-line tool, report generator, or
+agent tool can call the diagnostic and receive a structured result.
 
-## Healthcare use cases worth studying first
+## Why geometry?
 
-### Patient-message and inbox triage
+Probability vectors live on a simplex, not in ordinary unconstrained Euclidean
+space. Decision-PGA uses the square-root transform to place probability vectors
+on the positive unit sphere, where Fisher-Rao geometry becomes easier to work
+with. The result is a way to analyze dispersion directions, not only dispersion
+amount.
 
-Many healthcare workflows begin with a message. The candidate decisions may be
-answer, ask for clarification, route to nurse, route to physician, schedule,
-retrieve chart context, or escalate. Decision-PGA could help distinguish a
-stable routing decision from a two-route ambiguity or diffuse uncertainty.
+That matters because uncertainty can have shape. A cloud stretched along one
+direction is different from a cloud spread broadly across many choices. Two
+states may have similar entropy while suggesting different next actions. PGA
+metrics such as the first principal geodesic fraction and anisotropy ratio are
+attempts to capture that distinction.
 
-### Guideline and policy retrieval
+This is a hypothesis to test, not a settled claim. Decision-PGA should be
+compared against simpler baselines such as entropy, margin, switch rate,
+agreement, calibration, and task-specific accuracy.
 
-RAG-style systems can retrieve evidence that is relevant but not coherent. The
-system may face conflicts between guidelines, local policies, patient-specific
-constraints, or outdated sources. A diagnostic over candidate evidence clusters
+## Application patterns worth testing
+
+### Tool and action selection
+
+Agentic systems frequently choose among tools, routes, or next actions. A
+diagnostic could distinguish stable tool choice from two-tool ambiguity or
+diffuse uncertainty across the action set.
+
+### Retrieval and evidence conflict
+
+Retrieval systems can surface sources that are relevant but not mutually
+consistent. A diagnostic over candidate evidence clusters or answer decisions
 could help decide whether to answer, retrieve more, cite uncertainty, or route
-to human review.
+to review.
 
-### Medical document extraction
+### Document extraction
 
-Healthcare uses enormous volumes of forms, referrals, notes, faxes, PDFs,
-prior authorizations, medication lists, and discharge documents. Extraction
-uncertainty is often not just "low confidence." It may be a two-value dispute,
-a source-span ambiguity, a table-row association problem, or OCR sensitivity.
-Decision-PGA could sit downstream of extraction candidates and help triage the
-kind of review needed.
+Extraction systems often face ambiguous spans, conflicting values, incomplete
+tables, or uncertain entity associations. A decision-state diagnostic could
+separate a stable extracted value from a two-value dispute or a diffuse
+source-association problem.
 
-### Clinical trial matching
+### Multi-step workflow monitoring
 
-Eligibility matching requires structured decisions over inclusion and
-exclusion criteria. Some fields are stable; some are missing; some conflict
-across notes or reports. Decision-state diagnostics could help separate clear
-matches from missing-evidence cases and true ambiguity.
+An agent may begin with one plan, gather new evidence, and gradually move into a
+different decision regime. Sliding-window diagnostics could help identify when a
+trajectory should be segmented, replanned, or escalated.
 
-### Care-management and operational agents
+## What must be proven next
 
-Agentic systems may coordinate multi-step workflows: gather context, check
-criteria, prepare documentation, route work, and monitor follow-up. A final
-confidence score misses drift across the trajectory. Sliding-window
-decision-state diagnostics could help identify when the agent's plan has moved
-into a different regime.
+The next step is not a bigger claim. It is better evidence. Decision-PGA needs
+tests that ask where it adds value over simpler metrics and where it is
+redundant.
 
-## What this does not claim
+Useful near-term tests include:
 
-Decision-PGA is not clinical validation. It is not a substitute for model
-evaluation, usability testing, bias assessment, safety review, regulatory
-analysis, or clinical governance. It does not determine truth. It does not
-decide whether a diagnosis, treatment, or recommendation is correct. It only
-analyzes the shape of probability-like observations over candidate decisions.
+- entropy-matched examples where binary ambiguity and diffuse uncertainty should
+  lead to different actions;
+- fixture suites for tool selection, retrieval conflict, and document
+  extraction;
+- held-out synthetic scenarios with known decision states;
+- comparisons against entropy, margin, agreement, drift, and switch-rate
+  baselines;
+- readable reports that state when PGA does not add value.
 
-That limitation is important. In healthcare, a tool that describes uncertainty
-can still be useful, but only if it is surrounded by validation, human
-oversight, workflow design, and governance appropriate to the use case.
+For healthcare-adjacent examples, the first benchmark should use synthetic or
+public, non-patient fixtures. No clinical or operational claim should depend on
+private data, anecdote, or unreviewed workflow assumptions.
 
-The prototype should therefore be evaluated first on synthetic and
-retrospective fixtures:
+## A practical open-source path
 
-- controlled action-selection examples;
-- document-extraction candidate fixtures;
-- evidence-conflict examples;
-- simulated agent trajectories;
-- benchmark comparisons against entropy and margin.
+The healthiest way to publish this idea is to separate the concept from claims
+of maturity:
 
-Only after those tests should anyone consider prospective workflow studies,
-and only with the appropriate institutional, regulatory, privacy, and ethics
-review.
+- publish the article and invite critique;
+- keep examples synthetic or public;
+- release the prototype only when its docs, license, tests, and limitations are
+  clear;
+- report negative or redundant findings alongside promising ones;
+- treat healthcare examples as evaluation targets that require separate
+  governance before real-world use.
 
-## Why publish now
-
-The timing is useful because the healthcare AI conversation is shifting from
-"can models answer questions?" to "how do AI systems participate in workflows
-responsibly?" That shift requires technical vocabulary for states between
-confidence and failure.
-
-Decision-PGA gives one possible vocabulary:
-
-- stable decisions;
-- structured ambiguity;
-- diffuse uncertainty;
-- sensitivity near a boundary;
-- decision-state drift.
-
-It is not the final answer. It is a proposal for a measurement layer that can
-be made explicit, tested, criticized, and improved.
-
-## A near-term open-source path
-
-The most practical next step is not to overclaim the method. It is to publish a
-clear article, release the prototype openly, and invite technical feedback.
-
-The first open-source package should focus on:
-
-- probability-cloud diagnostics;
-- reproducible synthetic benchmarks;
-- document-extraction and healthcare-flavored examples that use no patient
-  data;
-- local CLI and MCP-style tool interfaces;
-- readable Markdown/PDF reports;
-- clear limitations.
-
-The strongest early healthcare-facing benchmark would not require clinical
-data. It could use synthetic fixtures that mimic common workflow decisions:
-two plausible extracted values, conflicting evidence clusters, routing
-ambiguity, and multi-step drift.
+Decision-PGA may turn out to be most useful as a small observability layer: a
+local diagnostic that helps an AI workflow decide whether to proceed, clarify,
+gather evidence, inspect sensitivity, segment, replan, or escalate.
 
 ## Conclusion
 
-Healthcare AI will need more than confident answers. It will need systems that
-can expose when they are stable, ambiguous, diffuse, sensitive, or drifting.
+As AI systems become more active participants in workflows, they will need ways
+to expose not only what they chose, but what kind of uncertainty surrounded the
+choice. Confidence scores are part of that story, but they are not the whole
+story.
 
-Decision-PGA is a small attempt to formalize that layer. By analyzing
-probability clouds on the simplex, it asks whether the geometry of a decision
-state can help route AI workflows toward better next actions: proceed, clarify,
-gather evidence, inspect sensitivity, segment, replan, or escalate.
-
-That question is worth studying now, before agentic healthcare systems become
-routine infrastructure. The right goal is not to claim that Decision-PGA is
-ready for clinical deployment. The right goal is to make decision-state
-diagnostics visible enough that they can be tested before they are needed at
-scale.
+Decision-PGA proposes a compact way to describe uncertainty shape over candidate
+decisions. It is early, model-neutral, and intentionally modest. The important
+claim is not that the method is ready for high-stakes deployment. The important
+claim is that decision-state diagnostics deserve to be made visible, tested, and
+improved before agentic AI systems become routine infrastructure.

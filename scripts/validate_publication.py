@@ -11,7 +11,8 @@ REQUIRED_FILES = [
     "article.md",
     "publication-plan.md",
     "releases/v0.1-publication.md",
-    "assets/decision-pga-healthcare-decision-state-diagnostics.pdf",
+    "assets/decision-pga-decision-state-diagnostics.pdf",
+    "assets/decision-pga-diagnostic-loop.svg",
     "_config.yml",
     "_layouts/default.html",
     "assets/styles.css",
@@ -20,13 +21,14 @@ REQUIRED_FILES = [
 
 
 ARTICLE_REQUIRED_PHRASES = [
-    "Decision-State Diagnostics for Healthcare AI",
+    "Decision-PGA and the Need for Decision-State Diagnostics",
     "personal technical perspective, not an institutional statement",
     "no patient data",
     "not clinical validation",
-    "not a medical device or clinical decision support product",
-    "Mayo Clinic",
-    "https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-and-machine-learning-aiml-enabled-medical-devices",
+    "does not describe a medical device or clinical decision support product",
+    "Healthcare is not the only place this matters",
+    "Decision-PGA should be compared against simpler baselines",
+    "https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-enabled-medical-devices",
     "https://www.fda.gov/medical-devices/software-medical-device-samd/clinical-decision-support-software-frequently-asked-questions-faqs",
     "https://healthit.gov/regulations/hti-rules/hti-1-final-rule/",
     "https://www.who.int/publications/i/item/9789240029200",
@@ -55,8 +57,18 @@ def main() -> None:
         require(path.stat().st_size > 0, f"Required file is empty: {relative}")
 
     article = (ROOT / "article.md").read_text(encoding="utf-8")
+    normalized_article = " ".join(article.split())
     for phrase in ARTICLE_REQUIRED_PHRASES:
-        require(phrase in article, f"Article missing required phrase/link: {phrase}")
+        require(
+            phrase in article or phrase in normalized_article,
+            f"Article missing required phrase/link: {phrase}",
+        )
+    removed_terms = ["Ma" + "yo", "Ma" + "yo Clinic"]
+    for term in removed_terms:
+        require(term not in article, "Active article should not name removed institutions")
+    placeholder_terms = ["TO" + "DO", "T" + "BD"]
+    for term in placeholder_terms:
+        require(term not in article, "Active article contains placeholder text")
 
     plan = (ROOT / "publication-plan.md").read_text(encoding="utf-8")
     for phrase in PLAN_REQUIRED_PHRASES:
@@ -65,10 +77,13 @@ def main() -> None:
     index = (ROOT / "index.md").read_text(encoding="utf-8")
     require("Read the article" in index, "Landing page missing article call to action")
     require("Download PDF" in index, "Landing page missing PDF call to action")
+    require(
+        "assets/decision-pga-decision-state-diagnostics.pdf" in index,
+        "Landing page should link to the current PDF asset",
+    )
 
     print("publication site validation passed")
 
 
 if __name__ == "__main__":
     main()
-

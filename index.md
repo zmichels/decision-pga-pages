@@ -1,20 +1,20 @@
 ---
 layout: default
-title: Decision-PGA for Healthcare AI
-description: A public staging site for an article about decision-state diagnostics in healthcare AI workflows.
+title: Decision-PGA Publication
+description: A public staging site for an article about decision-state diagnostics in applied AI workflows.
 ---
 
 <section class="hero">
   <div class="kicker">Open publication staging</div>
-  <h1>Decision-state diagnostics for healthcare AI</h1>
+  <h1>Decision-state diagnostics for applied AI workflows</h1>
   <p class="lede">
     A public article and release staging site for Decision-PGA, a prototype
-    framework for describing the shape of uncertainty around agentic AI
-    decisions.
+    framework for describing the shape of uncertainty around AI decisions before
+    a workflow acts.
   </p>
   <div class="actions">
     <a class="button" href="{{ '/article/' | relative_url }}">Read the article</a>
-    <a class="button secondary" href="{{ '/assets/decision-pga-healthcare-decision-state-diagnostics.pdf' | relative_url }}">Download PDF</a>
+    <a class="button secondary" href="{{ '/assets/decision-pga-decision-state-diagnostics.pdf' | relative_url }}">Download PDF</a>
     <a class="button secondary" href="{{ '/publication-plan/' | relative_url }}">Publication plan</a>
   </div>
 </section>
@@ -27,9 +27,10 @@ description: A public staging site for an article about decision-state diagnosti
 
 ## What This Site Is For
 
-This repository is the public publication surface for the healthcare-focused
-Decision-PGA article. The main prototype code can remain private while the
-article, PDF, release notes, and publication plan are reviewed openly.
+This repository is the public publication surface for the Decision-PGA article
+and its decision-state diagnostics framing. The main prototype code can remain
+private while the article, PDF, release notes, and publication plan are reviewed
+openly.
 
 <div class="grid">
   <section class="panel">
@@ -57,8 +58,7 @@ article, PDF, release notes, and publication plan are reviewed openly.
 ## Current Status
 
 - Article draft: ready for review.
-- PDF preview: generated from the current Markdown draft.
+- PDF preview: generated from the current public Markdown draft.
 - Main Decision-PGA code repository: intentionally not linked as public release
   material yet.
 - Suggested next mirrors: Substack or Medium after a quick feedback pass.
-
