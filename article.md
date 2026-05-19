@@ -9,7 +9,7 @@ permalink: /article/
 
 <p class="article-meta">
   Zachary D. Michels, PhD<br>
-  May 18, 2026
+  May 19, 2026
 </p>
 
 ## A Prototype Vocabulary for Uncertainty Shape in Agentic AI Workflows

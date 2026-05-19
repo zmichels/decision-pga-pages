@@ -27,7 +27,7 @@ REQUIRED_FILES = [
 ARTICLE_REQUIRED_PHRASES = [
     "Decision-PGA and the Need for Decision-State Diagnostics",
     "Zachary D. Michels, PhD",
-    "May 18, 2026",
+    "May 19, 2026",
     "personal technical perspective, not an institutional statement",
     "no patient data",
     "not clinical validation",
