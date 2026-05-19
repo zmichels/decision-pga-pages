@@ -33,6 +33,16 @@ describes the shape of the resulting uncertainty. The aim is not to replace task
 evaluation or human review. The aim is to make a decision state easier to
 inspect, compare, and route.
 
+The "PGA" in Decision-PGA refers to Principal Geodesic Analysis: a manifold
+analogue of Principal Component Analysis (PCA). Where PCA summarizes variation
+with linear directions in a Euclidean vector space, PGA summarizes variation
+with geodesic directions on a curved space. The method lineage here comes from
+Fletcher, Lu, Pizer, and Joshi's 2004 paper, "Principal Geodesic Analysis for
+the Study of Nonlinear Statistics of Shape," which introduced PGA for
+statistical shape analysis on nonlinear Riemannian spaces. Decision-PGA borrows
+that mean, log-map, and tangent-dispersion idea, but applies it to a different
+object: probability clouds over candidate decisions.
+
 This article is a personal technical perspective, not an institutional
 statement. It uses no patient data, is not clinical validation, and does not
 describe a medical device or clinical decision support product.
@@ -217,6 +227,12 @@ behavior just as well, Decision-PGA should say so. The value of PGA-style
 analysis depends on whether intrinsic dispersion shape reveals operationally
 useful distinctions that simpler baselines miss.
 
+That grounding matters because Decision-PGA is not inventing "PGA" as a brand
+name. It is adapting an existing geometric-statistics idea to a decision
+diagnostics setting. The adaptation itself still needs evidence: the shape of a
+probability cloud may be useful in some workflow states and unnecessary in
+others.
+
 ## Application patterns worth testing
 
 ### Tool and action selection
@@ -298,6 +314,19 @@ interesting: decision-state diagnostics could eventually connect probability
 clouds, trace telemetry, retrieval behavior, and tool-use trajectories into a
 more general science of agent workflow monitoring. That is the horizon, not the
 starting claim.
+
+## Selected references
+
+- Fletcher, P. T., Lu, C., Pizer, S. M., & Joshi, S. (2004). "Principal
+  Geodesic Analysis for the Study of Nonlinear Statistics of Shape." IEEE
+  Transactions on Medical Imaging, 23(8), 995-1005.
+  https://doi.org/10.1109/TMI.2004.831793
+- Zhang, M., & Fletcher, P. T. (2013). "Probabilistic Principal Geodesic
+  Analysis." Advances in Neural Information Processing Systems 26.
+  https://papers.nips.cc/paper/5133-probabilistic-principal-geodesic-analysis
+- Kuhn, L., Gal, Y., & Farquhar, S. (2023). "Semantic Uncertainty: Linguistic
+  Invariances for Uncertainty Estimation in Natural Language Generation."
+  https://arxiv.org/abs/2302.09664
 
 ## Conclusion
 
