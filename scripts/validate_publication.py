@@ -136,6 +136,13 @@ def main() -> None:
         "not clinical validation",
         "Visual Walkthrough",
         "document-triage-demo-overview.svg",
+        "How to read the matrices",
+        "Each row is one synthetic observation",
+        "The columns always follow this order",
+        "Decision-PGA reads the full matrix",
+        "Try one case as a diagnostic payload",
+        "Generated diagnostic readout",
+        "Probability table columns",
     ]:
         require(phrase in demo, f"Demo page missing required phrase: {phrase}")
 

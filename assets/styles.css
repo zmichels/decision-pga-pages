@@ -206,11 +206,16 @@ li {
 .scenario-card h2 {
   margin-top: 0.4rem;
   padding-top: 0;
+  font-size: clamp(1.35rem, 2.2vw, 1.7rem);
 }
 
-.scenario-card pre {
-  margin-bottom: 0;
-  background: white;
+.scenario-card h3 {
+  margin: 0 0 0.55rem;
+  font-size: 1rem;
+}
+
+.scenario-card p {
+  font-size: 0.98rem;
 }
 
 .state-label {
@@ -219,6 +224,105 @@ li {
   font-weight: 750;
   letter-spacing: 0.03em;
   text-transform: uppercase;
+}
+
+.column-order {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.column-order span {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+  background: var(--wash);
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.column-order strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  margin-right: 0.35rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: white;
+  font-size: 0.8rem;
+}
+
+.scenario-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.85fr);
+  gap: 1rem;
+  align-items: start;
+  margin-top: 1rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+}
+
+.probability-table {
+  min-width: 520px;
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+.probability-table th,
+.probability-table td {
+  padding: 0.45rem 0.5rem;
+  text-align: right;
+}
+
+.probability-table th:first-child,
+.probability-table td:first-child {
+  color: var(--muted);
+  text-align: left;
+}
+
+.diagnostic-readout {
+  border: 1px solid #b7d1d8;
+  border-radius: 8px;
+  padding: 0.85rem;
+  background: #eef8fa;
+}
+
+.diagnostic-readout dl {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.85fr) minmax(0, 1fr);
+  gap: 0.35rem 0.75rem;
+  margin: 0 0 0.85rem;
+}
+
+.diagnostic-readout dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 750;
+}
+
+.diagnostic-readout dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.diagnostic-readout p,
+.microcopy {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.microcopy {
+  margin: 0.55rem 0 0;
 }
 
 table {
@@ -271,5 +375,9 @@ pre {
 
   nav {
     justify-content: flex-start;
+  }
+
+  .scenario-detail-grid {
+    grid-template-columns: 1fr;
   }
 }

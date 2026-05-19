@@ -38,18 +38,75 @@ The fixture is available as JSON:
 Generated diagnostic outputs are also available:
 [examples/document-triage/demo_results.json]({{ '/examples/document-triage/demo_results.json' | relative_url }}).
 
+## How to read the matrices
+
+Each row is one synthetic observation: one repeated model sample, score pass,
+review vote, perturbation, or agent step. The row values are probabilities over
+the possible next workflow actions, and each row sums to 1.00.
+
+The columns always follow this order:
+
+<div class="column-order" aria-label="Probability table columns">
+  <span><strong>1</strong> accept_extraction</span>
+  <span><strong>2</strong> ask_for_clarification</span>
+  <span><strong>3</strong> retrieve_more_context</span>
+  <span><strong>4</strong> flag_for_review</span>
+  <span><strong>5</strong> defer</span>
+</div>
+
+So the row `[0.92, 0.03, 0.02, 0.02, 0.01]` means: this observation puts
+0.92 probability on `accept_extraction`, 0.03 on `ask_for_clarification`, and
+so on. Decision-PGA reads the full matrix as one probability cloud. It does not
+diagnose the rows one at a time.
+
 ## How To Use The Demo
 
 1. Pick a document extraction scenario.
-2. Read the candidate value and the five-action probability cloud.
-3. Ask what a simpler confidence score would tell you.
-4. Compare that with the expected Decision-PGA state.
+2. Read the column-labeled probability table.
+3. Treat the table as the input cloud for Decision-PGA.
+4. Compare the generated diagnostic readout with the simpler visual intuition.
 5. Route the workflow using the mapped action.
 
 In a future code-backed demo, the probability cloud would come from repeated
 model samples, model-score adapters, reviewer votes, rule checks, or an agent
 trace. For this public article companion, the values are intentionally clean so
 the states are easy to see.
+
+## Try one case as a diagnostic payload
+
+This is the shape of the first case as a Decision-PGA diagnostic request. The
+demo page is static, but this is the same structure a CLI, notebook, MCP tool,
+or agent wrapper would pass to the prototype.
+
+```json
+{
+  "source": "probability_cloud",
+  "label": "clean_invoice_due_date",
+  "labels": [
+    "accept_extraction",
+    "ask_for_clarification",
+    "retrieve_more_context",
+    "flag_for_review",
+    "defer"
+  ],
+  "probabilities": [
+    [0.92, 0.03, 0.02, 0.02, 0.01],
+    [0.91, 0.04, 0.02, 0.02, 0.01],
+    [0.94, 0.02, 0.01, 0.02, 0.01]
+  ]
+}
+```
+
+The generated readout for the full eight-row fixture is:
+
+```json
+{
+  "state": "stable",
+  "recommended_action": "proceed",
+  "demo_workflow_action": "accept_extraction",
+  "top_labels": ["accept_extraction", "ask_for_clarification", "flag_for_review"]
+}
+```
 
 ## Scenario Summary
 
@@ -83,12 +140,36 @@ state, and the workflow action.
     <h2>Clean invoice due date</h2>
     <p>
       A vendor invoice shows a clearly labeled due date near the payment total.
-      The synthetic observations form a tight cloud around
-      <code>accept_extraction</code>.
+      The observations form a tight cloud around <code>accept_extraction</code>.
     </p>
-    <pre><code>[0.92, 0.03, 0.02, 0.02, 0.01]
-[0.91, 0.04, 0.02, 0.02, 0.01]
-[0.94, 0.02, 0.01, 0.02, 0.01]</code></pre>
+    <div class="scenario-detail-grid">
+      <div>
+        <h3>Input cloud sample</h3>
+        <div class="table-wrap">
+          <table class="probability-table">
+            <thead>
+              <tr><th>obs</th><th>accept</th><th>clarify</th><th>retrieve</th><th>review</th><th>defer</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>0.92</td><td>0.03</td><td>0.02</td><td>0.02</td><td>0.01</td></tr>
+              <tr><td>2</td><td>0.91</td><td>0.04</td><td>0.02</td><td>0.02</td><td>0.01</td></tr>
+              <tr><td>3</td><td>0.94</td><td>0.02</td><td>0.01</td><td>0.02</td><td>0.01</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="microcopy">Full fixture: 8 rows x 5 action columns.</p>
+      </div>
+      <div class="diagnostic-readout">
+        <h3>Generated diagnostic readout</h3>
+        <dl>
+          <dt>Decision-PGA state</dt><dd>stable</dd>
+          <dt>Demo workflow action</dt><dd><code>accept_extraction</code></dd>
+          <dt>Mean margin</dt><dd>0.90</dd>
+          <dt>Dispersion</dt><dd>0.002</dd>
+        </dl>
+        <p>A tight cloud with a large margin is stable enough for this synthetic workflow to proceed.</p>
+      </div>
+    </div>
   </article>
 
   <article class="scenario-card">
@@ -99,9 +180,34 @@ state, and the workflow action.
       The cloud mostly varies along one axis: accept the extraction, or ask which
       date definition the user intended.
     </p>
-    <pre><code>[0.42, 0.45, 0.05, 0.05, 0.03]
-[0.48, 0.39, 0.05, 0.05, 0.03]
-[0.38, 0.50, 0.04, 0.05, 0.03]</code></pre>
+    <div class="scenario-detail-grid">
+      <div>
+        <h3>Input cloud sample</h3>
+        <div class="table-wrap">
+          <table class="probability-table">
+            <thead>
+              <tr><th>obs</th><th>accept</th><th>clarify</th><th>retrieve</th><th>review</th><th>defer</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>0.42</td><td>0.45</td><td>0.05</td><td>0.05</td><td>0.03</td></tr>
+              <tr><td>2</td><td>0.48</td><td>0.39</td><td>0.05</td><td>0.05</td><td>0.03</td></tr>
+              <tr><td>3</td><td>0.38</td><td>0.50</td><td>0.04</td><td>0.05</td><td>0.03</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="microcopy">The top action flips between accept and clarify.</p>
+      </div>
+      <div class="diagnostic-readout">
+        <h3>Generated diagnostic readout</h3>
+        <dl>
+          <dt>Decision-PGA state</dt><dd>binary_ambiguity</dd>
+          <dt>Demo workflow action</dt><dd><code>ask_for_clarification</code></dd>
+          <dt>PC1 fraction</dt><dd>0.98</dd>
+          <dt>Mean margin</dt><dd>0.01</dd>
+        </dl>
+        <p>Most variation lies along one axis and the leading actions are nearly tied, so the useful move is a targeted clarification.</p>
+      </div>
+    </div>
   </article>
 
   <article class="scenario-card">
@@ -112,9 +218,34 @@ state, and the workflow action.
       only the cover page is available. The probability mass spreads across
       several actions because the workflow lacks evidence.
     </p>
-    <pre><code>[0.18, 0.20, 0.30, 0.18, 0.14]
-[0.22, 0.17, 0.27, 0.19, 0.15]
-[0.16, 0.22, 0.29, 0.17, 0.16]</code></pre>
+    <div class="scenario-detail-grid">
+      <div>
+        <h3>Input cloud sample</h3>
+        <div class="table-wrap">
+          <table class="probability-table">
+            <thead>
+              <tr><th>obs</th><th>accept</th><th>clarify</th><th>retrieve</th><th>review</th><th>defer</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>0.18</td><td>0.20</td><td>0.30</td><td>0.18</td><td>0.14</td></tr>
+              <tr><td>2</td><td>0.22</td><td>0.17</td><td>0.27</td><td>0.19</td><td>0.15</td></tr>
+              <tr><td>3</td><td>0.16</td><td>0.22</td><td>0.29</td><td>0.17</td><td>0.16</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="microcopy">No single action dominates the evidence pattern.</p>
+      </div>
+      <div class="diagnostic-readout">
+        <h3>Generated diagnostic readout</h3>
+        <dl>
+          <dt>Decision-PGA state</dt><dd>diffuse_uncertainty</dd>
+          <dt>Demo workflow action</dt><dd><code>retrieve_more_context</code></dd>
+          <dt>PC1 fraction</dt><dd>0.64</dd>
+          <dt>Mean margin</dt><dd>0.08</dd>
+        </dl>
+        <p>The uncertainty is scattered rather than cleanly two-way, so the demo routes toward more context.</p>
+      </div>
+    </div>
   </article>
 
   <article class="scenario-card">
@@ -125,9 +256,34 @@ state, and the workflow action.
       an internal manual-review threshold. The safest route is not automatic
       rejection; it is targeted review.
     </p>
-    <pre><code>[0.56, 0.03, 0.04, 0.34, 0.03]
-[0.58, 0.03, 0.04, 0.32, 0.03]
-[0.38, 0.03, 0.04, 0.52, 0.03]</code></pre>
+    <div class="scenario-detail-grid">
+      <div>
+        <h3>Input cloud sample</h3>
+        <div class="table-wrap">
+          <table class="probability-table">
+            <thead>
+              <tr><th>obs</th><th>accept</th><th>clarify</th><th>retrieve</th><th>review</th><th>defer</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>0.56</td><td>0.03</td><td>0.04</td><td>0.34</td><td>0.03</td></tr>
+              <tr><td>2</td><td>0.58</td><td>0.03</td><td>0.04</td><td>0.32</td><td>0.03</td></tr>
+              <tr><td>5</td><td>0.38</td><td>0.03</td><td>0.04</td><td>0.52</td><td>0.03</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="microcopy">A small context shift moves the top action from accept to review.</p>
+      </div>
+      <div class="diagnostic-readout">
+        <h3>Generated diagnostic readout</h3>
+        <dl>
+          <dt>Decision-PGA state</dt><dd>boundary_sensitive</dd>
+          <dt>Demo workflow action</dt><dd><code>flag_for_review</code></dd>
+          <dt>PC1 fraction</dt><dd>0.97</dd>
+          <dt>Half-cloud distance</dt><dd>0.19</dd>
+        </dl>
+        <p>The samples move coherently along a low-margin boundary, so the demo chooses targeted review.</p>
+      </div>
+    </div>
   </article>
 
   <article class="scenario-card">
@@ -138,9 +294,34 @@ state, and the workflow action.
       note and a conflicting total. The sequence matters, so the workflow should
       pause and re-evaluate before acting.
     </p>
-    <pre><code>[0.92, 0.03, 0.02, 0.02, 0.01]
-[0.78, 0.06, 0.05, 0.08, 0.03]
-[0.02, 0.02, 0.03, 0.10, 0.83]</code></pre>
+    <div class="scenario-detail-grid">
+      <div>
+        <h3>Input cloud sample</h3>
+        <div class="table-wrap">
+          <table class="probability-table">
+            <thead>
+              <tr><th>obs</th><th>accept</th><th>clarify</th><th>retrieve</th><th>review</th><th>defer</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>0.92</td><td>0.03</td><td>0.02</td><td>0.02</td><td>0.01</td></tr>
+              <tr><td>4</td><td>0.78</td><td>0.06</td><td>0.05</td><td>0.08</td><td>0.03</td></tr>
+              <tr><td>8</td><td>0.02</td><td>0.02</td><td>0.03</td><td>0.10</td><td>0.83</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="microcopy">The early rows favor accept; later rows favor defer.</p>
+      </div>
+      <div class="diagnostic-readout">
+        <h3>Generated diagnostic readout</h3>
+        <dl>
+          <dt>Decision-PGA state</dt><dd>regime_shift</dd>
+          <dt>Demo workflow action</dt><dd><code>defer</code></dd>
+          <dt>Dispersion</dt><dd>0.303</dd>
+          <dt>Half-cloud distance</dt><dd>1.09</dd>
+        </dl>
+        <p>The early and late cloud means are far apart, so the demo pauses instead of treating the packet as one static extraction.</p>
+      </div>
+    </div>
   </article>
 </section>
 
