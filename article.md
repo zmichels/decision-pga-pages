@@ -15,16 +15,18 @@ permalink: /article/
 ## A Prototype Vocabulary for Uncertainty Shape in Agentic AI Workflows
 
 AI systems are moving from one-shot answer generation toward workflow
-participation. They retrieve evidence, extract data, route tasks, call tools,
-compare options, and recommend next actions. That shift changes the uncertainty
-problem. It is no longer enough to ask whether a model is confident in a final
-answer. A workflow often needs to know what kind of decision state the system is
-in before it acts.
+participation. They read documents, retrieve evidence, extract fields, route
+requests, call tools, compare options, and recommend next actions. A person may
+experience that as a very ordinary queue: invoices waiting for review, contract
+dates to extract, messages to triage, or policy questions that need the right
+source. The uncertainty problem changes when an AI system is not merely writing
+an answer, but helping decide what should happen next in that queue.
 
-Is the next action stable enough to proceed? Is the uncertainty concentrated
-between two plausible choices? Is it scattered across many alternatives? Is the
-system sensitive to a small boundary change? Has the decision state drifted over
-a multi-step trajectory?
+In that setting, "low confidence" is too blunt. A workflow needs more practical
+questions. Is the extracted due date stable enough to accept? Is the system
+mostly torn between two plausible contract dates? Is it uncertain because the
+attachment it needs is missing? Did a threshold rule flip the recommended
+action? Did later pages in a packet contradict earlier pages?
 
 Decision-PGA is a deliberately narrow prototype method for studying those
 questions. In its current form, it analyzes clouds of categorical probability
@@ -61,8 +63,13 @@ describe a medical device or clinical decision support product.
 The phrase "decision-state" can easily become too large. In this article, I use
 it in a deliberately narrow and observable sense: a decision-state is a
 probability-like distribution over an explicit set of candidate decisions in a
-specified task context. Those candidate decisions might be actions, labels,
-extracted values, evidence clusters, review outcomes, or routing choices.
+specified task context.
+
+For example, suppose a document workflow is looking at an invoice due date. The
+candidate decisions might be: accept the extracted value, ask the user which
+date they mean, retrieve another attachment, flag the case for review, or defer
+until the packet is re-read. A decision-state is not the whole mind of the
+model. It is the observed pattern of support across those specific options.
 
 That definition is intentionally modest. It does not require access to hidden
 model activations, private reasoning traces, or a full latent representation of
@@ -84,20 +91,30 @@ probabilities, calibrated probabilities, retrieval scores, agreement rates,
 human review flags, and task-specific benchmarks. Those signals matter. The gap
 appears when a system must decide what to do next.
 
-Consider a workflow that can answer, ask a clarifying question, retrieve more
-evidence, route to a reviewer, abstain, or replan. Two cases can have similar
-entropy but require different responses. In one case, almost all uncertainty may
-lie between two options. In another, the probability mass may be scattered
-across many actions. A scalar score may say "uncertain" in both cases. A
-decision-state diagnostic tries to preserve more of the shape:
+Consider two document cases that both look "uncertain" by a scalar score. In
+the first, a contract has two dates on the same page: an effective date and a
+signature date. The system is not generally confused; it is mostly split between
+"accept this date" and "ask which date definition the user intended." In the
+second case, a purchase request refers to an attachment that is not present. The
+system's probability mass is spread across retrieve context, clarify, review,
+and defer because the evidence itself is incomplete.
 
-- a tight cloud suggests the candidate decision is stable within the tested
-  context;
-- an elongated two-choice cloud suggests targeted clarification or comparison;
-- a diffuse cloud suggests missing context or insufficient evidence;
-- a boundary-sensitive cloud suggests assumptions or thresholds should be
-  inspected;
-- a drifting cloud suggests segmentation, replanning, or escalation.
+Those should not feel like the same workflow state. The first case suggests a
+targeted clarification. The second suggests finding the missing source. Entropy
+can warn that both cases are uncertain, but it does not always tell a person
+what kind of uncertainty they are looking at. A decision-state diagnostic tries
+to preserve that shape:
+
+- if repeated observations stay tightly around one action, the extraction may be
+  stable enough to accept;
+- if the cloud stretches mainly between two choices, the next useful action may
+  be a targeted clarification;
+- if the cloud spreads across many choices, the workflow may need more context
+  rather than a yes/no decision;
+- if small changes flip the action near a threshold, the case may deserve
+  review;
+- if the preferred action changes over a sequence of pages or tool calls, the
+  workflow may need to pause, segment, or replan.
 
 The practical question is modest but important: can we build diagnostic tools
 that help AI workflows choose safer and more useful next actions under
@@ -105,20 +122,22 @@ uncertainty?
 
 ## A minimal operational example
 
-Imagine a workflow that samples candidate next actions across repeated runs or
-controlled perturbations. The candidate set is fixed: answer, clarify, retrieve,
-route, abstain, or replan.
+Imagine a document extraction tool that has read the same field several ways:
+through repeated model samples, OCR perturbations, neighboring page context,
+reviewer votes, or a small set of rule checks. Each pass returns support for the
+same five workflow actions: accept the extraction, ask for clarification,
+retrieve more context, flag for review, or defer.
 
-An entropy score can tell us that the workflow is uncertain. Decision-PGA asks a
-more structured follow-up question. Is the probability cloud stretched mostly
-between answer and clarify? Is it diffuse across all six actions? Is it stable
-until one boundary condition changes? Does the preferred action drift from
-retrieve to route over a multi-step trajectory?
+A simple score can tell us that the tool is uncertain. Decision-PGA asks a more
+workable follow-up: what does the uncertainty look like? Is the cloud tightly
+clustered around accept? Is it stretched between accept and clarify? Is it
+diffuse because the source document is incomplete? Is it moving from accept to
+defer as later pages introduce contradictory evidence?
 
-Those cases should not necessarily trigger the same response. A two-action
-ambiguity may call for a targeted clarification. Diffuse uncertainty may call
-for more evidence. Drift may call for segmentation or replanning. This is the
-practical niche Decision-PGA is meant to explore.
+This is the practical niche Decision-PGA is meant to explore. It is not trying
+to make the document extraction decision by itself. It is trying to help a
+workflow choose a better next step when a human would otherwise only see
+"confidence: low."
 
 A small companion page makes this operational shape concrete with synthetic
 document-extraction triage cases:
@@ -191,11 +210,11 @@ That produces a compact diagnostic contract:
 
 | State | Possible workflow interpretation |
 | --- | --- |
-| Stable | Proceed if the task is in scope and other checks pass. |
-| Binary ambiguity | Ask a targeted question or compare top candidates. |
-| Diffuse uncertainty | Gather evidence or broaden context. |
-| Boundary sensitive | Inspect assumptions, thresholds, or constraints. |
-| Regime shift | Segment the task, replan, or escalate. |
+| Stable | The same due date, route, or action keeps winning; proceed if the task is in scope and other checks pass. |
+| Binary ambiguity | The workflow is mostly torn between two options, such as two plausible dates; ask a targeted question or compare top candidates. |
+| Diffuse uncertainty | No action clearly explains the case; gather evidence, retrieve a missing attachment, or broaden context. |
+| Boundary sensitive | A small change flips the action near a threshold; inspect assumptions, thresholds, or constraints. |
+| Regime shift | Later evidence changes the preferred action; segment the task, replan, or escalate. |
 
 This contract is intentionally small. It is meant to be usable by software
 systems, not just by notebooks. A local command-line tool, report generator, or
@@ -238,28 +257,33 @@ others.
 ### Tool and action selection
 
 Agentic systems frequently choose among tools, routes, or next actions. A
-diagnostic could distinguish stable tool choice from two-tool ambiguity or
-diffuse uncertainty across the action set.
+support agent might decide whether to answer directly, search a knowledge base,
+open a ticket, or route to a specialist. A diagnostic could distinguish a stable
+tool choice from a two-tool ambiguity or diffuse uncertainty across the action
+set.
 
 ### Retrieval and evidence conflict
 
 Retrieval systems can surface sources that are relevant but not mutually
-consistent. A diagnostic over candidate evidence clusters or answer decisions
-could help decide whether to answer, retrieve more, cite uncertainty, or route
-to review.
+consistent. In a policy question, one source may look current while another
+contains an exception. A diagnostic over candidate evidence clusters or answer
+decisions could help decide whether to answer, retrieve more, cite uncertainty,
+or route to review.
 
 ### Document extraction
 
 Extraction systems often face ambiguous spans, conflicting values, incomplete
 tables, or uncertain entity associations. A decision-state diagnostic could
-separate a stable extracted value from a two-value dispute or a diffuse
-source-association problem.
+separate a stable extracted value from a two-value dispute, a missing-document
+problem, or a table-row association problem.
 
 ### Multi-step workflow monitoring
 
 An agent may begin with one plan, gather new evidence, and gradually move into a
-different decision regime. Sliding-window diagnostics could help identify when a
-trajectory should be segmented, replanned, or escalated.
+different decision regime. A case may begin as "accept this extraction" and end
+as "defer, because a later page contradicts the earlier value." Sliding-window
+diagnostics could help identify when a trajectory should be segmented,
+replanned, or escalated.
 
 ## What must be proven next
 
