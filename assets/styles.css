@@ -257,7 +257,7 @@ li {
 
 .scenario-detail-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(240px, 0.85fr);
+  grid-template-columns: minmax(0, 1.25fr) minmax(230px, 0.75fr);
   gap: 1rem;
   align-items: start;
   margin-top: 1rem;
@@ -271,14 +271,14 @@ li {
 }
 
 .probability-table {
-  min-width: 520px;
+  min-width: 0;
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
 }
 
 .probability-table th,
 .probability-table td {
-  padding: 0.45rem 0.5rem;
+  padding: 0.42rem 0.35rem;
   text-align: right;
 }
 
@@ -297,7 +297,7 @@ li {
 
 .diagnostic-readout dl {
   display: grid;
-  grid-template-columns: minmax(120px, 0.85fr) minmax(0, 1fr);
+  grid-template-columns: minmax(96px, 0.8fr) minmax(0, 1fr);
   gap: 0.35rem 0.75rem;
   margin: 0 0 0.85rem;
 }

@@ -163,7 +163,7 @@ state, and the workflow action.
         <h3>Generated diagnostic readout</h3>
         <dl>
           <dt>Decision-PGA state</dt><dd>stable</dd>
-          <dt>Demo workflow action</dt><dd><code>accept_extraction</code></dd>
+          <dt>Workflow action</dt><dd><code>accept_extraction</code></dd>
           <dt>Mean margin</dt><dd>0.90</dd>
           <dt>Dispersion</dt><dd>0.002</dd>
         </dl>
@@ -201,7 +201,7 @@ state, and the workflow action.
         <h3>Generated diagnostic readout</h3>
         <dl>
           <dt>Decision-PGA state</dt><dd>binary_ambiguity</dd>
-          <dt>Demo workflow action</dt><dd><code>ask_for_clarification</code></dd>
+          <dt>Workflow action</dt><dd><code>ask_for_clarification</code></dd>
           <dt>PC1 fraction</dt><dd>0.98</dd>
           <dt>Mean margin</dt><dd>0.01</dd>
         </dl>
@@ -239,7 +239,7 @@ state, and the workflow action.
         <h3>Generated diagnostic readout</h3>
         <dl>
           <dt>Decision-PGA state</dt><dd>diffuse_uncertainty</dd>
-          <dt>Demo workflow action</dt><dd><code>retrieve_more_context</code></dd>
+          <dt>Workflow action</dt><dd><code>retrieve_more_context</code></dd>
           <dt>PC1 fraction</dt><dd>0.64</dd>
           <dt>Mean margin</dt><dd>0.08</dd>
         </dl>
@@ -277,7 +277,7 @@ state, and the workflow action.
         <h3>Generated diagnostic readout</h3>
         <dl>
           <dt>Decision-PGA state</dt><dd>boundary_sensitive</dd>
-          <dt>Demo workflow action</dt><dd><code>flag_for_review</code></dd>
+          <dt>Workflow action</dt><dd><code>flag_for_review</code></dd>
           <dt>PC1 fraction</dt><dd>0.97</dd>
           <dt>Half-cloud distance</dt><dd>0.19</dd>
         </dl>
@@ -315,7 +315,7 @@ state, and the workflow action.
         <h3>Generated diagnostic readout</h3>
         <dl>
           <dt>Decision-PGA state</dt><dd>regime_shift</dd>
-          <dt>Demo workflow action</dt><dd><code>defer</code></dd>
+          <dt>Workflow action</dt><dd><code>defer</code></dd>
           <dt>Dispersion</dt><dd>0.303</dd>
           <dt>Half-cloud distance</dt><dd>1.09</dd>
         </dl>
