@@ -98,6 +98,25 @@
     });
   }
 
+  function generateVariationRows(rows, state, counter) {
+    const amplitudeByState = {
+      stable: 0.012,
+      binary_ambiguous: 0.035,
+      diffuse: 0.045,
+      boundary_sensitive: 0.03,
+      drifting: 0.04,
+    };
+    const amplitude = amplitudeByState[state] || 0.025;
+    const varied = rows.map((row, rowIndex) =>
+      row.map((value, columnIndex) => {
+        const wave = Math.sin((counter + 1) * (rowIndex + 2) * (columnIndex + 3));
+        const offset = amplitude * wave;
+        return Math.max(0.01, value + offset);
+      })
+    );
+    return normalizeProbabilities(varied);
+  }
+
   function sqrtEmbed(rows) {
     return rows.map((row) => normalizeVector(row.map((value) => Math.sqrt(value))));
   }
@@ -357,8 +376,8 @@
         input.type = "number";
         input.min = "0";
         input.max = "1";
-        input.step = "0.01";
-        input.value = value.toFixed(2);
+        input.step = "0.001";
+        input.value = value.toFixed(3);
         input.dataset.columnIndex = String(columnIndex);
         td.append(input);
         tr.append(td);
@@ -486,6 +505,7 @@
     const output = root.querySelector("[data-diagnostic-output]");
     const explanation = root.querySelector("[data-human-explanation]");
     const payload = root.querySelector("[data-payload-output]");
+    let variationCounter = 0;
 
     fixture.scenarios.forEach((item) => {
       const option = document.createElement("option");
@@ -496,6 +516,7 @@
 
     function renderScenario(nextScenario) {
       scenario = nextScenario;
+      variationCounter = 0;
       select.value = scenario.id;
       renderScenarioButtons(scenarioButtons, fixture.scenarios, scenario, renderScenario);
       renderContext(context, scenario);
@@ -525,6 +546,11 @@
     root.querySelector("[data-reset-scenario]").addEventListener("click", () => renderScenario(scenario));
     root.querySelector("[data-normalize-rows]").addEventListener("click", () => {
       normalizeEditorRows(root, editor);
+      runDiagnostic();
+    });
+    root.querySelector("[data-generate-variation]").addEventListener("click", () => {
+      variationCounter += 1;
+      renderMatrixEditor(editor, labels, generateVariationRows(scenario.observations, scenario.expected_state, variationCounter));
       runDiagnostic();
     });
 

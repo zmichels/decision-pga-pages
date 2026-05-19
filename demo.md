@@ -159,12 +159,14 @@ boundary cases after you have a feel for the workflow.
         <button type="button" class="button" data-run-diagnostic>Run diagnostic</button>
         <button type="button" class="button secondary" data-reset-scenario>Reset case</button>
         <button type="button" class="button secondary" data-normalize-rows>Normalize rows</button>
+        <button type="button" class="button secondary" data-generate-variation>Generate variation</button>
       </div>
       <p class="microcopy">
         The prebuilt cases are the intended path. Editing is optional: make two
         columns alternate as winners to create ambiguity; spread mass across many
         columns to create missing-context uncertainty; make early and late rows
-        disagree to create drift.
+        disagree to create drift. Use <strong>Generate variation</strong> to
+        explore another synthetic cloud without typing values.
       </p>
     </div>
 
@@ -459,4 +461,4 @@ That is the practical idea behind Decision-PGA as an agent-facing diagnostic:
 turn a cloud of decision evidence into a state description that helps choose the
 next workflow action.
 
-<script src="{{ '/assets/decision-pga-demo-runner.js?v=20260519-live-usability' | relative_url }}" defer></script>
+<script src="{{ '/assets/decision-pga-demo-runner.js?v=20260519-live-variation' | relative_url }}" defer></script>
