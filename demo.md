@@ -110,13 +110,16 @@ The generated readout for the full eight-row fixture is:
 
 ## Scenario Summary
 
-| Scenario | Expected decision state | Suggested workflow action | Demo intuition |
+The summary uses short action labels to stay readable. The full action names
+are listed above in the Action Vocabulary and repeated in the scenario readouts.
+
+| Scenario | Expected decision state | Workflow action | Demo intuition |
 |---|---|---|---|
-| Clean invoice due date | stable | `accept_extraction` | Repeated observations point to the same action. |
-| Two plausible contract dates | binary ambiguous | `ask_for_clarification` | The workflow is mostly split between two choices. |
-| Missing attachment reference | diffuse | `retrieve_more_context` | Uncertainty is scattered because the evidence is incomplete. |
-| Near-threshold total | boundary-sensitive | `flag_for_review` | Small perturbations alter whether to accept or review. |
-| Contradictory revision packet | drifting | `defer` | The preferred action changes over the read sequence. |
+| Clean invoice due date | stable | accept | Repeated observations point to the same action. |
+| Two plausible contract dates | binary ambiguous | clarify | The workflow is mostly split between two choices. |
+| Missing attachment reference | diffuse | retrieve | Uncertainty is scattered because the evidence is incomplete. |
+| Near-threshold total | boundary-sensitive | review | Small perturbations alter whether to accept or review. |
+| Contradictory revision packet | drifting | defer | The preferred action changes over the read sequence. |
 
 ## Visual Walkthrough
 
