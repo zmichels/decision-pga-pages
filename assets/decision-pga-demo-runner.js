@@ -9,6 +9,14 @@
     defer: "defer",
   };
 
+  const ACTION_SHORT_COPY = {
+    accept_extraction: "accept",
+    ask_for_clarification: "clarify",
+    retrieve_more_context: "retrieve",
+    flag_for_review: "review",
+    defer: "defer",
+  };
+
   const STATE_COPY = {
     stable: {
       action: "accept_extraction",
@@ -42,6 +50,14 @@
     },
   };
 
+  const FIXTURE_STATE_COPY = {
+    stable: "stable",
+    binary_ambiguous: "ambiguous",
+    diffuse: "diffuse",
+    boundary_sensitive: "sensitive",
+    drifting: "drifting",
+  };
+
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
   }
@@ -52,6 +68,10 @@
 
   function humanizeAction(label) {
     return ACTION_COPY[label] || label.replaceAll("_", " ");
+  }
+
+  function shortenAction(label) {
+    return ACTION_SHORT_COPY[label] || humanizeAction(label);
   }
 
   function dot(a, b) {
@@ -365,6 +385,30 @@
     container.append(context, value, why);
   }
 
+  function renderScenarioButtons(container, scenarios, activeScenario, onSelect) {
+    container.innerHTML = "";
+    const intro = createElement(
+      "p",
+      "microcopy",
+      "One-click synthetic cases. These are the fastest way to see how the same diagnostic maps different document situations to different workflow actions."
+    );
+    const buttons = createElement("div", "live-demo-case-buttons");
+    scenarios.forEach((item) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "case-button";
+      button.dataset.scenarioId = item.id;
+      button.setAttribute("aria-pressed", String(item.id === activeScenario.id));
+      button.append(
+        createElement("span", null, item.name),
+        createElement("small", null, `${FIXTURE_STATE_COPY[item.expected_state] || item.expected_state} -> ${shortenAction(item.expected_action)}`)
+      );
+      button.addEventListener("click", () => onSelect(item));
+      buttons.append(button);
+    });
+    container.append(intro, buttons);
+  }
+
   function renderOutput(container, labels, diagnostic) {
     const stateInfo = STATE_COPY[diagnostic.state];
     container.innerHTML = "";
@@ -396,7 +440,9 @@
     const barTitle = createElement("p", "microcopy", "Mean next-action probabilities");
     const sequence = createElement("div", "sequence-row");
     diagnostic.topSequence.forEach((label, index) => {
-      sequence.append(createElement("span", "sequence-chip", `${index + 1}: ${humanizeAction(label)}`));
+      const chip = createElement("span", "sequence-chip", `${index + 1}: ${shortenAction(label)}`);
+      chip.title = humanizeAction(label);
+      sequence.append(chip);
     });
 
     container.append(title, stateLine, action, top, note, metrics, barTitle);
@@ -434,6 +480,7 @@
     let scenario = fixture.scenarios[0];
 
     const select = root.querySelector("[data-scenario-select]");
+    const scenarioButtons = root.querySelector("[data-scenario-buttons]");
     const context = root.querySelector("[data-scenario-context]");
     const editor = root.querySelector("[data-matrix-editor]");
     const output = root.querySelector("[data-diagnostic-output]");
@@ -449,6 +496,8 @@
 
     function renderScenario(nextScenario) {
       scenario = nextScenario;
+      select.value = scenario.id;
+      renderScenarioButtons(scenarioButtons, fixture.scenarios, scenario, renderScenario);
       renderContext(context, scenario);
       renderMatrixEditor(editor, labels, scenario.observations);
       runDiagnostic();

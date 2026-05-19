@@ -358,6 +358,15 @@ li {
   color: var(--muted);
 }
 
+.live-demo-steps {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 .live-demo-controls {
   display: grid;
   gap: 0.35rem;
@@ -394,6 +403,58 @@ li {
   color: var(--ink);
 }
 
+.live-demo-case-strip {
+  display: grid;
+  gap: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  padding: 0.9rem;
+}
+
+.live-demo-case-strip p {
+  margin: 0;
+}
+
+.live-demo-case-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 0.55rem;
+}
+
+.case-button {
+  min-height: 4.1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.65rem 0.7rem;
+  background: var(--wash);
+  color: var(--ink);
+  text-align: left;
+}
+
+.case-button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: #e9f6f8;
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.case-button span,
+.case-button small {
+  display: block;
+}
+
+.case-button span {
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.case-button small {
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
 .live-demo-grid {
   grid-template-columns: minmax(0, 1.25fr) minmax(250px, 0.75fr);
   align-items: start;
@@ -403,10 +464,19 @@ li {
 .live-demo-output,
 .live-demo-explain,
 .payload-panel {
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: white;
   padding: 1rem;
+}
+
+.live-demo-output {
+  overflow: hidden;
+}
+
+.live-demo-output code {
+  overflow-wrap: anywhere;
 }
 
 .live-table-wrap {
@@ -500,13 +570,15 @@ li {
   display: grid;
   gap: 0.45rem;
   margin-top: 0.8rem;
+  min-width: 0;
 }
 
 .probability-bar-row {
   display: grid;
-  grid-template-columns: minmax(120px, 0.72fr) minmax(120px, 1fr) 3.3rem;
-  gap: 0.5rem;
+  grid-template-columns: minmax(0, 8.2rem) minmax(3.5rem, 1fr) minmax(2.4rem, max-content);
+  gap: 0.45rem;
   align-items: center;
+  min-width: 0;
 }
 
 .probability-bar-label,
@@ -516,7 +588,19 @@ li {
   font-weight: 700;
 }
 
+.probability-bar-label {
+  min-width: 0;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.probability-bar-value {
+  justify-self: end;
+  font-variant-numeric: tabular-nums;
+}
+
 .probability-bar-track {
+  min-width: 0;
   height: 0.55rem;
   border-radius: 999px;
   background: #dbe1ea;
@@ -530,13 +614,14 @@ li {
 }
 
 .sequence-row {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4.9rem, 1fr));
   gap: 0.35rem;
   margin-top: 0.75rem;
 }
 
 .sequence-chip {
+  display: block;
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 0.15rem 0.45rem;
@@ -544,6 +629,10 @@ li {
   color: var(--muted);
   font-size: 0.76rem;
   font-weight: 750;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .live-demo-explain p {

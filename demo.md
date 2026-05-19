@@ -109,6 +109,10 @@ The easiest way to use it is human-first: read the document situation, look at
 which action columns are winning across rows, then click **Run diagnostic** and
 compare your intuition with the generated state.
 
+You do not need to type numbers to use the demo. Start with the prebuilt
+synthetic cases below. The table is editable only so you can poke at the
+boundary cases after you have a feel for the workflow.
+
 <section
   class="live-demo"
   data-dpga-demo-runner
@@ -121,12 +125,19 @@ compare your intuition with the generated state.
         Pick a synthetic case, edit the action probabilities if you want, and
         watch the diagnostic state update from the probability cloud.
       </p>
+      <ol class="live-demo-steps">
+        <li>Choose a familiar document situation.</li>
+        <li>Notice whether rows agree, split, scatter, or drift.</li>
+        <li>Run the diagnostic and compare the suggested action.</li>
+      </ol>
     </div>
     <div class="live-demo-controls">
       <label for="dpga-scenario-select">Document case</label>
       <select id="dpga-scenario-select" data-scenario-select></select>
     </div>
   </div>
+
+  <div class="live-demo-case-strip" data-scenario-buttons aria-label="Synthetic document case shortcuts"></div>
 
   <div class="live-demo-context" data-scenario-context>
     Loading synthetic document cases...
@@ -135,10 +146,12 @@ compare your intuition with the generated state.
   <div class="live-demo-grid">
     <div class="live-demo-editor">
       <div class="live-demo-section-title">
-        <h4>Editable probability rows</h4>
+        <h4>Probability rows</h4>
         <p>
-          Each row is one pass through the same document situation. The columns
-          are possible next actions, and each row should sum to 1.
+          Each row is one synthetic pass through the same document situation,
+          such as a model sample, page window, prompt variant, or repeated
+          extraction pass. The columns are possible next actions, and each row
+          should sum to 1.
         </p>
       </div>
       <div class="table-wrap live-table-wrap" data-matrix-editor></div>
@@ -148,9 +161,10 @@ compare your intuition with the generated state.
         <button type="button" class="button secondary" data-normalize-rows>Normalize rows</button>
       </div>
       <p class="microcopy">
-        Tip: make two columns alternate as winners to create ambiguity; spread
-        mass across many columns to create missing-context uncertainty; make
-        early and late rows disagree to create drift.
+        The prebuilt cases are the intended path. Editing is optional: make two
+        columns alternate as winners to create ambiguity; spread mass across many
+        columns to create missing-context uncertainty; make early and late rows
+        disagree to create drift.
       </p>
     </div>
 
