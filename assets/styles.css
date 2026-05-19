@@ -380,4 +380,11 @@ pre {
   .scenario-detail-grid {
     grid-template-columns: 1fr;
   }
+
+  .page > table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }

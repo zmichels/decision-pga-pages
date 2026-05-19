@@ -113,7 +113,7 @@ The generated readout for the full eight-row fixture is:
 The summary uses short action labels to stay readable. The full action names
 are listed above in the Action Vocabulary and repeated in the scenario readouts.
 
-| Scenario | Expected decision state | Workflow action | Demo intuition |
+| Case | State | Action | Cue |
 |---|---|---|---|
 | Clean invoice due date | stable | accept | Repeated observations point to the same action. |
 | Two plausible contract dates | binary ambiguous | clarify | The workflow is mostly split between two choices. |
