@@ -14,6 +14,8 @@ REQUIRED_FILES = [
     "demo.md",
     "releases/v0.1-publication.md",
     "examples/document-triage/demo_cases.json",
+    "examples/document-triage/demo_results.json",
+    "assets/document-triage-demo-overview.svg",
     "assets/decision-pga-decision-state-diagnostics.pdf",
     "assets/decision-pga-diagnostic-loop.svg",
     "_config.yml",
@@ -132,6 +134,8 @@ def main() -> None:
         "boundary-sensitive",
         "drifting",
         "not clinical validation",
+        "Visual Walkthrough",
+        "document-triage-demo-overview.svg",
     ]:
         require(phrase in demo, f"Demo page missing required phrase: {phrase}")
 
@@ -152,6 +156,31 @@ def main() -> None:
             require(len(row) == len(DEMO_REQUIRED_ACTIONS), f"Observation width mismatch in {scenario['id']}")
             require(abs(sum(row) - 1.0) < 1e-9, f"Observation probabilities do not sum to 1 in {scenario['id']}")
             require(all(value > 0 for value in row), f"Observation contains nonpositive value in {scenario['id']}")
+
+    results = json.loads((ROOT / "examples/document-triage/demo_results.json").read_text(encoding="utf-8"))
+    require(results["source_fixture"] == "examples/document-triage/demo_cases.json", "Unexpected demo result source")
+    diagnostic_states = [scenario["diagnostic_state"] for scenario in results["scenarios"]]
+    require(
+        diagnostic_states
+        == ["stable", "binary_ambiguity", "diffuse_uncertainty", "boundary_sensitive", "regime_shift"],
+        "Demo diagnostic results should cover the current Decision-PGA states in order",
+    )
+    workflow_actions = [scenario["workflow_action"] for scenario in results["scenarios"]]
+    require(workflow_actions == DEMO_REQUIRED_ACTIONS, "Demo result workflow actions should match the public action vocabulary")
+    for scenario in results["scenarios"]:
+        require("mean_probability" in scenario, f"Demo result missing mean probability: {scenario['id']}")
+        require("metrics" in scenario, f"Demo result missing metrics: {scenario['id']}")
+
+    svg = (ROOT / "assets/document-triage-demo-overview.svg").read_text(encoding="utf-8")
+    for phrase in [
+        "Document extraction triage demo",
+        "Clean invoice due date",
+        "Two plausible contract dates",
+        "Missing attachment reference",
+        "Near-threshold total",
+        "Contradictory revision packet",
+    ]:
+        require(phrase in svg, f"Demo SVG missing required text: {phrase}")
 
     print("publication site validation passed")
 

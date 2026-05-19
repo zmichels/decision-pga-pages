@@ -35,6 +35,9 @@ actions:
 The fixture is available as JSON:
 [examples/document-triage/demo_cases.json]({{ '/examples/document-triage/demo_cases.json' | relative_url }}).
 
+Generated diagnostic outputs are also available:
+[examples/document-triage/demo_results.json]({{ '/examples/document-triage/demo_results.json' | relative_url }}).
+
 ## How To Use The Demo
 
 1. Pick a document extraction scenario.
@@ -57,6 +60,22 @@ the states are easy to see.
 | Missing attachment reference | diffuse | `retrieve_more_context` | Uncertainty is scattered because the evidence is incomplete. |
 | Near-threshold total | boundary-sensitive | `flag_for_review` | Small perturbations alter whether to accept or review. |
 | Contradictory revision packet | drifting | `defer` | The preferred action changes over the read sequence. |
+
+## Visual Walkthrough
+
+The overview below connects each synthetic document situation to the mean action
+probabilities, the top action sequence across observations, the Decision-PGA
+state, and the workflow action.
+
+<figure class="diagram-figure">
+  <img src="{{ '/assets/document-triage-demo-overview.svg?v=20260519-demo-output' | relative_url }}" alt="Document extraction triage visual summary showing synthetic probability clouds mapped to decision states and workflow actions.">
+  <figcaption>
+    Each row uses the same action vocabulary. The colored bar summarizes mean
+    action probability, the small squares show which action was top-ranked in
+    each observation, and the right side shows the diagnostic state mapped to a
+    workflow action.
+  </figcaption>
+</figure>
 
 <section class="scenario-list">
   <article class="scenario-card">
@@ -106,9 +125,9 @@ the states are easy to see.
       an internal manual-review threshold. The safest route is not automatic
       rejection; it is targeted review.
     </p>
-    <pre><code>[0.47, 0.05, 0.06, 0.39, 0.03]
-[0.41, 0.05, 0.07, 0.43, 0.04]
-[0.49, 0.04, 0.06, 0.38, 0.03]</code></pre>
+    <pre><code>[0.56, 0.03, 0.04, 0.34, 0.03]
+[0.58, 0.03, 0.04, 0.32, 0.03]
+[0.38, 0.03, 0.04, 0.52, 0.03]</code></pre>
   </article>
 
   <article class="scenario-card">
@@ -119,9 +138,9 @@ the states are easy to see.
       note and a conflicting total. The sequence matters, so the workflow should
       pause and re-evaluate before acting.
     </p>
-    <pre><code>[0.86, 0.05, 0.03, 0.04, 0.02]
-[0.50, 0.11, 0.12, 0.20, 0.07]
-[0.08, 0.07, 0.18, 0.25, 0.42]</code></pre>
+    <pre><code>[0.92, 0.03, 0.02, 0.02, 0.01]
+[0.78, 0.06, 0.05, 0.08, 0.03]
+[0.02, 0.02, 0.03, 0.10, 0.83]</code></pre>
   </article>
 </section>
 

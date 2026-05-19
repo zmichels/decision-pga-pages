@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1098" viewBox="0 0 1120 1098" role="img" aria-labelledby="title desc">
+<title id="title">Document extraction triage demo</title>
+<desc id="desc">Synthetic Decision-PGA probability-cloud scenarios mapped to diagnostic states and workflow actions.</desc>
+<defs><marker id="arrowhead" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="9" markerHeight="9" orient="auto"><path d="M 0 0 L 12 6 L 0 12 z" fill="#236a7c"/></marker></defs>
+<rect width="1120" height="100%" fill="#f7f8fb"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}.small{font-size:13px;fill:#5d687a}.label{font-size:12px;font-weight:750;letter-spacing:.03em;text-transform:uppercase}.title{font-size:30px;font-weight:800;fill:#172033}.h{font-size:19px;font-weight:800;fill:#172033}.metric{font-size:13px;fill:#172033}.mono{font-family:'SFMono-Regular',Consolas,monospace;font-size:12px}</style>
+<text x="40" y="52" class="title">Document extraction triage demo</text>
+<text x="40" y="82" class="small">Synthetic probability clouds over five workflow actions, diagnosed by the local Decision-PGA prototype.</text>
+<rect x="40" y="98" width="14" height="14" rx="3" fill="#2f7d73"/>
+<text x="60" y="110" class="small">accept</text>
+<rect x="230" y="98" width="14" height="14" rx="3" fill="#d6a437"/>
+<text x="250" y="110" class="small">clarify</text>
+<rect x="420" y="98" width="14" height="14" rx="3" fill="#2f6f9f"/>
+<text x="440" y="110" class="small">retrieve</text>
+<rect x="610" y="98" width="14" height="14" rx="3" fill="#c7643a"/>
+<text x="630" y="110" class="small">review</text>
+<rect x="800" y="98" width="14" height="14" rx="3" fill="#6456a3"/>
+<text x="820" y="110" class="small">defer</text>
+<rect x="28" y="134" width="1064" height="154" rx="12" fill="#ffffff" stroke="#dbe1ea"/>
+<text x="52" y="168" class="h">Clean invoice due date</text>
+<text x="52" y="192" class="small">A vendor invoice shows a clearly labeled due date near the payment total.</text>
+<rect x="52.00" y="216" width="378.84" height="24" fill="#2f7d73"/>
+<rect x="430.84" y="216" width="10.89" height="24" fill="#d6a437"/>
+<rect x="441.72" y="216" width="7.49" height="24" fill="#2f6f9f"/>
+<rect x="449.21" y="216" width="8.68" height="24" fill="#c7643a"/>
+<rect x="457.89" y="216" width="4.11" height="24" fill="#6456a3"/>
+<rect x="52" y="216" width="410" height="24" fill="none" stroke="#172033" stroke-opacity=".18"/>
+<text x="52" y="262" class="small">mean action probabilities</text>
+<rect x="52" y="266" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="74" y="266" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="96" y="266" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="118" y="266" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="140" y="266" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="162" y="266" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="184" y="266" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="206" y="266" width="16" height="16" rx="3" fill="#2f7d73"/>
+<text x="236" y="279" class="small">top action sequence</text>
+<path d="M 506 210 L 584 210" fill="none" stroke="#236a7c" stroke-width="3" marker-end="url(#arrowhead)"/>
+<rect x="610" y="172" width="190" height="78" rx="10" fill="#eef8fa" stroke="#b7d1d8"/>
+<text x="705" y="202" text-anchor="middle" class="label" fill="#174a59">state</text>
+<text x="705" y="228" text-anchor="middle" font-size="18" font-weight="800" fill="#174a59">stable</text>
+<rect x="832" y="172" width="210" height="78" rx="10" fill="#fff8e9" stroke="#e5c878"/>
+<text x="937" y="202" text-anchor="middle" class="label" fill="#6f4f12">workflow action</text>
+<text x="937" y="228" text-anchor="middle" font-size="17" font-weight="800" fill="#6f4f12">accept</text>
+<text x="610" y="271" class="metric">dispersion 0.002  PC1 0.86  margin 0.90  drift 0.03</text>
+<rect x="28" y="312" width="1064" height="154" rx="12" fill="#ffffff" stroke="#dbe1ea"/>
+<text x="52" y="346" class="h">Two plausible contract dates</text>
+<text x="52" y="370" class="small">A contract amendment includes both an effective date and a signature date near the...</text>
+<rect x="52.00" y="394" width="176.79" height="24" fill="#2f7d73"/>
+<rect x="228.79" y="394" width="180.84" height="24" fill="#d6a437"/>
+<rect x="409.64" y="394" width="19.48" height="24" fill="#2f6f9f"/>
+<rect x="429.12" y="394" width="20.55" height="24" fill="#c7643a"/>
+<rect x="449.67" y="394" width="12.33" height="24" fill="#6456a3"/>
+<rect x="52" y="394" width="410" height="24" fill="none" stroke="#172033" stroke-opacity=".18"/>
+<text x="52" y="440" class="small">mean action probabilities</text>
+<rect x="52" y="444" width="16" height="16" rx="3" fill="#d6a437"/>
+<rect x="74" y="444" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="96" y="444" width="16" height="16" rx="3" fill="#d6a437"/>
+<rect x="118" y="444" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="140" y="444" width="16" height="16" rx="3" fill="#d6a437"/>
+<rect x="162" y="444" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="184" y="444" width="16" height="16" rx="3" fill="#d6a437"/>
+<rect x="206" y="444" width="16" height="16" rx="3" fill="#2f7d73"/>
+<text x="236" y="457" class="small">top action sequence</text>
+<path d="M 506 388 L 584 388" fill="none" stroke="#236a7c" stroke-width="3" marker-end="url(#arrowhead)"/>
+<rect x="610" y="350" width="190" height="78" rx="10" fill="#eef8fa" stroke="#b7d1d8"/>
+<text x="705" y="380" text-anchor="middle" class="label" fill="#174a59">state</text>
+<text x="705" y="406" text-anchor="middle" font-size="18" font-weight="800" fill="#174a59">binary ambiguous</text>
+<rect x="832" y="350" width="210" height="78" rx="10" fill="#fff8e9" stroke="#e5c878"/>
+<text x="937" y="380" text-anchor="middle" class="label" fill="#6f4f12">workflow action</text>
+<text x="937" y="406" text-anchor="middle" font-size="17" font-weight="800" fill="#6f4f12">clarify</text>
+<text x="610" y="449" class="metric">dispersion 0.003  PC1 0.98  margin 0.01  drift 0.01</text>
+<rect x="28" y="490" width="1064" height="154" rx="12" fill="#ffffff" stroke="#dbe1ea"/>
+<text x="52" y="524" class="h">Missing attachment reference</text>
+<text x="52" y="548" class="small">A purchase request says the approved amount is listed in an attached quote, but onl...</text>
+<rect x="52.00" y="572" width="79.83" height="24" fill="#2f7d73"/>
+<rect x="131.83" y="572" width="78.35" height="24" fill="#d6a437"/>
+<rect x="210.18" y="572" width="112.78" height="24" fill="#2f6f9f"/>
+<rect x="322.96" y="572" width="76.92" height="24" fill="#c7643a"/>
+<rect x="399.89" y="572" width="62.11" height="24" fill="#6456a3"/>
+<rect x="52" y="572" width="410" height="24" fill="none" stroke="#172033" stroke-opacity=".18"/>
+<text x="52" y="618" class="small">mean action probabilities</text>
+<rect x="52" y="622" width="16" height="16" rx="3" fill="#2f6f9f"/>
+<rect x="74" y="622" width="16" height="16" rx="3" fill="#2f6f9f"/>
+<rect x="96" y="622" width="16" height="16" rx="3" fill="#2f6f9f"/>
+<rect x="118" y="622" width="16" height="16" rx="3" fill="#2f6f9f"/>
+<rect x="140" y="622" width="16" height="16" rx="3" fill="#2f6f9f"/>
+<rect x="162" y="622" width="16" height="16" rx="3" fill="#2f6f9f"/>
+<rect x="184" y="622" width="16" height="16" rx="3" fill="#2f6f9f"/>
+<rect x="206" y="622" width="16" height="16" rx="3" fill="#2f6f9f"/>
+<text x="236" y="635" class="small">top action sequence</text>
+<path d="M 506 566 L 584 566" fill="none" stroke="#236a7c" stroke-width="3" marker-end="url(#arrowhead)"/>
+<rect x="610" y="528" width="190" height="78" rx="10" fill="#eef8fa" stroke="#b7d1d8"/>
+<text x="705" y="558" text-anchor="middle" class="label" fill="#174a59">state</text>
+<text x="705" y="584" text-anchor="middle" font-size="18" font-weight="800" fill="#174a59">diffuse</text>
+<rect x="832" y="528" width="210" height="78" rx="10" fill="#fff8e9" stroke="#e5c878"/>
+<text x="937" y="558" text-anchor="middle" class="label" fill="#6f4f12">workflow action</text>
+<text x="937" y="584" text-anchor="middle" font-size="17" font-weight="800" fill="#6f4f12">retrieve</text>
+<text x="610" y="627" class="metric">dispersion 0.002  PC1 0.64  margin 0.08  drift 0.01</text>
+<rect x="28" y="668" width="1064" height="154" rx="12" fill="#ffffff" stroke="#dbe1ea"/>
+<text x="52" y="702" class="h">Near-threshold total</text>
+<text x="52" y="726" class="small">A reimbursement form total is legible, but the extracted value is close to an inter...</text>
+<rect x="52.00" y="750" width="192.72" height="24" fill="#2f7d73"/>
+<rect x="244.72" y="750" width="13.39" height="24" fill="#d6a437"/>
+<rect x="258.11" y="750" width="17.54" height="24" fill="#2f6f9f"/>
+<rect x="275.65" y="750" width="173.93" height="24" fill="#c7643a"/>
+<rect x="449.59" y="750" width="12.41" height="24" fill="#6456a3"/>
+<rect x="52" y="750" width="410" height="24" fill="none" stroke="#172033" stroke-opacity=".18"/>
+<text x="52" y="796" class="small">mean action probabilities</text>
+<rect x="52" y="800" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="74" y="800" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="96" y="800" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="118" y="800" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="140" y="800" width="16" height="16" rx="3" fill="#c7643a"/>
+<rect x="162" y="800" width="16" height="16" rx="3" fill="#c7643a"/>
+<rect x="184" y="800" width="16" height="16" rx="3" fill="#c7643a"/>
+<rect x="206" y="800" width="16" height="16" rx="3" fill="#c7643a"/>
+<text x="236" y="813" class="small">top action sequence</text>
+<path d="M 506 744 L 584 744" fill="none" stroke="#236a7c" stroke-width="3" marker-end="url(#arrowhead)"/>
+<rect x="610" y="706" width="190" height="78" rx="10" fill="#eef8fa" stroke="#b7d1d8"/>
+<text x="705" y="736" text-anchor="middle" class="label" fill="#174a59">state</text>
+<text x="705" y="762" text-anchor="middle" font-size="18" font-weight="800" fill="#174a59">boundary-sensitive</text>
+<rect x="832" y="706" width="210" height="78" rx="10" fill="#fff8e9" stroke="#e5c878"/>
+<text x="937" y="736" text-anchor="middle" class="label" fill="#6f4f12">workflow action</text>
+<text x="937" y="762" text-anchor="middle" font-size="17" font-weight="800" fill="#6f4f12">review</text>
+<text x="610" y="805" class="metric">dispersion 0.009  PC1 0.97  margin 0.05  drift 0.19</text>
+<rect x="28" y="846" width="1064" height="154" rx="12" fill="#ffffff" stroke="#dbe1ea"/>
+<text x="52" y="880" class="h">Contradictory revision packet</text>
+<text x="52" y="904" class="small">A multi-page packet starts with a clean field value, then later pages introduce a r...</text>
+<rect x="52.00" y="928" width="179.94" height="24" fill="#2f7d73"/>
+<rect x="231.94" y="928" width="20.59" height="24" fill="#d6a437"/>
+<rect x="252.53" y="928" width="21.96" height="24" fill="#2f6f9f"/>
+<rect x="274.49" y="928" width="46.32" height="24" fill="#c7643a"/>
+<rect x="320.81" y="928" width="141.19" height="24" fill="#6456a3"/>
+<rect x="52" y="928" width="410" height="24" fill="none" stroke="#172033" stroke-opacity=".18"/>
+<text x="52" y="974" class="small">mean action probabilities</text>
+<rect x="52" y="978" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="74" y="978" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="96" y="978" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="118" y="978" width="16" height="16" rx="3" fill="#2f7d73"/>
+<rect x="140" y="978" width="16" height="16" rx="3" fill="#6456a3"/>
+<rect x="162" y="978" width="16" height="16" rx="3" fill="#6456a3"/>
+<rect x="184" y="978" width="16" height="16" rx="3" fill="#6456a3"/>
+<rect x="206" y="978" width="16" height="16" rx="3" fill="#6456a3"/>
+<text x="236" y="991" class="small">top action sequence</text>
+<path d="M 506 922 L 584 922" fill="none" stroke="#236a7c" stroke-width="3" marker-end="url(#arrowhead)"/>
+<rect x="610" y="884" width="190" height="78" rx="10" fill="#eef8fa" stroke="#b7d1d8"/>
+<text x="705" y="914" text-anchor="middle" class="label" fill="#174a59">state</text>
+<text x="705" y="940" text-anchor="middle" font-size="18" font-weight="800" fill="#174a59">drifting</text>
+<rect x="832" y="884" width="210" height="78" rx="10" fill="#fff8e9" stroke="#e5c878"/>
+<text x="937" y="914" text-anchor="middle" class="label" fill="#6f4f12">workflow action</text>
+<text x="937" y="940" text-anchor="middle" font-size="17" font-weight="800" fill="#6f4f12">defer</text>
+<text x="610" y="983" class="metric">dispersion 0.303  PC1 0.99  margin 0.09  drift 1.09</text>
+<text x="40" y="1056" class="small">Read left to right: synthetic document situation -> mean action probabilities -> Decision-PGA state -> workflow action.</text>
+<text x="40" y="1078" class="small">This is an illustrative diagnostic walkthrough, not a document parser, benchmark, or clinical validation.</text>
+</svg>

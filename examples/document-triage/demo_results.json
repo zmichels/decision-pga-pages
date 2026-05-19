@@ -1,0 +1,219 @@
+{
+  "schema_version": "decision-pga-document-triage-results-v1",
+  "source_fixture": "examples/document-triage/demo_cases.json",
+  "method": "Generated with the local Decision-PGA diagnostic prototype.",
+  "labels": [
+    "accept_extraction",
+    "ask_for_clarification",
+    "retrieve_more_context",
+    "flag_for_review",
+    "defer"
+  ],
+  "scenarios": [
+    {
+      "id": "clean_invoice_due_date",
+      "name": "Clean invoice due date",
+      "document_context": "A vendor invoice shows a clearly labeled due date near the payment total.",
+      "candidate_value": "Due date = 2026-06-15",
+      "diagnostic_state": "stable",
+      "display_state": "stable",
+      "diagnostic_action": "proceed",
+      "workflow_action": "accept_extraction",
+      "expected_action": "accept_extraction",
+      "top_labels": [
+        "accept_extraction",
+        "ask_for_clarification",
+        "flag_for_review"
+      ],
+      "mean_probability": [
+        0.923993,
+        0.02655,
+        0.018266,
+        0.021175,
+        0.010017
+      ],
+      "top_action_sequence": [
+        "accept_extraction",
+        "accept_extraction",
+        "accept_extraction",
+        "accept_extraction",
+        "accept_extraction",
+        "accept_extraction",
+        "accept_extraction",
+        "accept_extraction"
+      ],
+      "metrics": {
+        "total_dispersion": 0.001686,
+        "pc1_fraction": 0.86125,
+        "mean_margin": 0.897443,
+        "half_geodesic_distance": 0.034059,
+        "top_label_switch_rate": 0.0
+      },
+      "rationale": "The cloud is tight and the mean decision margin is high."
+    },
+    {
+      "id": "ambiguous_contract_date",
+      "name": "Two plausible contract dates",
+      "document_context": "A contract amendment includes both an effective date and a signature date near the same paragraph.",
+      "candidate_value": "Date field = effective date vs signature date",
+      "diagnostic_state": "binary_ambiguity",
+      "display_state": "binary ambiguous",
+      "diagnostic_action": "clarify_between_top_labels",
+      "workflow_action": "ask_for_clarification",
+      "expected_action": "ask_for_clarification",
+      "top_labels": [
+        "ask_for_clarification",
+        "accept_extraction",
+        "flag_for_review"
+      ],
+      "mean_probability": [
+        0.431206,
+        0.44108,
+        0.047513,
+        0.050125,
+        0.030075
+      ],
+      "top_action_sequence": [
+        "ask_for_clarification",
+        "accept_extraction",
+        "ask_for_clarification",
+        "accept_extraction",
+        "ask_for_clarification",
+        "accept_extraction",
+        "ask_for_clarification",
+        "accept_extraction"
+      ],
+      "metrics": {
+        "total_dispersion": 0.002501,
+        "pc1_fraction": 0.982815,
+        "mean_margin": 0.009875,
+        "half_geodesic_distance": 0.008028,
+        "top_label_switch_rate": 1.0
+      },
+      "rationale": "Most dispersion lies along one axis and the leading mean labels are close."
+    },
+    {
+      "id": "missing_attachment_reference",
+      "name": "Missing attachment reference",
+      "document_context": "A purchase request says the approved amount is listed in an attached quote, but only the request cover page is available.",
+      "candidate_value": "Approved amount = value referenced in missing attachment",
+      "diagnostic_state": "diffuse_uncertainty",
+      "display_state": "diffuse",
+      "diagnostic_action": "gather_more_evidence",
+      "workflow_action": "retrieve_more_context",
+      "expected_action": "retrieve_more_context",
+      "top_labels": [
+        "retrieve_more_context",
+        "accept_extraction",
+        "ask_for_clarification"
+      ],
+      "mean_probability": [
+        0.194715,
+        0.191093,
+        0.275075,
+        0.187621,
+        0.151496
+      ],
+      "top_action_sequence": [
+        "retrieve_more_context",
+        "retrieve_more_context",
+        "retrieve_more_context",
+        "retrieve_more_context",
+        "retrieve_more_context",
+        "retrieve_more_context",
+        "retrieve_more_context",
+        "retrieve_more_context"
+      ],
+      "metrics": {
+        "total_dispersion": 0.002017,
+        "pc1_fraction": 0.638706,
+        "mean_margin": 0.080361,
+        "half_geodesic_distance": 0.008928,
+        "top_label_switch_rate": 0.0
+      },
+      "rationale": "The cloud does not meet a stronger stable or structured-ambiguity pattern."
+    },
+    {
+      "id": "near_threshold_total",
+      "name": "Near-threshold total",
+      "document_context": "A reimbursement form total is legible, but the extracted value is close to an internal manual-review threshold.",
+      "candidate_value": "Total = 5000.00",
+      "diagnostic_state": "boundary_sensitive",
+      "display_state": "boundary-sensitive",
+      "diagnostic_action": "inspect_sensitivity",
+      "workflow_action": "flag_for_review",
+      "expected_action": "flag_for_review",
+      "top_labels": [
+        "accept_extraction",
+        "flag_for_review",
+        "retrieve_more_context"
+      ],
+      "mean_probability": [
+        0.470049,
+        0.032663,
+        0.042785,
+        0.424227,
+        0.030276
+      ],
+      "top_action_sequence": [
+        "accept_extraction",
+        "accept_extraction",
+        "accept_extraction",
+        "accept_extraction",
+        "flag_for_review",
+        "flag_for_review",
+        "flag_for_review",
+        "flag_for_review"
+      ],
+      "metrics": {
+        "total_dispersion": 0.009139,
+        "pc1_fraction": 0.973308,
+        "mean_margin": 0.045822,
+        "half_geodesic_distance": 0.186488,
+        "top_label_switch_rate": 0.142857
+      },
+      "rationale": "Samples move coherently along a low-margin decision boundary."
+    },
+    {
+      "id": "contradictory_revision_packet",
+      "name": "Contradictory revision packet",
+      "document_context": "A multi-page packet starts with a clean field value, then later pages introduce a revision note and conflicting total.",
+      "candidate_value": "Approved amount = original total vs revised total",
+      "diagnostic_state": "regime_shift",
+      "display_state": "drifting",
+      "diagnostic_action": "segment_or_replan",
+      "workflow_action": "defer",
+      "expected_action": "defer",
+      "top_labels": [
+        "accept_extraction",
+        "defer",
+        "flag_for_review"
+      ],
+      "mean_probability": [
+        0.438884,
+        0.050215,
+        0.053551,
+        0.11298,
+        0.34437
+      ],
+      "top_action_sequence": [
+        "accept_extraction",
+        "accept_extraction",
+        "accept_extraction",
+        "accept_extraction",
+        "defer",
+        "defer",
+        "defer",
+        "defer"
+      ],
+      "metrics": {
+        "total_dispersion": 0.303027,
+        "pc1_fraction": 0.989476,
+        "mean_margin": 0.094514,
+        "half_geodesic_distance": 1.08924,
+        "top_label_switch_rate": 0.142857
+      },
+      "rationale": "Early and late cloud means are far apart while samples remain locally decisive."
+    }
+  ]
+}

@@ -13,6 +13,8 @@ broader release.
 - `article.md` - canonical article draft
 - `demo.md` - synthetic document extraction triage demo
 - `examples/document-triage/demo_cases.json` - demo probability-cloud fixture
+- `examples/document-triage/demo_results.json` - generated diagnostic outputs
+- `assets/document-triage-demo-overview.svg` - visual demo summary
 - `publication-plan.md` - no-cost one-week publication route
 - `assets/decision-pga-diagnostic-loop.svg` - explanatory diagram
 - `assets/decision-pga-decision-state-diagnostics.pdf` - PDF preview
@@ -32,6 +34,15 @@ clinical decision support product.
 
 ```bash
 python3 scripts/validate_publication.py
+```
+
+## Rebuild Demo Outputs
+
+The demo outputs are generated from `examples/document-triage/demo_cases.json`
+with the local Decision-PGA prototype.
+
+```bash
+python3 scripts/build_demo_outputs.py
 ```
 
 ## Rebuild PDF
