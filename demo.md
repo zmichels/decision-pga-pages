@@ -459,4 +459,4 @@ That is the practical idea behind Decision-PGA as an agent-facing diagnostic:
 turn a cloud of decision evidence into a state description that helps choose the
 next workflow action.
 
-<script src="{{ '/assets/decision-pga-demo-runner.js?v=20260519-live-runner' | relative_url }}" defer></script>
+<script src="{{ '/assets/decision-pga-demo-runner.js?v=20260519-live-usability' | relative_url }}" defer></script>
