@@ -1,8 +1,7 @@
 # License
 
-Unless otherwise noted, article text, release notes, and site content in this
-repository are licensed under the Creative Commons Attribution 4.0
-International license.
+Unless otherwise noted, article text and site content in this repository are
+licensed under the Creative Commons Attribution 4.0 International license.
 
 License summary:
 
@@ -13,4 +12,3 @@ License summary:
 Canonical license text:
 
 https://creativecommons.org/licenses/by/4.0/
-

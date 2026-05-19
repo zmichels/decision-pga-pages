@@ -58,7 +58,7 @@ def main() -> int:
         from decision_pga.diagnostics import diagnose_probability_cloud
     except ImportError as exc:
         raise SystemExit(
-            "Could not import decision_pga. Run this from the local publication "
+            "Could not import decision_pga. Run this from the local site "
             "workspace where /Users/Z/Documents/Decision-PGA is available, or "
             "install decision-pga into the active Python environment."
         ) from exc

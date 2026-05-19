@@ -38,6 +38,9 @@ The fixture is available as JSON:
 Generated diagnostic outputs are also available:
 [examples/document-triage/demo_results.json]({{ '/examples/document-triage/demo_results.json' | relative_url }}).
 
+The open-source prototype repository is available at
+[github.com/zmichels/Decision-PGA](https://github.com/zmichels/Decision-PGA).
+
 ## How to read the matrices
 
 Each row is one synthetic observation: one repeated model sample, score pass,
@@ -67,7 +70,7 @@ diagnose the rows one at a time.
 4. Compare the generated diagnostic readout with the simpler visual intuition.
 5. Route the workflow using the mapped action.
 
-In a future code-backed demo, the probability cloud would come from repeated
+In a real code-backed workflow, the probability cloud could come from repeated
 model samples, model-score adapters, reviewer votes, rule checks, or an agent
 trace. For this public article companion, the values are intentionally clean so
 the states are easy to see.

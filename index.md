@@ -1,22 +1,22 @@
 ---
 layout: default
-title: Decision-PGA Publication
-description: A public staging site for an article about decision-state diagnostics in applied AI workflows.
+title: Decision-PGA
+description: Article, demo, and open-source code for decision-state diagnostics in applied AI workflows.
 ---
 
 <section class="hero">
-  <div class="kicker">Open publication staging</div>
+  <div class="kicker">Open-source diagnostic prototype</div>
   <h1>Decision-state diagnostics for applied AI workflows</h1>
   <p class="lede">
-    A public article and release staging site for Decision-PGA, a prototype
-    framework for describing the shape of uncertainty around AI decisions before
-    a workflow acts.
+    Decision-PGA is a prototype framework for describing the shape of
+    uncertainty around AI decisions before a workflow acts. This site gathers
+    the article, a synthetic demo, the public code repository, and a PDF copy.
   </p>
   <div class="actions">
     <a class="button" href="{{ '/article/' | relative_url }}">Read the article</a>
     <a class="button secondary" href="{{ '/demo/' | relative_url }}">Try the demo</a>
+    <a class="button secondary" href="https://github.com/zmichels/Decision-PGA">View code</a>
     <a class="button secondary" href="{{ '/assets/decision-pga-decision-state-diagnostics.pdf' | relative_url }}">Download PDF</a>
-    <a class="button secondary" href="{{ '/publication-plan/' | relative_url }}">Publication plan</a>
   </div>
 </section>
 
@@ -28,46 +28,44 @@ description: A public staging site for an article about decision-state diagnosti
 
 ## What This Site Is For
 
-This repository is the public publication surface for the Decision-PGA article
-and its decision-state diagnostics framing. The main prototype code can remain
-private while the article, PDF, release notes, and publication plan are reviewed
-openly.
+This site is a compact public entry point for Decision-PGA: the framing article,
+the synthetic document-triage demo, the open-source prototype repository, and a
+PDF version of the article.
 
 <div class="grid">
   <section class="panel">
-    <h3>Canonical article</h3>
+    <h3>Article</h3>
     <p>
-      The Markdown article is the source of truth for early review and public
-      linking.
-    </p>
-  </section>
-  <section class="panel">
-    <h3>Shareable PDF</h3>
-    <p>
-      The PDF is included for readers who prefer a stable document-style copy.
+      The article explains why workflow-oriented AI systems need diagnostics
+      for the shape of decision uncertainty.
     </p>
   </section>
   <section class="panel">
     <h3>Synthetic demo</h3>
     <p>
-      A document extraction triage fixture shows how stable, ambiguous,
-      diffuse, boundary-sensitive, and drifting decision states can map to
-      workflow actions.
+      A document extraction triage fixture shows how probability clouds can map
+      to workflow actions.
     </p>
   </section>
   <section class="panel">
-    <h3>Release staging</h3>
+    <h3>Public code</h3>
     <p>
-      Release notes track what is ready now and what should wait for the main
-      code repository.
+      The initial Decision-PGA prototype is available at
+      <a href="https://github.com/zmichels/Decision-PGA">github.com/zmichels/Decision-PGA</a>.
+    </p>
+  </section>
+  <section class="panel">
+    <h3>PDF</h3>
+    <p>
+      A browser-rendered PDF is included for readers who prefer a document-style
+      copy of the article.
     </p>
   </section>
 </div>
 
 ## Current Status
 
-- Article draft: ready for review.
-- PDF preview: generated from the current public Markdown draft.
-- Main Decision-PGA code repository: intentionally not linked as public release
-  material yet.
-- Suggested next mirrors: Substack or Medium after a quick feedback pass.
+- Article and PDF: available for public reading and critique.
+- Demo: synthetic, non-clinical, and designed to build intuition.
+- Code: public initial research release at
+  <https://github.com/zmichels/Decision-PGA>.

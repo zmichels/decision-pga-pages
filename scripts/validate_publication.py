@@ -10,9 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_FILES = [
     "index.md",
     "article.md",
-    "publication-plan.md",
     "demo.md",
-    "releases/v0.1-publication.md",
     "examples/document-triage/demo_cases.json",
     "examples/document-triage/demo_results.json",
     "assets/document-triage-demo-overview.svg",
@@ -45,16 +43,6 @@ ARTICLE_REQUIRED_PHRASES = [
     "https://www.fda.gov/medical-devices/software-medical-device-samd/clinical-decision-support-software-frequently-asked-questions-faqs",
     "https://healthit.gov/regulations/hti-rules/hti-1-final-rule/",
     "https://www.who.int/publications/i/item/9789240029200",
-]
-
-
-PLAN_REQUIRED_PHRASES = [
-    "One-week publication path",
-    "GitHub Pages or repository Markdown",
-    "Substack or Medium",
-    "OSF Preprints",
-    "Zenodo",
-    "arXiv",
 ]
 
 
@@ -95,6 +83,7 @@ def main() -> None:
             f"Article missing required phrase/link: {phrase}",
         )
     require("Document Extraction Triage Demo" in article, "Article should link to the demo page")
+    require("https://github.com/zmichels/Decision-PGA" in article, "Article should link to the public code repo")
     removed_terms = ["Ma" + "yo", "Ma" + "yo Clinic"]
     for term in removed_terms:
         require(term not in article, "Active article should not name removed institutions")
@@ -102,13 +91,11 @@ def main() -> None:
     for term in placeholder_terms:
         require(term not in article, "Active article contains placeholder text")
 
-    plan = (ROOT / "publication-plan.md").read_text(encoding="utf-8")
-    for phrase in PLAN_REQUIRED_PHRASES:
-        require(phrase in plan, f"Publication plan missing required phrase: {phrase}")
-
     index = (ROOT / "index.md").read_text(encoding="utf-8")
     require("Read the article" in index, "Landing page missing article call to action")
     require("Try the demo" in index, "Landing page missing demo call to action")
+    require("View code" in index, "Landing page missing code call to action")
+    require("https://github.com/zmichels/Decision-PGA" in index, "Landing page missing public code repo link")
     require("Download PDF" in index, "Landing page missing PDF call to action")
     require(
         "assets/decision-pga-decision-state-diagnostics.pdf" in index,
@@ -117,6 +104,9 @@ def main() -> None:
 
     layout = (ROOT / "_layouts/default.html").read_text(encoding="utf-8")
     require("styles.css?v=20260519-demo-responsive" in layout, "Layout should version the stylesheet")
+    require("https://github.com/zmichels/Decision-PGA" in layout, "Nav should link to the public code repo")
+    for removed_nav in ["publication-plan", "Release Notes", "Plan"]:
+        require(removed_nav not in layout, f"Layout should not expose old staging navigation: {removed_nav}")
 
     pdf = ROOT / "assets/decision-pga-decision-state-diagnostics.pdf"
     require(pdf.read_bytes().startswith(b"%PDF"), "PDF asset does not look like a PDF")
@@ -146,6 +136,7 @@ def main() -> None:
         "Try one case as a diagnostic payload",
         "Generated diagnostic readout",
         "Probability table columns",
+        "https://github.com/zmichels/Decision-PGA",
     ]:
         require(phrase in demo, f"Demo page missing required phrase: {phrase}")
 
@@ -192,7 +183,7 @@ def main() -> None:
     ]:
         require(phrase in svg, f"Demo SVG missing required text: {phrase}")
 
-    print("publication site validation passed")
+    print("site validation passed")
 
 
 if __name__ == "__main__":

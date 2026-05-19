@@ -1,11 +1,11 @@
-# Decision-PGA Publication Site
+# Decision-PGA Site
 
-This repository is the public GitHub Pages staging site for the article
+This repository hosts the public GitHub Pages companion site for
 **Decision-PGA and the Need for Decision-State Diagnostics**.
 
-It intentionally separates the public publication surface from the private
-Decision-PGA prototype repository while the code is still being readied for a
-broader release.
+The site links the article, synthetic document-triage demo, PDF copy, and the
+public Decision-PGA prototype repository:
+<https://github.com/zmichels/Decision-PGA>.
 
 ## Contents
 
@@ -15,10 +15,8 @@ broader release.
 - `examples/document-triage/demo_cases.json` - demo probability-cloud fixture
 - `examples/document-triage/demo_results.json` - generated diagnostic outputs
 - `assets/document-triage-demo-overview.svg` - visual demo summary
-- `publication-plan.md` - no-cost one-week publication route
 - `assets/decision-pga-diagnostic-loop.svg` - explanatory diagram
-- `assets/decision-pga-decision-state-diagnostics.pdf` - PDF preview
-- `releases/v0.1-publication.md` - release staging notes
+- `assets/decision-pga-decision-state-diagnostics.pdf` - PDF copy
 - `scripts/build_pdf.py` - Chrome-based publication PDF generator
 
 Local prior drafts are kept under `drafts/`, which is intentionally ignored by

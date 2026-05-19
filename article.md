@@ -114,6 +114,9 @@ A small companion page makes this operational shape concrete with synthetic
 document-extraction triage cases:
 [Document Extraction Triage Demo]({{ '/demo/' | relative_url }}).
 
+The public prototype code is available at
+[github.com/zmichels/Decision-PGA](https://github.com/zmichels/Decision-PGA).
+
 ## Why healthcare is a useful application lens
 
 Healthcare is not the only place this matters, but it is a useful lens because
@@ -267,18 +270,24 @@ For healthcare-adjacent examples, the first benchmark should use synthetic or
 public, non-patient fixtures. No clinical or operational claim should depend on
 private data, anecdote, or unreviewed workflow assumptions.
 
-## A practical open-source path
+## How to try the prototype
 
-The healthiest way to publish this idea is to separate the concept from claims
-of maturity:
+The current code is an initial public research release. It is intended for
+synthetic examples, collaborator testing, agent-tooling experiments, and
+critique:
 
-- publish the article and invite critique;
-- keep examples synthetic or public;
-- release the prototype only when its docs, license, tests, and limitations are
-  clear;
-- report negative or redundant findings alongside promising ones;
-- treat healthcare examples as evaluation targets that require separate
-  governance before real-world use.
+- public repository:
+  [github.com/zmichels/Decision-PGA](https://github.com/zmichels/Decision-PGA);
+- synthetic demo fixture:
+  [Document Extraction Triage Demo]({{ '/demo/' | relative_url }});
+- local examples for probability clouds, model-output-shaped observations,
+  sampled responses, provider-score-shaped payloads, and evaluation reports.
+
+The prototype should still be treated carefully. Examples should remain
+synthetic or explicitly public. Negative or redundant findings should be
+reported alongside promising ones. Healthcare-adjacent examples should be
+treated as evaluation targets that require separate governance before real-world
+use.
 
 Decision-PGA may turn out to be most useful as a small observability layer: a
 local diagnostic that helps an AI workflow decide whether to proceed, clarify,
