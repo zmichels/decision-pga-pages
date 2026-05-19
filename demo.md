@@ -97,6 +97,77 @@ The useful experience is the contrast between cases. A stable invoice due date
 and a missing attachment can both involve uncertainty, but they should lead to
 different next actions. The demo is designed to make that difference visible.
 
+## Live Diagnostic Workspace
+
+Choose a case, inspect or edit the probability rows, then run the same kind of
+diagnostic that a CLI, notebook, MCP tool, or agent wrapper would pass to the
+prototype. The live runner stays entirely in your browser. It does not call a
+model, upload data, or contact a server beyond loading this page's synthetic
+fixture.
+
+The easiest way to use it is human-first: read the document situation, look at
+which action columns are winning across rows, then click **Run diagnostic** and
+compare your intuition with the generated state.
+
+<section
+  class="live-demo"
+  data-dpga-demo-runner
+  data-fixture-url="{{ '/examples/document-triage/demo_cases.json' | relative_url }}"
+>
+  <div class="live-demo-header">
+    <div>
+      <h3>Interactive document-triage diagnostic</h3>
+      <p>
+        Pick a synthetic case, edit the action probabilities if you want, and
+        watch the diagnostic state update from the probability cloud.
+      </p>
+    </div>
+    <div class="live-demo-controls">
+      <label for="dpga-scenario-select">Document case</label>
+      <select id="dpga-scenario-select" data-scenario-select></select>
+    </div>
+  </div>
+
+  <div class="live-demo-context" data-scenario-context>
+    Loading synthetic document cases...
+  </div>
+
+  <div class="live-demo-grid">
+    <div class="live-demo-editor">
+      <div class="live-demo-section-title">
+        <h4>Editable probability rows</h4>
+        <p>
+          Each row is one pass through the same document situation. The columns
+          are possible next actions, and each row should sum to 1.
+        </p>
+      </div>
+      <div class="table-wrap live-table-wrap" data-matrix-editor></div>
+      <div class="live-demo-buttons">
+        <button type="button" class="button" data-run-diagnostic>Run diagnostic</button>
+        <button type="button" class="button secondary" data-reset-scenario>Reset case</button>
+        <button type="button" class="button secondary" data-normalize-rows>Normalize rows</button>
+      </div>
+      <p class="microcopy">
+        Tip: make two columns alternate as winners to create ambiguity; spread
+        mass across many columns to create missing-context uncertainty; make
+        early and late rows disagree to create drift.
+      </p>
+    </div>
+
+    <aside class="live-demo-output" data-diagnostic-output aria-live="polite">
+      <h4>Generated diagnostic readout</h4>
+      <p>Run a case to see the state, action, and metric summary.</p>
+    </aside>
+  </div>
+
+  <div class="live-demo-explain" data-human-explanation></div>
+
+  <details class="payload-panel">
+    <summary>Show the current diagnostic payload</summary>
+    <pre><code data-payload-output>{}</code></pre>
+  </details>
+</section>
+
 ## Try one case as a diagnostic payload
 
 This is the shape of the first case as a Decision-PGA diagnostic request. The
@@ -373,3 +444,5 @@ from distinguishing *why* it is uncertain:
 That is the practical idea behind Decision-PGA as an agent-facing diagnostic:
 turn a cloud of decision evidence into a state description that helps choose the
 next workflow action.
+
+<script src="{{ '/assets/decision-pga-demo-runner.js?v=20260519-live-runner' | relative_url }}" defer></script>

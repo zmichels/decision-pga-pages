@@ -19,6 +19,7 @@ REQUIRED_FILES = [
     "_config.yml",
     "_layouts/default.html",
     "assets/styles.css",
+    "assets/decision-pga-demo-runner.js",
     "LICENSE.md",
     "scripts/build_pdf.py",
 ]
@@ -143,9 +144,29 @@ def main() -> None:
         "Try one case as a diagnostic payload",
         "Generated diagnostic readout",
         "Probability table columns",
+        "Live Diagnostic Workspace",
+        "Choose a case, inspect or edit the probability rows, then run the same",
+        "data-dpga-demo-runner",
+        "decision-pga-demo-runner.js",
         "https://github.com/zmichels/Decision-PGA",
     ]:
         require(phrase in demo, f"Demo page missing required phrase: {phrase}")
+
+    runner = (ROOT / "assets/decision-pga-demo-runner.js").read_text(encoding="utf-8")
+    for phrase in [
+        "diagnoseProbabilityCloud",
+        "sphereLog",
+        "jacobiEigenvalues",
+        "renderProbabilityBars",
+        "renderPayload",
+        "examples/document-triage/demo_cases.json",
+        "accept_extraction",
+        "ask_for_clarification",
+        "retrieve_more_context",
+        "flag_for_review",
+        "defer",
+    ]:
+        require(phrase in runner, f"Live demo runner missing required behavior marker: {phrase}")
 
     fixture_path = ROOT / "examples/document-triage/demo_cases.json"
     fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
