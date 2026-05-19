@@ -115,6 +115,9 @@ def main() -> None:
         "Landing page should link to the current PDF asset",
     )
 
+    layout = (ROOT / "_layouts/default.html").read_text(encoding="utf-8")
+    require("styles.css?v=20260519-demo-clarity" in layout, "Layout should version the stylesheet")
+
     pdf = ROOT / "assets/decision-pga-decision-state-diagnostics.pdf"
     require(pdf.read_bytes().startswith(b"%PDF"), "PDF asset does not look like a PDF")
     require(pdf.stat().st_size > 100_000, "PDF asset is unexpectedly small")
