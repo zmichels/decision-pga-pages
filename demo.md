@@ -12,9 +12,14 @@ more concrete. The setting is a familiar document extraction workflow: an AI
 system proposes or reviews an extracted field, then needs to choose what the
 workflow should do next.
 
+Imagine a small work queue. One document arrives, the AI reads it, and the
+workflow has five possible buttons it could press next: accept the extracted
+value, ask a person to clarify the meaning, retrieve another source, flag the
+case for review, or defer because the packet is changing underneath the system.
+
 The point is not that Decision-PGA extracts the field. The point is that a
 Decision-PGA-style diagnostic can describe the *shape* of uncertainty around
-the next workflow action.
+which button should be pressed next.
 
 This page uses no patient data, is not clinical validation, and is not a
 clinical decision support demonstration.
@@ -41,6 +46,23 @@ Generated diagnostic outputs are also available:
 The open-source prototype repository is available at
 [github.com/zmichels/Decision-PGA](https://github.com/zmichels/Decision-PGA).
 
+## What the numbers stand for
+
+The numbers are not document text. They are the workflow's repeated estimates
+of what should happen next after looking at a document situation. In a real
+system, those estimates might come from repeated model samples, model logprobs,
+rule checks, OCR perturbations, reviewer votes, or an agent trace. In this demo,
+they are clean synthetic values so the patterns are easy to see.
+
+You can read each row as one pass through the same case. A row like
+`[0.92, 0.03, 0.02, 0.02, 0.01]` says: on this pass, the workflow strongly
+leans toward `accept_extraction`. A row like
+`[0.42, 0.45, 0.05, 0.05, 0.03]` says: on this pass, the workflow is split
+between accepting and asking for clarification.
+
+Decision-PGA does not judge the document itself. It reads the group of rows as
+a cloud of next-action evidence, then asks what shape that cloud has.
+
 ## How to read the matrices
 
 Each row is one synthetic observation: one repeated model sample, score pass,
@@ -64,16 +86,16 @@ diagnose the rows one at a time.
 
 ## How To Use The Demo
 
-1. Pick a document extraction scenario.
-2. Read the column-labeled probability table.
-3. Treat the table as the input cloud for Decision-PGA.
-4. Compare the generated diagnostic readout with the simpler visual intuition.
-5. Route the workflow using the mapped action.
+1. Pick a scenario and read the short document story.
+2. Look across the rows, not just at one row. Ask whether the same action keeps
+   winning, whether two actions trade places, or whether the evidence is
+   scattered.
+3. Compare that human reading with the generated diagnostic state.
+4. Use the mapped workflow action as the practical interpretation.
 
-In a real code-backed workflow, the probability cloud could come from repeated
-model samples, model-score adapters, reviewer votes, rule checks, or an agent
-trace. For this public article companion, the values are intentionally clean so
-the states are easy to see.
+The useful experience is the contrast between cases. A stable invoice due date
+and a missing attachment can both involve uncertainty, but they should lead to
+different next actions. The demo is designed to make that difference visible.
 
 ## Try one case as a diagnostic payload
 
@@ -115,6 +137,9 @@ The generated readout for the full eight-row fixture is:
 
 The summary uses short action labels to stay readable. The full action names
 are listed above in the Action Vocabulary and repeated in the scenario readouts.
+Read the cases from top to bottom: they move from a clean extraction, to a
+two-choice ambiguity, to missing evidence, to threshold sensitivity, to a
+sequence that changes over time.
 
 | Case | State | Action | Cue |
 |---|---|---|---|
@@ -146,6 +171,7 @@ state, and the workflow action.
     <h2>Clean invoice due date</h2>
     <p>
       A vendor invoice shows a clearly labeled due date near the payment total.
+      If this were in a work queue, most reviewers would expect it to move on.
       The observations form a tight cloud around <code>accept_extraction</code>.
     </p>
     <div class="scenario-detail-grid">
@@ -163,7 +189,7 @@ state, and the workflow action.
             </tbody>
           </table>
         </div>
-        <p class="microcopy">Full fixture: 8 rows x 5 action columns.</p>
+        <p class="microcopy">Across the full eight-row fixture, accept remains the clear winner.</p>
       </div>
       <div class="diagnostic-readout">
         <h3>Generated diagnostic readout</h3>
@@ -173,7 +199,7 @@ state, and the workflow action.
           <dt>Mean margin</dt><dd>0.90</dd>
           <dt>Dispersion</dt><dd>0.002</dd>
         </dl>
-        <p>A tight cloud with a large margin is stable enough for this synthetic workflow to proceed.</p>
+        <p>A tight cloud with a large margin means the workflow is not just confident once; it is repeatedly stable.</p>
       </div>
     </div>
   </article>
@@ -183,8 +209,10 @@ state, and the workflow action.
     <h2>Two plausible contract dates</h2>
     <p>
       A contract amendment includes both an effective date and a signature date.
-      The cloud mostly varies along one axis: accept the extraction, or ask which
-      date definition the user intended.
+      A person can understand the confusion immediately: both dates are real,
+      but they answer different questions. The cloud mostly varies along one
+      axis: accept the extraction, or ask which date definition the user
+      intended.
     </p>
     <div class="scenario-detail-grid">
       <div>
@@ -201,7 +229,7 @@ state, and the workflow action.
             </tbody>
           </table>
         </div>
-        <p class="microcopy">The top action flips between accept and clarify.</p>
+        <p class="microcopy">This is not broad confusion; it is a focused two-action dispute.</p>
       </div>
       <div class="diagnostic-readout">
         <h3>Generated diagnostic readout</h3>
@@ -222,7 +250,7 @@ state, and the workflow action.
     <p>
       A purchase request says the approved amount is in an attached quote, but
       only the cover page is available. The probability mass spreads across
-      several actions because the workflow lacks evidence.
+      several actions because the workflow lacks the source it needs.
     </p>
     <div class="scenario-detail-grid">
       <div>
@@ -239,7 +267,7 @@ state, and the workflow action.
             </tbody>
           </table>
         </div>
-        <p class="microcopy">No single action dominates the evidence pattern.</p>
+        <p class="microcopy">The pattern reads like missing context, not a clean two-option choice.</p>
       </div>
       <div class="diagnostic-readout">
         <h3>Generated diagnostic readout</h3>
@@ -260,7 +288,7 @@ state, and the workflow action.
     <p>
       A reimbursement form total is legible, but the extracted value is close to
       an internal manual-review threshold. The safest route is not automatic
-      rejection; it is targeted review.
+      rejection; it is targeted review of a boundary case.
     </p>
     <div class="scenario-detail-grid">
       <div>
@@ -277,7 +305,7 @@ state, and the workflow action.
             </tbody>
           </table>
         </div>
-        <p class="microcopy">A small context shift moves the top action from accept to review.</p>
+        <p class="microcopy">The value itself may be readable, but the action depends on a threshold.</p>
       </div>
       <div class="diagnostic-readout">
         <h3>Generated diagnostic readout</h3>
@@ -315,7 +343,7 @@ state, and the workflow action.
             </tbody>
           </table>
         </div>
-        <p class="microcopy">The early rows favor accept; later rows favor defer.</p>
+        <p class="microcopy">The rows tell a time story: early evidence and late evidence disagree.</p>
       </div>
       <div class="diagnostic-readout">
         <h3>Generated diagnostic readout</h3>
