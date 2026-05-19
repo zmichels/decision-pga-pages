@@ -176,6 +176,11 @@ boundary cases after you have a feel for the workflow.
     </aside>
   </div>
 
+  <section class="manifold-map-panel" data-manifold-map aria-live="polite">
+    <h4>Simplex manifold map</h4>
+    <p>Run a case to see the probability cloud as a curved-geometry projection.</p>
+  </section>
+
   <div class="live-demo-explain" data-human-explanation></div>
 
   <details class="payload-panel">
@@ -461,4 +466,4 @@ That is the practical idea behind Decision-PGA as an agent-facing diagnostic:
 turn a cloud of decision evidence into a state description that helps choose the
 next workflow action.
 
-<script src="{{ '/assets/decision-pga-demo-runner.js?v=20260519-live-variation' | relative_url }}" defer></script>
+<script src="{{ '/assets/decision-pga-demo-runner.js?v=20260519-live-manifold' | relative_url }}" defer></script>

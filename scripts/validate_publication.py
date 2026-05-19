@@ -111,7 +111,7 @@ def main() -> None:
     )
 
     layout = (ROOT / "_layouts/default.html").read_text(encoding="utf-8")
-    require("styles.css?v=20260519-live-usability" in layout, "Layout should version the stylesheet")
+    require("styles.css?v=20260519-live-manifold" in layout, "Layout should version the stylesheet")
     require("https://github.com/zmichels/Decision-PGA" in layout, "Nav should link to the public code repo")
     for removed_nav in ["publication-plan", "Release Notes", "Plan"]:
         require(removed_nav not in layout, f"Layout should not expose old staging navigation: {removed_nav}")
@@ -147,6 +147,8 @@ def main() -> None:
         "Live Diagnostic Workspace",
         "Choose a case, inspect or edit the probability rows, then run the same",
         "Generate variation",
+        "Simplex manifold map",
+        "data-manifold-map",
         "data-dpga-demo-runner",
         "decision-pga-demo-runner.js",
         "https://github.com/zmichels/Decision-PGA",
@@ -156,8 +158,11 @@ def main() -> None:
     runner = (ROOT / "assets/decision-pga-demo-runner.js").read_text(encoding="utf-8")
     for phrase in [
         "diagnoseProbabilityCloud",
+        "jacobiEigensystem",
         "sphereLog",
         "jacobiEigenvalues",
+        "projectTangentCloud",
+        "renderManifoldMap",
         "renderProbabilityBars",
         "renderPayload",
         "generateVariationRows",

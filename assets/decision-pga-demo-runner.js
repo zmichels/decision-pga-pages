@@ -17,6 +17,14 @@
     defer: "defer",
   };
 
+  const ACTION_COLORS = {
+    accept_extraction: "#2f7d73",
+    ask_for_clarification: "#d6a437",
+    retrieve_more_context: "#2f6f9f",
+    flag_for_review: "#c7643a",
+    defer: "#6456a3",
+  };
+
   const STATE_COPY = {
     stable: {
       action: "accept_extraction",
@@ -100,20 +108,36 @@
 
   function generateVariationRows(rows, state, counter) {
     const amplitudeByState = {
-      stable: 0.012,
-      binary_ambiguous: 0.035,
-      diffuse: 0.045,
-      boundary_sensitive: 0.03,
-      drifting: 0.04,
+      stable: 0.006,
+      binary_ambiguous: 0.014,
+      diffuse: 0.026,
+      boundary_sensitive: 0.018,
+      drifting: 0.024,
     };
     const amplitude = amplitudeByState[state] || 0.025;
-    const varied = rows.map((row, rowIndex) =>
-      row.map((value, columnIndex) => {
-        const wave = Math.sin((counter + 1) * (rowIndex + 2) * (columnIndex + 3));
-        const offset = amplitude * wave;
-        return Math.max(0.01, value + offset);
-      })
-    );
+    const varied = rows.map((row, rowIndex) => {
+      const next = row.slice();
+      if (state === "binary_ambiguous") {
+        const direction = rowIndex % 2 === 0 ? -1 : 1;
+        const offset = direction * amplitude * (0.8 + 0.2 * Math.sin(counter + 1));
+        next[0] += offset;
+        next[1] -= offset;
+      } else if (state === "boundary_sensitive") {
+        const offset = amplitude * Math.sin((counter + 1) * (rowIndex + 2));
+        next[0] += offset;
+        next[3] -= offset;
+      } else if (state === "drifting") {
+        const direction = rowIndex < rows.length / 2 ? 1 : -1;
+        const offset = direction * amplitude * (0.8 + 0.2 * Math.cos(counter + 1));
+        next[0] += offset;
+        next[4] -= offset;
+      } else {
+        next.forEach((value, columnIndex) => {
+          next[columnIndex] = value + amplitude * Math.sin((counter + 1) * (rowIndex + 2) * (columnIndex + 3));
+        });
+      }
+      return next.map((value) => Math.max(0.01, value));
+    });
     return normalizeProbabilities(varied);
   }
 
@@ -175,9 +199,12 @@
     return tensor;
   }
 
-  function jacobiEigenvalues(matrix) {
+  function jacobiEigensystem(matrix) {
     const n = matrix.length;
     const a = matrix.map((row) => row.slice());
+    const vectors = Array.from({ length: n }, (_, row) =>
+      Array.from({ length: n }, (_, column) => (row === column ? 1 : 0))
+    );
     for (let iter = 0; iter < 80; iter += 1) {
       let p = 0;
       let q = 1;
@@ -198,25 +225,64 @@
       const app = a[p][p];
       const aqq = a[q][q];
       const apq = a[p][q];
-      const phi = 0.5 * Math.atan2(2 * apq, aqq - app);
-      const c = Math.cos(phi);
-      const s = Math.sin(phi);
-      for (let k = 0; k < n; k += 1) {
-        const aik = a[p][k];
-        const aqk = a[q][k];
-        a[p][k] = c * aik - s * aqk;
-        a[q][k] = s * aik + c * aqk;
+      const tau = (aqq - app) / (2 * apq);
+      const t = Math.sign(tau || 1) / (Math.abs(tau) + Math.sqrt(1 + tau * tau));
+      const c = 1 / Math.sqrt(1 + t * t);
+      const s = t * c;
+
+      for (let i = 0; i < n; i += 1) {
+        if (i !== p && i !== q) {
+          const aip = a[i][p];
+          const aiq = a[i][q];
+          a[i][p] = c * aip - s * aiq;
+          a[p][i] = a[i][p];
+          a[i][q] = s * aip + c * aiq;
+          a[q][i] = a[i][q];
+        }
       }
-      for (let k = 0; k < n; k += 1) {
-        const akp = a[k][p];
-        const akq = a[k][q];
-        a[k][p] = c * akp - s * akq;
-        a[k][q] = s * akp + c * akq;
-      }
+      a[p][p] = app - t * apq;
+      a[q][q] = aqq + t * apq;
       a[p][q] = 0;
       a[q][p] = 0;
+
+      for (let i = 0; i < n; i += 1) {
+        const vip = vectors[i][p];
+        const viq = vectors[i][q];
+        vectors[i][p] = c * vip - s * viq;
+        vectors[i][q] = s * vip + c * viq;
+      }
     }
-    return a.map((row, index) => Math.max(0, row[index])).sort((left, right) => right - left);
+    const pairs = a
+      .map((row, index) => ({
+        value: Math.max(0, row[index]),
+        vector: normalizeVector(vectors.map((vectorRow) => vectorRow[index])),
+      }))
+      .sort((left, right) => right.value - left.value);
+    return {
+      values: pairs.map((pair) => pair.value),
+      vectors: pairs.map((pair) => pair.vector),
+    };
+  }
+
+  function jacobiEigenvalues(matrix) {
+    return jacobiEigensystem(matrix).values;
+  }
+
+  function projectTangentCloud(tangents, eigenvectors, sequence) {
+    const first = eigenvectors[0] || tangents[0].map(() => 0);
+    const second = eigenvectors[1] || tangents[0].map(() => 0);
+    const coordinates = tangents.map((tangent, index) => ({
+      x: dot(tangent, first),
+      y: dot(tangent, second),
+      action: sequence[index],
+      index,
+    }));
+    const maxRadius = Math.max(1e-8, ...coordinates.map((point) => Math.sqrt(point.x * point.x + point.y * point.y)));
+    return {
+      coordinates,
+      maxRadius,
+      scaleReference: Math.max(0.16, maxRadius * 1.15),
+    };
   }
 
   function meanProbability(rows) {
@@ -260,7 +326,8 @@
     const mean = intrinsicMeanSphere(points);
     const tangents = points.map((point) => sphereLog(mean, point));
     const tensor = covarianceTensor(tangents);
-    const eigenvalues = jacobiEigenvalues(tensor);
+    const eigensystem = jacobiEigensystem(tensor);
+    const eigenvalues = eigensystem.values;
     const totalDispersion = eigenvalues.reduce((sum, value) => sum + value, 0);
     const pc1Fraction = totalDispersion > 1e-12 ? eigenvalues[0] / totalDispersion : 0;
     const anisotropyRatio = eigenvalues[1] > 1e-12 ? eigenvalues[0] / eigenvalues[1] : eigenvalues[0] > 0 ? Infinity : 0;
@@ -270,6 +337,7 @@
     const sequence = topSequence(probs, labels);
     const topLabelSwitchRate = switchRate(sequence);
     const halfDistance = halfGeodesicDistance(probs);
+    const projection = projectTangentCloud(tangents, eigensystem.vectors, sequence);
 
     let state = "diffuse_uncertainty";
     if (halfDistance > 0.45 && topLabelSwitchRate > 0) {
@@ -296,6 +364,10 @@
         half_geodesic_distance: halfDistance,
         top_label_switch_rate: topLabelSwitchRate,
       },
+      geometry: {
+        projection,
+        eigenvalues,
+      },
     };
   }
 
@@ -304,6 +376,17 @@
     if (className) {
       element.className = className;
     }
+    if (text !== undefined) {
+      element.textContent = text;
+    }
+    return element;
+  }
+
+  function createSvgElement(tag, attributes = {}, text) {
+    const element = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    Object.entries(attributes).forEach(([name, value]) => {
+      element.setAttribute(name, String(value));
+    });
     if (text !== undefined) {
       element.textContent = text;
     }
@@ -324,6 +407,95 @@
       bars.append(row);
     });
     container.append(bars);
+  }
+
+  function renderManifoldMap(container, labels, diagnostic) {
+    const projection = diagnostic.geometry.projection;
+    const size = 360;
+    const center = 180;
+    const radius = 132;
+    const viewScale = (radius * 0.82) / projection.scaleReference;
+    const toScreen = (point) => ({
+      x: center + point.x * viewScale,
+      y: center - point.y * viewScale,
+    });
+    const points = projection.coordinates.map((point) => ({ ...point, ...toScreen(point) }));
+    const pathData = points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" ");
+
+    container.innerHTML = "";
+    const header = createElement("div", "manifold-map-header");
+    const copy = createElement("div");
+    copy.append(
+      createElement("h4", null, "Simplex manifold map"),
+      createElement(
+        "p",
+        null,
+        "A stereonet-like projection of the same probability cloud. Points are repeated observations, colors are top actions, the center is the intrinsic mean, and the guides show the leading dispersion directions."
+      )
+    );
+    const scale = createElement("p", "manifold-scale", `auto-zoom radius: ${format(projection.scaleReference, 2)} geodesic units`);
+    header.append(copy, scale);
+
+    const frame = createElement("div", "manifold-map-frame");
+    const svg = createSvgElement("svg", {
+      viewBox: `0 0 ${size} ${size}`,
+      role: "img",
+      "aria-label": "Tangent projection of the probability cloud on a circular simplex manifold map",
+    });
+
+    const defs = createSvgElement("defs");
+    const gradient = createSvgElement("radialGradient", { id: "manifoldFill", cx: "50%", cy: "42%", r: "64%" });
+    gradient.append(
+      createSvgElement("stop", { offset: "0%", "stop-color": "#ffffff" }),
+      createSvgElement("stop", { offset: "100%", "stop-color": "#eef8fa" })
+    );
+    defs.append(gradient);
+    svg.append(defs);
+
+    svg.append(createSvgElement("circle", { cx: center, cy: center, r: radius, fill: "url(#manifoldFill)", stroke: "#b7d1d8", "stroke-width": 2 }));
+    [0.35, 0.68].forEach((fraction) => {
+      svg.append(createSvgElement("circle", { cx: center, cy: center, r: radius * fraction, fill: "none", stroke: "#d7e4e8", "stroke-width": 1 }));
+    });
+    [-0.55, 0, 0.55].forEach((offset) => {
+      svg.append(createSvgElement("ellipse", { cx: center, cy: center + offset * radius * 0.4, rx: radius * 0.9, ry: radius * 0.22, fill: "none", stroke: "#dce7ea", "stroke-width": 1 }));
+      svg.append(createSvgElement("ellipse", { cx: center + offset * radius * 0.4, cy: center, rx: radius * 0.22, ry: radius * 0.9, fill: "none", stroke: "#dce7ea", "stroke-width": 1 }));
+    });
+
+    svg.append(createSvgElement("line", { x1: center - radius * 0.9, y1: center, x2: center + radius * 0.9, y2: center, stroke: "#236a7c", "stroke-width": 2.4, "stroke-linecap": "round" }));
+    svg.append(createSvgElement("line", { x1: center, y1: center - radius * 0.82, x2: center, y2: center + radius * 0.82, stroke: "#236a7c", "stroke-width": 1.7, "stroke-dasharray": "6 6", "stroke-linecap": "round", opacity: 0.75 }));
+    svg.append(createSvgElement("text", { x: center + radius * 0.92, y: center - 8, class: "manifold-axis-label", "text-anchor": "end" }, "PC1"));
+    svg.append(createSvgElement("text", { x: center + 8, y: center - radius * 0.78, class: "manifold-axis-label" }, "PC2"));
+
+    if (points.length > 1) {
+      svg.append(createSvgElement("path", { d: pathData, fill: "none", stroke: "#172033", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: 0.32 }));
+    }
+    svg.append(createSvgElement("circle", { cx: center, cy: center, r: 4, fill: "#172033" }));
+    svg.append(createSvgElement("text", { x: center + 8, y: center - 8, class: "manifold-axis-label" }, "mean"));
+
+    points.forEach((point) => {
+      const group = createSvgElement("g");
+      group.append(createSvgElement("circle", { cx: point.x, cy: point.y, r: point.index === 0 || point.index === points.length - 1 ? 7 : 6, fill: ACTION_COLORS[point.action], stroke: "#ffffff", "stroke-width": 2 }));
+      group.append(createSvgElement("text", { x: point.x, y: point.y + 3.5, class: "manifold-point-label", "text-anchor": "middle" }, String(point.index + 1)));
+      group.append(createSvgElement("title", {}, `${point.index + 1}: ${humanizeAction(point.action)}`));
+      svg.append(group);
+    });
+    frame.append(svg);
+
+    const legend = createElement("div", "manifold-legend");
+    labels.forEach((label) => {
+      const item = createElement("span", "manifold-legend-item");
+      const swatch = createElement("span", "manifold-swatch");
+      swatch.style.background = ACTION_COLORS[label];
+      item.append(swatch, document.createTextNode(humanizeAction(label)));
+      legend.append(item);
+    });
+
+    const reading = createElement(
+      "p",
+      "microcopy",
+      "How to read it: tight center clusters suggest stable decisions; line-shaped clouds suggest one dominant ambiguity axis; broad scatter suggests diffuse uncertainty; and a connected path crossing the disk suggests drift or a changing decision pathway."
+    );
+    container.append(header, frame, legend, reading);
   }
 
   function renderPayload(container, scenario, labels, rows) {
@@ -503,6 +675,7 @@
     const context = root.querySelector("[data-scenario-context]");
     const editor = root.querySelector("[data-matrix-editor]");
     const output = root.querySelector("[data-diagnostic-output]");
+    const manifoldMap = root.querySelector("[data-manifold-map]");
     const explanation = root.querySelector("[data-human-explanation]");
     const payload = root.querySelector("[data-payload-output]");
     let variationCounter = 0;
@@ -529,6 +702,7 @@
       updateRowSums(editor);
       const diagnostic = diagnoseProbabilityCloud(rows, labels);
       renderOutput(output, labels, diagnostic);
+      renderManifoldMap(manifoldMap, labels, diagnostic);
       renderExplanation(explanation, scenario, diagnostic);
       renderPayload(payload, scenario, labels, rows);
     }
