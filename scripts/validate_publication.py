@@ -116,7 +116,7 @@ def main() -> None:
     )
 
     layout = (ROOT / "_layouts/default.html").read_text(encoding="utf-8")
-    require("styles.css?v=20260519-demo-clarity" in layout, "Layout should version the stylesheet")
+    require("styles.css?v=20260519-demo-responsive" in layout, "Layout should version the stylesheet")
 
     pdf = ROOT / "assets/decision-pga-decision-state-diagnostics.pdf"
     require(pdf.read_bytes().startswith(b"%PDF"), "PDF asset does not look like a PDF")
