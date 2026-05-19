@@ -5,3 +5,4 @@ _site/
 vendor/
 drafts/
 .publication-build/
+.superpowers/
