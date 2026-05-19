@@ -190,6 +190,37 @@ li {
   margin-top: 0;
 }
 
+.scenario-list {
+  display: grid;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.scenario-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem;
+  background: var(--wash);
+}
+
+.scenario-card h2 {
+  margin-top: 0.4rem;
+  padding-top: 0;
+}
+
+.scenario-card pre {
+  margin-bottom: 0;
+  background: white;
+}
+
+.state-label {
+  color: var(--accent-strong);
+  font-size: 0.82rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

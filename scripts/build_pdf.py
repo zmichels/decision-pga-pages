@@ -13,6 +13,8 @@ ARTICLE = ROOT / "article.md"
 OUTPUT = ROOT / "assets" / "decision-pga-decision-state-diagnostics.pdf"
 BUILD_DIR = ROOT / ".publication-build"
 HTML_OUTPUT = BUILD_DIR / "decision-pga-print.html"
+SITE_URL = "https://zmichels.github.io"
+SITE_BASEURL = "/decision-pga-pages"
 
 
 CHROME_CANDIDATES = [
@@ -25,13 +27,32 @@ def strip_front_matter(markdown: str) -> str:
     return re.sub(r"^---\n.*?\n---\n", "", markdown, flags=re.S)
 
 
-def inline_markup(text: str) -> str:
-    escaped = html.escape(text)
-    escaped = re.sub(
+def linkify_urls(escaped: str) -> str:
+    return re.sub(
         r"(https?://[^\s<]+)",
         lambda match: f'<a href="{match.group(1)}">{match.group(1)}</a>',
         escaped,
     )
+
+
+def resolve_link_href(href: str) -> str:
+    match = re.fullmatch(r"\{\{\s*'([^']+)'\s*\|\s*relative_url\s*\}\}", href.strip())
+    if match:
+        return f"{SITE_URL}{SITE_BASEURL}{match.group(1)}"
+    return href
+
+
+def inline_markup(text: str) -> str:
+    parts: list[str] = []
+    last = 0
+    for match in re.finditer(r"\[([^\]]+)\]\(([^)]+)\)", text):
+        parts.append(linkify_urls(html.escape(text[last : match.start()])))
+        label = html.escape(match.group(1))
+        href = html.escape(resolve_link_href(match.group(2)), quote=True)
+        parts.append(f'<a href="{href}">{label}</a>')
+        last = match.end()
+    parts.append(linkify_urls(html.escape(text[last:])))
+    escaped = "".join(parts)
     return escaped
 
 

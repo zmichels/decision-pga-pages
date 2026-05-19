@@ -11,6 +11,8 @@ broader release.
 
 - `index.md` - landing page for GitHub Pages
 - `article.md` - canonical article draft
+- `demo.md` - synthetic document extraction triage demo
+- `examples/document-triage/demo_cases.json` - demo probability-cloud fixture
 - `publication-plan.md` - no-cost one-week publication route
 - `assets/decision-pga-diagnostic-loop.svg` - explanatory diagram
 - `assets/decision-pga-decision-state-diagnostics.pdf` - PDF preview

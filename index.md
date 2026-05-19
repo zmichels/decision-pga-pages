@@ -14,6 +14,7 @@ description: A public staging site for an article about decision-state diagnosti
   </p>
   <div class="actions">
     <a class="button" href="{{ '/article/' | relative_url }}">Read the article</a>
+    <a class="button secondary" href="{{ '/demo/' | relative_url }}">Try the demo</a>
     <a class="button secondary" href="{{ '/assets/decision-pga-decision-state-diagnostics.pdf' | relative_url }}">Download PDF</a>
     <a class="button secondary" href="{{ '/publication-plan/' | relative_url }}">Publication plan</a>
   </div>
@@ -44,6 +45,14 @@ openly.
     <h3>Shareable PDF</h3>
     <p>
       The PDF is included for readers who prefer a stable document-style copy.
+    </p>
+  </section>
+  <section class="panel">
+    <h3>Synthetic demo</h3>
+    <p>
+      A document extraction triage fixture shows how stable, ambiguous,
+      diffuse, boundary-sensitive, and drifting decision states can map to
+      workflow actions.
     </p>
   </section>
   <section class="panel">

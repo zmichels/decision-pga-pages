@@ -110,6 +110,10 @@ ambiguity may call for a targeted clarification. Diffuse uncertainty may call
 for more evidence. Drift may call for segmentation or replanning. This is the
 practical niche Decision-PGA is meant to explore.
 
+A small companion page makes this operational shape concrete with synthetic
+document-extraction triage cases:
+[Document Extraction Triage Demo]({{ '/demo/' | relative_url }}).
+
 ## Why healthcare is a useful application lens
 
 Healthcare is not the only place this matters, but it is a useful lens because

@@ -1,0 +1,109 @@
+{
+  "schema_version": "decision-pga-document-triage-demo-v1",
+  "title": "Synthetic document extraction triage cases",
+  "description": "Clean synthetic probability clouds for demonstrating how Decision-PGA-style decision-state diagnostics can route a document extraction workflow.",
+  "labels": [
+    "accept_extraction",
+    "ask_for_clarification",
+    "retrieve_more_context",
+    "flag_for_review",
+    "defer"
+  ],
+  "scenarios": [
+    {
+      "id": "clean_invoice_due_date",
+      "name": "Clean invoice due date",
+      "document_context": "A vendor invoice shows a clearly labeled due date near the payment total.",
+      "candidate_value": "Due date = 2026-06-15",
+      "expected_state": "stable",
+      "expected_action": "accept_extraction",
+      "why_it_feels_real": "Many extraction tasks are boring in the best way: repeated passes all prefer the same action with only small noise.",
+      "observations": [
+        [0.92, 0.03, 0.02, 0.02, 0.01],
+        [0.91, 0.04, 0.02, 0.02, 0.01],
+        [0.94, 0.02, 0.01, 0.02, 0.01],
+        [0.90, 0.04, 0.03, 0.02, 0.01],
+        [0.93, 0.02, 0.02, 0.02, 0.01],
+        [0.92, 0.03, 0.02, 0.02, 0.01],
+        [0.95, 0.01, 0.01, 0.02, 0.01],
+        [0.91, 0.03, 0.02, 0.03, 0.01]
+      ]
+    },
+    {
+      "id": "ambiguous_contract_date",
+      "name": "Two plausible contract dates",
+      "document_context": "A contract amendment includes both an effective date and a signature date near the same paragraph.",
+      "candidate_value": "Date field = effective date vs signature date",
+      "expected_state": "binary_ambiguous",
+      "expected_action": "ask_for_clarification",
+      "why_it_feels_real": "The workflow is not broadly confused. It is mostly choosing between accepting the extracted date and asking which date definition the user intended.",
+      "observations": [
+        [0.42, 0.45, 0.05, 0.05, 0.03],
+        [0.48, 0.39, 0.05, 0.05, 0.03],
+        [0.38, 0.50, 0.04, 0.05, 0.03],
+        [0.46, 0.41, 0.05, 0.05, 0.03],
+        [0.40, 0.47, 0.05, 0.05, 0.03],
+        [0.50, 0.37, 0.05, 0.05, 0.03],
+        [0.37, 0.51, 0.04, 0.05, 0.03],
+        [0.44, 0.43, 0.05, 0.05, 0.03]
+      ]
+    },
+    {
+      "id": "missing_attachment_reference",
+      "name": "Missing attachment reference",
+      "document_context": "A purchase request says the approved amount is listed in an attached quote, but only the request cover page is available.",
+      "candidate_value": "Approved amount = value referenced in missing attachment",
+      "expected_state": "diffuse",
+      "expected_action": "retrieve_more_context",
+      "why_it_feels_real": "No single next action dominates because the evidence is incomplete. The most useful response is to retrieve the missing page or attachment.",
+      "observations": [
+        [0.18, 0.20, 0.30, 0.18, 0.14],
+        [0.22, 0.17, 0.27, 0.19, 0.15],
+        [0.16, 0.22, 0.29, 0.17, 0.16],
+        [0.21, 0.18, 0.25, 0.21, 0.15],
+        [0.19, 0.21, 0.28, 0.17, 0.15],
+        [0.20, 0.16, 0.31, 0.18, 0.15],
+        [0.17, 0.21, 0.26, 0.20, 0.16],
+        [0.23, 0.18, 0.24, 0.20, 0.15]
+      ]
+    },
+    {
+      "id": "near_threshold_total",
+      "name": "Near-threshold total",
+      "document_context": "A reimbursement form total is legible, but the extracted value is close to an internal manual-review threshold.",
+      "candidate_value": "Total = 5000.00",
+      "expected_state": "boundary_sensitive",
+      "expected_action": "flag_for_review",
+      "why_it_feels_real": "The value might be correct, but a small perturbation changes whether the workflow should auto-accept or route to review.",
+      "observations": [
+        [0.47, 0.05, 0.06, 0.39, 0.03],
+        [0.41, 0.05, 0.07, 0.43, 0.04],
+        [0.49, 0.04, 0.06, 0.38, 0.03],
+        [0.38, 0.05, 0.08, 0.45, 0.04],
+        [0.46, 0.05, 0.06, 0.40, 0.03],
+        [0.40, 0.04, 0.07, 0.45, 0.04],
+        [0.48, 0.04, 0.06, 0.39, 0.03],
+        [0.42, 0.05, 0.07, 0.42, 0.04]
+      ]
+    },
+    {
+      "id": "contradictory_revision_packet",
+      "name": "Contradictory revision packet",
+      "document_context": "A multi-page packet starts with a clean field value, then later pages introduce a revision note and conflicting total.",
+      "candidate_value": "Approved amount = original total vs revised total",
+      "expected_state": "drifting",
+      "expected_action": "defer",
+      "why_it_feels_real": "The right action changes over the read sequence. A workflow should pause and re-evaluate rather than treating the whole packet as one static extraction.",
+      "observations": [
+        [0.86, 0.05, 0.03, 0.04, 0.02],
+        [0.80, 0.07, 0.04, 0.06, 0.03],
+        [0.70, 0.09, 0.06, 0.10, 0.05],
+        [0.50, 0.11, 0.12, 0.20, 0.07],
+        [0.32, 0.12, 0.15, 0.30, 0.11],
+        [0.20, 0.10, 0.18, 0.32, 0.20],
+        [0.12, 0.09, 0.20, 0.28, 0.31],
+        [0.08, 0.07, 0.18, 0.25, 0.42]
+      ]
+    }
+  ]
+}
