@@ -180,14 +180,21 @@ li {
 }
 
 .panel {
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 1rem;
   background: var(--wash);
+  overflow-wrap: anywhere;
 }
 
 .panel h3 {
   margin-top: 0;
+}
+
+.panel a {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .scenario-list {

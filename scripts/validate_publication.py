@@ -113,7 +113,10 @@ def main() -> None:
     )
 
     layout = (ROOT / "_layouts/default.html").read_text(encoding="utf-8")
-    require("styles.css?v=20260519-toolkit" in layout, "Layout should version the stylesheet")
+    require("styles.css?v=20260519-toolkit-wrap" in layout, "Layout should version the stylesheet")
+    styles = (ROOT / "assets/styles.css").read_text(encoding="utf-8")
+    require(".panel a" in styles, "Stylesheet should include panel link wrapping")
+    require("overflow-wrap: anywhere" in styles, "Panel content should wrap long filenames")
     require("https://github.com/zmichels/Decision-PGA" in layout, "Nav should link to the public code repo")
     require("Toolkit" in layout, "Nav should link to the toolkit page")
     for removed_nav in ["publication-plan", "Release Notes", "Plan"]:
