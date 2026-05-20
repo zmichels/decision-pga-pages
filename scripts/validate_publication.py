@@ -111,7 +111,7 @@ def main() -> None:
     )
 
     layout = (ROOT / "_layouts/default.html").read_text(encoding="utf-8")
-    require("styles.css?v=20260519-shape-atlas" in layout, "Layout should version the stylesheet")
+    require("styles.css?v=20260519-atlas-regions" in layout, "Layout should version the stylesheet")
     require("https://github.com/zmichels/Decision-PGA" in layout, "Nav should link to the public code repo")
     for removed_nav in ["publication-plan", "Release Notes", "Plan"]:
         require(removed_nav not in layout, f"Layout should not expose old staging navigation: {removed_nav}")
@@ -168,6 +168,8 @@ def main() -> None:
         "generateVariationRows",
         "SHAPE_ATLAS",
         "createShapeAtlasSvg",
+        "threshold_band",
+        "two_lobes",
         "examples/document-triage/demo_cases.json",
         "accept_extraction",
         "ask_for_clarification",

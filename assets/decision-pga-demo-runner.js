@@ -130,6 +130,7 @@
       pattern: "near a threshold",
       reading: "The path hugs a low-margin boundary, so small changes can flip the next action.",
       guide: "diagonal",
+      region: "threshold_band",
       points: [
         [-0.48, -0.26, "accept_extraction"],
         [-0.28, -0.15, "accept_extraction"],
@@ -146,14 +147,15 @@
       pattern: "early-to-late movement",
       reading: "The sequence moves from one neighborhood to another, so the workflow should pause and re-evaluate.",
       path: true,
+      region: "two_lobes",
       points: [
-        [-0.55, -0.08, "accept_extraction"],
-        [-0.42, -0.03, "accept_extraction"],
-        [-0.28, 0.02, "accept_extraction"],
-        [-0.04, 0.05, "flag_for_review"],
-        [0.18, 0.08, "defer"],
-        [0.4, 0.1, "defer"],
-        [0.56, 0.14, "defer"],
+        [-0.56, -0.12, "accept_extraction"],
+        [-0.46, -0.02, "accept_extraction"],
+        [-0.34, 0.08, "accept_extraction"],
+        [0.02, 0.02, "flag_for_review"],
+        [0.36, 0.14, "defer"],
+        [0.48, 0.04, "defer"],
+        [0.58, 0.12, "defer"],
       ],
     },
   ];
@@ -527,12 +529,18 @@
     svg.append(defs);
     svg.append(createSvgElement("circle", { cx: center, cy: center, r: radius, fill: `url(#${gradientId})`, stroke: "#b7d1d8", "stroke-width": 2 }));
     svg.append(createSvgElement("circle", { cx: center, cy: center, r: radius * 0.46, fill: "none", stroke: "#d7e4e8", "stroke-width": 1 }));
+    if (shape.region === "threshold_band") {
+      svg.append(createSvgElement("polygon", { points: "43,101 52,119 137,79 128,61", fill: "#c7643a", opacity: 0.14, stroke: "#c7643a", "stroke-width": 1.5, "stroke-opacity": 0.26 }));
+      svg.append(createSvgElement("line", { x1: center - radius * 0.38, y1: center - radius * 0.38, x2: center + radius * 0.38, y2: center + radius * 0.38, stroke: "#c4d5da", "stroke-width": 1.7, "stroke-dasharray": "4 5", "stroke-linecap": "round", opacity: 0.8 }));
+    } else if (shape.region === "two_lobes") {
+      svg.append(createSvgElement("ellipse", { cx: center - radius * 0.46, cy: center + radius * 0.02, rx: radius * 0.24, ry: radius * 0.2, fill: ACTION_COLORS.accept_extraction, opacity: 0.1, stroke: ACTION_COLORS.accept_extraction, "stroke-width": 1.7, "stroke-opacity": 0.28 }));
+      svg.append(createSvgElement("ellipse", { cx: center + radius * 0.47, cy: center - radius * 0.1, rx: radius * 0.24, ry: radius * 0.2, fill: ACTION_COLORS.defer, opacity: 0.1, stroke: ACTION_COLORS.defer, "stroke-width": 1.7, "stroke-opacity": 0.28 }));
+    }
     if (shape.guide === "horizontal") {
       svg.append(createSvgElement("line", { x1: center - radius * 0.72, y1: center, x2: center + radius * 0.72, y2: center, stroke: "#236a7c", "stroke-width": 3, "stroke-linecap": "round", opacity: 0.38 }));
       svg.append(createSvgElement("ellipse", { cx: center, cy: center, rx: radius * 0.72, ry: radius * 0.17, fill: "#236a7c", opacity: 0.08 }));
     } else if (shape.guide === "diagonal") {
-      svg.append(createSvgElement("line", { x1: center - radius * 0.66, y1: center + radius * 0.35, x2: center + radius * 0.66, y2: center - radius * 0.35, stroke: "#c7643a", "stroke-width": 3, "stroke-linecap": "round", opacity: 0.35 }));
-      svg.append(createSvgElement("line", { x1: center - radius * 0.48, y1: center - radius * 0.46, x2: center + radius * 0.48, y2: center + radius * 0.46, stroke: "#9fb8bf", "stroke-width": 1.4, "stroke-dasharray": "4 5", "stroke-linecap": "round", opacity: 0.65 }));
+      svg.append(createSvgElement("line", { x1: center - radius * 0.66, y1: center + radius * 0.35, x2: center + radius * 0.66, y2: center - radius * 0.35, stroke: "#c7643a", "stroke-width": 3.8, "stroke-linecap": "round", opacity: 0.48 }));
     } else if (shape.state === "diffuse_uncertainty") {
       svg.append(createSvgElement("ellipse", { cx: center, cy: center, rx: radius * 0.62, ry: radius * 0.48, fill: "#236a7c", opacity: 0.06, stroke: "#236a7c", "stroke-width": 1.8, "stroke-opacity": 0.16 }));
     } else {
