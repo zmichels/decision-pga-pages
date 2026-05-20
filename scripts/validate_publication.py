@@ -111,7 +111,7 @@ def main() -> None:
     )
 
     layout = (ROOT / "_layouts/default.html").read_text(encoding="utf-8")
-    require("styles.css?v=20260519-live-manifold" in layout, "Layout should version the stylesheet")
+    require("styles.css?v=20260519-live-map-clean" in layout, "Layout should version the stylesheet")
     require("https://github.com/zmichels/Decision-PGA" in layout, "Nav should link to the public code repo")
     for removed_nav in ["publication-plan", "Release Notes", "Plan"]:
         require(removed_nav not in layout, f"Layout should not expose old staging navigation: {removed_nav}")
@@ -147,7 +147,7 @@ def main() -> None:
         "Live Diagnostic Workspace",
         "Choose a case, inspect or edit the probability rows, then run the same",
         "Generate variation",
-        "Simplex manifold map",
+        "Decision cloud map",
         "data-manifold-map",
         "data-dpga-demo-runner",
         "decision-pga-demo-runner.js",
@@ -174,6 +174,7 @@ def main() -> None:
         "defer",
     ]:
         require(phrase in runner, f"Live demo runner missing required behavior marker: {phrase}")
+    require("auto-zoom radius" not in runner, "Live demo map should not expose auto-zoom implementation details")
 
     fixture_path = ROOT / "examples/document-triage/demo_cases.json"
     fixture = json.loads(fixture_path.read_text(encoding="utf-8"))

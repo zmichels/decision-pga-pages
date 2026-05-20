@@ -66,6 +66,14 @@
     drifting: "drifting",
   };
 
+  const MAP_PATTERN_COPY = {
+    stable: "clustered decision cloud",
+    binary_ambiguity: "two-way split",
+    diffuse_uncertainty: "spread-out uncertainty",
+    boundary_sensitive: "boundary-hugging path",
+    regime_shift: "shifting decision path",
+  };
+
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
   }
@@ -413,7 +421,7 @@
     const projection = diagnostic.geometry.projection;
     const size = 360;
     const center = 180;
-    const radius = 132;
+    const radius = 126;
     const viewScale = (radius * 0.82) / projection.scaleReference;
     const toScreen = (point) => ({
       x: center + point.x * viewScale,
@@ -421,20 +429,25 @@
     });
     const points = projection.coordinates.map((point) => ({ ...point, ...toScreen(point) }));
     const pathData = points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" ");
+    const maxAbsX = Math.max(0.012, ...projection.coordinates.map((point) => Math.abs(point.x)));
+    const maxAbsY = Math.max(0.012, ...projection.coordinates.map((point) => Math.abs(point.y)));
+    const ellipseRx = clamp(maxAbsX * viewScale * 1.35, 18, radius * 0.82);
+    const ellipseRy = clamp(maxAbsY * viewScale * 1.35, 12, radius * 0.58);
+    const lastPoint = points[points.length - 1];
 
     container.innerHTML = "";
     const header = createElement("div", "manifold-map-header");
     const copy = createElement("div");
     copy.append(
-      createElement("h4", null, "Simplex manifold map"),
+      createElement("h4", null, "Decision cloud map"),
       createElement(
         "p",
         null,
-        "A stereonet-like projection of the same probability cloud. Points are repeated observations, colors are top actions, the center is the intrinsic mean, and the guides show the leading dispersion directions."
+        "A simplified projection of the same probability rows. Dots are repeated passes, color shows the top next action, and the path shows how the decision route moves across the cloud."
       )
     );
-    const scale = createElement("p", "manifold-scale", `auto-zoom radius: ${format(projection.scaleReference, 2)} geodesic units`);
-    header.append(copy, scale);
+    const shape = createElement("p", "manifold-scale", MAP_PATTERN_COPY[diagnostic.state] || "decision cloud");
+    header.append(copy, shape);
 
     const frame = createElement("div", "manifold-map-frame");
     const svg = createSvgElement("svg", {
@@ -453,32 +466,27 @@
     svg.append(defs);
 
     svg.append(createSvgElement("circle", { cx: center, cy: center, r: radius, fill: "url(#manifoldFill)", stroke: "#b7d1d8", "stroke-width": 2 }));
-    [0.35, 0.68].forEach((fraction) => {
-      svg.append(createSvgElement("circle", { cx: center, cy: center, r: radius * fraction, fill: "none", stroke: "#d7e4e8", "stroke-width": 1 }));
-    });
-    [-0.55, 0, 0.55].forEach((offset) => {
-      svg.append(createSvgElement("ellipse", { cx: center, cy: center + offset * radius * 0.4, rx: radius * 0.9, ry: radius * 0.22, fill: "none", stroke: "#dce7ea", "stroke-width": 1 }));
-      svg.append(createSvgElement("ellipse", { cx: center + offset * radius * 0.4, cy: center, rx: radius * 0.22, ry: radius * 0.9, fill: "none", stroke: "#dce7ea", "stroke-width": 1 }));
-    });
-
-    svg.append(createSvgElement("line", { x1: center - radius * 0.9, y1: center, x2: center + radius * 0.9, y2: center, stroke: "#236a7c", "stroke-width": 2.4, "stroke-linecap": "round" }));
-    svg.append(createSvgElement("line", { x1: center, y1: center - radius * 0.82, x2: center, y2: center + radius * 0.82, stroke: "#236a7c", "stroke-width": 1.7, "stroke-dasharray": "6 6", "stroke-linecap": "round", opacity: 0.75 }));
-    svg.append(createSvgElement("text", { x: center + radius * 0.92, y: center - 8, class: "manifold-axis-label", "text-anchor": "end" }, "PC1"));
-    svg.append(createSvgElement("text", { x: center + 8, y: center - radius * 0.78, class: "manifold-axis-label" }, "PC2"));
+    svg.append(createSvgElement("circle", { cx: center, cy: center, r: radius * 0.55, fill: "none", stroke: "#d7e4e8", "stroke-width": 1.2 }));
+    svg.append(createSvgElement("line", { x1: center - radius * 0.72, y1: center, x2: center + radius * 0.72, y2: center, stroke: "#9fb8bf", "stroke-width": 1.6, "stroke-linecap": "round", opacity: 0.58 }));
+    svg.append(createSvgElement("line", { x1: center, y1: center - radius * 0.62, x2: center, y2: center + radius * 0.62, stroke: "#c4d5da", "stroke-width": 1.2, "stroke-dasharray": "5 7", "stroke-linecap": "round", opacity: 0.65 }));
+    svg.append(createSvgElement("ellipse", { cx: center, cy: center, rx: ellipseRx, ry: ellipseRy, fill: "#236a7c", opacity: 0.08, stroke: "#236a7c", "stroke-width": 2, "stroke-opacity": 0.2 }));
 
     if (points.length > 1) {
-      svg.append(createSvgElement("path", { d: pathData, fill: "none", stroke: "#172033", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: 0.32 }));
+      svg.append(createSvgElement("path", { d: pathData, fill: "none", stroke: "#172033", "stroke-width": 2.4, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: 0.28 }));
     }
-    svg.append(createSvgElement("circle", { cx: center, cy: center, r: 4, fill: "#172033" }));
-    svg.append(createSvgElement("text", { x: center + 8, y: center - 8, class: "manifold-axis-label" }, "mean"));
+    svg.append(createSvgElement("circle", { cx: center, cy: center, r: 4.2, fill: "#172033", opacity: 0.86 }));
 
     points.forEach((point) => {
       const group = createSvgElement("g");
-      group.append(createSvgElement("circle", { cx: point.x, cy: point.y, r: point.index === 0 || point.index === points.length - 1 ? 7 : 6, fill: ACTION_COLORS[point.action], stroke: "#ffffff", "stroke-width": 2 }));
-      group.append(createSvgElement("text", { x: point.x, y: point.y + 3.5, class: "manifold-point-label", "text-anchor": "middle" }, String(point.index + 1)));
+      group.append(createSvgElement("circle", { cx: point.x, cy: point.y, r: point.index === 0 || point.index === points.length - 1 ? 7 : 5.8, fill: ACTION_COLORS[point.action], stroke: "#ffffff", "stroke-width": 2.2, opacity: 0.96 }));
       group.append(createSvgElement("title", {}, `${point.index + 1}: ${humanizeAction(point.action)}`));
       svg.append(group);
     });
+    if (points.length > 0) {
+      const first = points[0];
+      svg.append(createSvgElement("text", { x: first.x + 8, y: first.y - 8, class: "manifold-start-label" }, "start"));
+      svg.append(createSvgElement("text", { x: lastPoint.x + 8, y: lastPoint.y + 15, class: "manifold-start-label" }, "latest"));
+    }
     frame.append(svg);
 
     const legend = createElement("div", "manifold-legend");
@@ -493,7 +501,7 @@
     const reading = createElement(
       "p",
       "microcopy",
-      "How to read it: tight center clusters suggest stable decisions; line-shaped clouds suggest one dominant ambiguity axis; broad scatter suggests diffuse uncertainty; and a connected path crossing the disk suggests drift or a changing decision pathway."
+      "How to read it: a tight cluster means repeated passes agree; a line-like cloud means the case is mostly split between two routes; a broad cloud means evidence is scattered; and a long path means the preferred route changes over the sequence."
     );
     container.append(header, frame, legend, reading);
   }
