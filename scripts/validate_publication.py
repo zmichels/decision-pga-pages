@@ -11,6 +11,7 @@ REQUIRED_FILES = [
     "index.md",
     "article.md",
     "demo.md",
+    "toolkit.md",
     "examples/document-triage/demo_cases.json",
     "examples/document-triage/demo_results.json",
     "assets/document-triage-demo-overview.svg",
@@ -102,6 +103,7 @@ def main() -> None:
     index = (ROOT / "index.md").read_text(encoding="utf-8")
     require("Read the article" in index, "Landing page missing article call to action")
     require("Try the demo" in index, "Landing page missing demo call to action")
+    require("Use the toolkit" in index, "Landing page missing toolkit call to action")
     require("View code" in index, "Landing page missing code call to action")
     require("https://github.com/zmichels/Decision-PGA" in index, "Landing page missing public code repo link")
     require("Download PDF" in index, "Landing page missing PDF call to action")
@@ -111,10 +113,27 @@ def main() -> None:
     )
 
     layout = (ROOT / "_layouts/default.html").read_text(encoding="utf-8")
-    require("styles.css?v=20260519-readout-wrap" in layout, "Layout should version the stylesheet")
+    require("styles.css?v=20260519-toolkit" in layout, "Layout should version the stylesheet")
     require("https://github.com/zmichels/Decision-PGA" in layout, "Nav should link to the public code repo")
+    require("Toolkit" in layout, "Nav should link to the toolkit page")
     for removed_nav in ["publication-plan", "Release Notes", "Plan"]:
         require(removed_nav not in layout, f"Layout should not expose old staging navigation: {removed_nav}")
+
+    toolkit = (ROOT / "toolkit.md").read_text(encoding="utf-8")
+    for phrase in [
+        "Decision-PGA Agent Toolkit",
+        "Diagnostic Payload Gallery",
+        "Use Decision-PGA in five minutes",
+        "what kind of uncertainty is it",
+        "Tool/action ambiguity",
+        "RAG evidence conflict",
+        "Document extraction routing",
+        "Multi-step agent drift",
+        "Stable abstain decision",
+        "https://github.com/zmichels/Decision-PGA/blob/main/docs/agent-toolkit.md",
+        "not a production safety layer",
+    ]:
+        require(phrase in toolkit, f"Toolkit page missing required phrase: {phrase}")
 
     pdf = ROOT / "assets/decision-pga-decision-state-diagnostics.pdf"
     require(pdf.read_bytes().startswith(b"%PDF"), "PDF asset does not look like a PDF")

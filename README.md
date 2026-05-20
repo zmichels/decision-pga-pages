@@ -3,8 +3,8 @@
 This repository hosts the public GitHub Pages companion site for
 **Decision-PGA and the Need for Decision-State Diagnostics**.
 
-The site links the article, synthetic document-triage demo, PDF copy, and the
-public Decision-PGA prototype repository:
+The site links the article, synthetic document-triage demo, agent toolkit page,
+PDF copy, and the public Decision-PGA prototype repository:
 <https://github.com/zmichels/Decision-PGA>.
 
 ## Contents
@@ -12,6 +12,7 @@ public Decision-PGA prototype repository:
 - `index.md` - landing page for GitHub Pages
 - `article.md` - canonical article draft
 - `demo.md` - synthetic document extraction triage demo
+- `toolkit.md` - practical agent-builder quickstart and payload gallery
 - `examples/document-triage/demo_cases.json` - demo probability-cloud fixture
 - `examples/document-triage/demo_results.json` - generated diagnostic outputs
 - `assets/document-triage-demo-overview.svg` - visual demo summary
