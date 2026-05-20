@@ -10,11 +10,13 @@ description: Article, demo, and open-source code for decision-state diagnostics 
   <p class="lede">
     Decision-PGA is a prototype framework for describing the shape of
     uncertainty around AI decisions before a workflow acts. This site gathers
-    the article, a synthetic demo, the public code repository, and a PDF copy.
+    the article, a synthetic demo, the agent toolkit, the public code
+    repository, and a PDF copy.
   </p>
   <div class="actions">
     <a class="button" href="{{ '/article/' | relative_url }}">Read the article</a>
     <a class="button secondary" href="{{ '/demo/' | relative_url }}">Try the demo</a>
+    <a class="button secondary" href="{{ '/toolkit/' | relative_url }}">Use the toolkit</a>
     <a class="button secondary" href="https://github.com/zmichels/Decision-PGA">View code</a>
     <a class="button secondary" href="{{ '/assets/decision-pga-decision-state-diagnostics.pdf' | relative_url }}">Download PDF</a>
   </div>
@@ -29,8 +31,8 @@ description: Article, demo, and open-source code for decision-state diagnostics 
 ## What This Site Is For
 
 This site is a compact public entry point for Decision-PGA: the framing article,
-the synthetic document-triage demo, the open-source prototype repository, and a
-PDF version of the article.
+the synthetic document-triage demo, the agent toolkit, the open-source
+prototype repository, and a PDF version of the article.
 
 <div class="grid">
   <section class="panel">
@@ -45,6 +47,14 @@ PDF version of the article.
     <p>
       A document extraction triage fixture shows how probability clouds can map
       to workflow actions.
+    </p>
+  </section>
+  <section class="panel">
+    <h3>Agent toolkit</h3>
+    <p>
+      A five-minute path shows CLI, Python API, MCP launch, and synthetic
+      agent payloads for developers who want to try the diagnostic contract in
+      their own workflow vocabulary.
     </p>
   </section>
   <section class="panel">
@@ -67,5 +77,6 @@ PDF version of the article.
 
 - Article and PDF: available for public reading and critique.
 - Demo: synthetic, non-clinical, and designed to build intuition.
+- Toolkit: copy-paste agent examples and a local MCP quickstart.
 - Code: public initial research release at
   <https://github.com/zmichels/Decision-PGA>.
