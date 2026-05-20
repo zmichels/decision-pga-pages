@@ -289,6 +289,8 @@ li {
 }
 
 .diagnostic-readout {
+  min-width: 0;
+  overflow: hidden;
   border: 1px solid #b7d1d8;
   border-radius: 8px;
   padding: 0.85rem;
@@ -297,8 +299,8 @@ li {
 
 .diagnostic-readout dl {
   display: grid;
-  grid-template-columns: minmax(96px, 0.8fr) minmax(0, 1fr);
-  gap: 0.35rem 0.75rem;
+  grid-template-columns: minmax(5.2rem, 0.55fr) minmax(0, 1fr);
+  gap: 0.35rem 0.55rem;
   margin: 0 0 0.85rem;
 }
 
@@ -309,10 +311,19 @@ li {
 }
 
 .diagnostic-readout dd {
+  min-width: 0;
   margin: 0;
   color: var(--ink);
   font-size: 0.9rem;
   font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.diagnostic-readout code {
+  padding: 0.08rem 0.2rem;
+  font-size: 0.9em;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .diagnostic-readout p,
