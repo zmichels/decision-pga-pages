@@ -682,6 +682,86 @@ li {
   overflow: visible;
 }
 
+.state-shape-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
+  gap: 0.8rem;
+}
+
+.state-shape-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 0.55rem;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbfc 100%);
+}
+
+.state-shape-card.is-active {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent), 0 0.5rem 1.2rem rgba(35, 106, 124, 0.1);
+}
+
+.state-shape-card-header {
+  display: grid;
+  gap: 0.35rem;
+  align-items: start;
+}
+
+.state-shape-card h5,
+.state-shape-card p {
+  margin: 0;
+}
+
+.state-shape-card h5 {
+  font-size: 0.95rem;
+  line-height: 1.18;
+}
+
+.state-shape-card-header p {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.state-shape-action {
+  justify-self: start;
+  max-width: 7.7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.12rem 0.42rem;
+  background: var(--wash);
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.state-shape-card.is-active .state-shape-action {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: white;
+}
+
+.state-shape-svg {
+  display: grid;
+  place-items: center;
+  min-height: 10.6rem;
+  border: 1px solid #edf2f6;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.state-shape-svg svg {
+  width: min(100%, 12rem);
+  height: auto;
+  overflow: visible;
+}
+
 .manifold-axis-label,
 .manifold-point-label,
 .manifold-start-label {
@@ -812,6 +892,10 @@ pre {
 
   .manifold-scale {
     justify-self: start;
+  }
+
+  .state-shape-action {
+    max-width: 100%;
   }
 
   .probability-bar-row {

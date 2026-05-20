@@ -74,6 +74,90 @@
     regime_shift: "shifting decision path",
   };
 
+  const SHAPE_ATLAS = [
+    {
+      state: "stable",
+      title: "Stable",
+      action: "accept_extraction",
+      pattern: "tight cluster",
+      reading: "Repeated passes land in the same neighborhood, so the workflow can usually accept and continue.",
+      points: [
+        [-0.12, 0.08, "accept_extraction"],
+        [-0.06, 0.02, "accept_extraction"],
+        [-0.01, 0.06, "accept_extraction"],
+        [0.04, -0.02, "accept_extraction"],
+        [-0.08, -0.05, "accept_extraction"],
+        [0.02, 0.02, "accept_extraction"],
+        [-0.04, 0.11, "accept_extraction"],
+      ],
+    },
+    {
+      state: "binary_ambiguity",
+      title: "Binary Ambiguity",
+      action: "ask_for_clarification",
+      pattern: "one dominant split",
+      reading: "The cloud is stretched along one main axis, which reads like a focused clarification question.",
+      guide: "horizontal",
+      points: [
+        [-0.58, -0.02, "accept_extraction"],
+        [-0.38, 0.04, "accept_extraction"],
+        [-0.16, -0.03, "accept_extraction"],
+        [0.12, 0.03, "ask_for_clarification"],
+        [0.32, -0.04, "ask_for_clarification"],
+        [0.52, 0.02, "ask_for_clarification"],
+      ],
+    },
+    {
+      state: "diffuse_uncertainty",
+      title: "Diffuse Uncertainty",
+      action: "retrieve_more_context",
+      pattern: "spread across routes",
+      reading: "Mass is scattered rather than organized, suggesting missing context or incomplete evidence.",
+      points: [
+        [-0.45, 0.36, "ask_for_clarification"],
+        [-0.2, -0.44, "flag_for_review"],
+        [0.1, 0.42, "retrieve_more_context"],
+        [0.44, -0.14, "defer"],
+        [0.02, -0.08, "retrieve_more_context"],
+        [-0.5, -0.08, "accept_extraction"],
+        [0.34, 0.28, "flag_for_review"],
+      ],
+    },
+    {
+      state: "boundary_sensitive",
+      title: "Boundary Sensitive",
+      action: "flag_for_review",
+      pattern: "near a threshold",
+      reading: "The path hugs a low-margin boundary, so small changes can flip the next action.",
+      guide: "diagonal",
+      points: [
+        [-0.48, -0.26, "accept_extraction"],
+        [-0.28, -0.15, "accept_extraction"],
+        [-0.08, -0.04, "accept_extraction"],
+        [0.1, 0.05, "flag_for_review"],
+        [0.3, 0.15, "flag_for_review"],
+        [0.5, 0.25, "flag_for_review"],
+      ],
+    },
+    {
+      state: "regime_shift",
+      title: "Regime Shift",
+      action: "defer",
+      pattern: "early-to-late movement",
+      reading: "The sequence moves from one neighborhood to another, so the workflow should pause and re-evaluate.",
+      path: true,
+      points: [
+        [-0.55, -0.08, "accept_extraction"],
+        [-0.42, -0.03, "accept_extraction"],
+        [-0.28, 0.02, "accept_extraction"],
+        [-0.04, 0.05, "flag_for_review"],
+        [0.18, 0.08, "defer"],
+        [0.4, 0.1, "defer"],
+        [0.56, 0.14, "defer"],
+      ],
+    },
+  ];
+
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
   }
@@ -417,77 +501,85 @@
     container.append(bars);
   }
 
-  function renderManifoldMap(container, labels, diagnostic) {
-    const projection = diagnostic.geometry.projection;
-    const size = 360;
-    const center = 180;
-    const radius = 126;
-    const viewScale = (radius * 0.82) / projection.scaleReference;
-    const toScreen = (point) => ({
-      x: center + point.x * viewScale,
-      y: center - point.y * viewScale,
+  function createShapeAtlasSvg(shape) {
+    const size = 180;
+    const center = 90;
+    const radius = 61;
+    const toScreen = ([x, y]) => ({
+      x: center + x * radius,
+      y: center - y * radius,
     });
-    const points = projection.coordinates.map((point) => ({ ...point, ...toScreen(point) }));
+    const points = shape.points.map((point) => ({ ...toScreen(point), action: point[2] }));
     const pathData = points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" ");
-    const maxAbsX = Math.max(0.012, ...projection.coordinates.map((point) => Math.abs(point.x)));
-    const maxAbsY = Math.max(0.012, ...projection.coordinates.map((point) => Math.abs(point.y)));
-    const ellipseRx = clamp(maxAbsX * viewScale * 1.35, 18, radius * 0.82);
-    const ellipseRy = clamp(maxAbsY * viewScale * 1.35, 12, radius * 0.58);
-    const lastPoint = points[points.length - 1];
-
-    container.innerHTML = "";
-    const header = createElement("div", "manifold-map-header");
-    const copy = createElement("div");
-    copy.append(
-      createElement("h4", null, "Decision cloud map"),
-      createElement(
-        "p",
-        null,
-        "A simplified projection of the same probability rows. Dots are repeated passes, color shows the top next action, and the path shows how the decision route moves across the cloud."
-      )
-    );
-    const shape = createElement("p", "manifold-scale", MAP_PATTERN_COPY[diagnostic.state] || "decision cloud");
-    header.append(copy, shape);
-
-    const frame = createElement("div", "manifold-map-frame");
+    const gradientId = `shapeAtlasFill-${shape.state}`;
     const svg = createSvgElement("svg", {
       viewBox: `0 0 ${size} ${size}`,
       role: "img",
-      "aria-label": "Tangent projection of the probability cloud on a circular simplex manifold map",
+      "aria-label": `${shape.title} schematic probability-cloud shape`,
     });
-
     const defs = createSvgElement("defs");
-    const gradient = createSvgElement("radialGradient", { id: "manifoldFill", cx: "50%", cy: "42%", r: "64%" });
+    const gradient = createSvgElement("radialGradient", { id: gradientId, cx: "50%", cy: "42%", r: "64%" });
     gradient.append(
       createSvgElement("stop", { offset: "0%", "stop-color": "#ffffff" }),
       createSvgElement("stop", { offset: "100%", "stop-color": "#eef8fa" })
     );
     defs.append(gradient);
     svg.append(defs);
-
-    svg.append(createSvgElement("circle", { cx: center, cy: center, r: radius, fill: "url(#manifoldFill)", stroke: "#b7d1d8", "stroke-width": 2 }));
-    svg.append(createSvgElement("circle", { cx: center, cy: center, r: radius * 0.55, fill: "none", stroke: "#d7e4e8", "stroke-width": 1.2 }));
-    svg.append(createSvgElement("line", { x1: center - radius * 0.72, y1: center, x2: center + radius * 0.72, y2: center, stroke: "#9fb8bf", "stroke-width": 1.6, "stroke-linecap": "round", opacity: 0.58 }));
-    svg.append(createSvgElement("line", { x1: center, y1: center - radius * 0.62, x2: center, y2: center + radius * 0.62, stroke: "#c4d5da", "stroke-width": 1.2, "stroke-dasharray": "5 7", "stroke-linecap": "round", opacity: 0.65 }));
-    svg.append(createSvgElement("ellipse", { cx: center, cy: center, rx: ellipseRx, ry: ellipseRy, fill: "#236a7c", opacity: 0.08, stroke: "#236a7c", "stroke-width": 2, "stroke-opacity": 0.2 }));
-
-    if (points.length > 1) {
-      svg.append(createSvgElement("path", { d: pathData, fill: "none", stroke: "#172033", "stroke-width": 2.4, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: 0.28 }));
+    svg.append(createSvgElement("circle", { cx: center, cy: center, r: radius, fill: `url(#${gradientId})`, stroke: "#b7d1d8", "stroke-width": 2 }));
+    svg.append(createSvgElement("circle", { cx: center, cy: center, r: radius * 0.46, fill: "none", stroke: "#d7e4e8", "stroke-width": 1 }));
+    if (shape.guide === "horizontal") {
+      svg.append(createSvgElement("line", { x1: center - radius * 0.72, y1: center, x2: center + radius * 0.72, y2: center, stroke: "#236a7c", "stroke-width": 3, "stroke-linecap": "round", opacity: 0.38 }));
+      svg.append(createSvgElement("ellipse", { cx: center, cy: center, rx: radius * 0.72, ry: radius * 0.17, fill: "#236a7c", opacity: 0.08 }));
+    } else if (shape.guide === "diagonal") {
+      svg.append(createSvgElement("line", { x1: center - radius * 0.66, y1: center + radius * 0.35, x2: center + radius * 0.66, y2: center - radius * 0.35, stroke: "#c7643a", "stroke-width": 3, "stroke-linecap": "round", opacity: 0.35 }));
+      svg.append(createSvgElement("line", { x1: center - radius * 0.48, y1: center - radius * 0.46, x2: center + radius * 0.48, y2: center + radius * 0.46, stroke: "#9fb8bf", "stroke-width": 1.4, "stroke-dasharray": "4 5", "stroke-linecap": "round", opacity: 0.65 }));
+    } else if (shape.state === "diffuse_uncertainty") {
+      svg.append(createSvgElement("ellipse", { cx: center, cy: center, rx: radius * 0.62, ry: radius * 0.48, fill: "#236a7c", opacity: 0.06, stroke: "#236a7c", "stroke-width": 1.8, "stroke-opacity": 0.16 }));
+    } else {
+      svg.append(createSvgElement("ellipse", { cx: center - radius * 0.04, cy: center - radius * 0.04, rx: radius * 0.2, ry: radius * 0.14, fill: "#236a7c", opacity: 0.08, stroke: "#236a7c", "stroke-width": 1.6, "stroke-opacity": 0.16 }));
     }
-    svg.append(createSvgElement("circle", { cx: center, cy: center, r: 4.2, fill: "#172033", opacity: 0.86 }));
-
-    points.forEach((point) => {
+    if (shape.path || shape.guide) {
+      svg.append(createSvgElement("path", { d: pathData, fill: "none", stroke: "#172033", "stroke-width": 2.2, "stroke-linecap": "round", "stroke-linejoin": "round", opacity: shape.path ? 0.35 : 0.18 }));
+    }
+    points.forEach((point, index) => {
       const group = createSvgElement("g");
-      group.append(createSvgElement("circle", { cx: point.x, cy: point.y, r: point.index === 0 || point.index === points.length - 1 ? 7 : 5.8, fill: ACTION_COLORS[point.action], stroke: "#ffffff", "stroke-width": 2.2, opacity: 0.96 }));
-      group.append(createSvgElement("title", {}, `${point.index + 1}: ${humanizeAction(point.action)}`));
+      group.append(createSvgElement("circle", { cx: point.x, cy: point.y, r: index === 0 || index === points.length - 1 ? 6 : 5.1, fill: ACTION_COLORS[point.action], stroke: "#ffffff", "stroke-width": 1.8, opacity: 0.97 }));
+      group.append(createSvgElement("title", {}, `${index + 1}: ${humanizeAction(point.action)}`));
       svg.append(group);
     });
-    if (points.length > 0) {
-      const first = points[0];
-      svg.append(createSvgElement("text", { x: first.x + 8, y: first.y - 8, class: "manifold-start-label" }, "start"));
-      svg.append(createSvgElement("text", { x: lastPoint.x + 8, y: lastPoint.y + 15, class: "manifold-start-label" }, "latest"));
-    }
-    frame.append(svg);
+    return svg;
+  }
+
+  function renderManifoldMap(container, labels, diagnostic) {
+    container.innerHTML = "";
+    const header = createElement("div", "manifold-map-header");
+    const copy = createElement("div");
+    copy.append(
+      createElement("h4", null, "Decision-state shape atlas"),
+      createElement(
+        "p",
+        null,
+        "Separate schematic projections show how different probability-cloud shapes can imply different workflow responses."
+      )
+    );
+    const shape = createElement("p", "manifold-scale", MAP_PATTERN_COPY[diagnostic.state] || "decision cloud");
+    header.append(copy, shape);
+
+    const atlas = createElement("div", "state-shape-grid");
+    SHAPE_ATLAS.forEach((item) => {
+      const card = createElement("article", "state-shape-card");
+      const isActive = item.state === diagnostic.state;
+      card.classList.toggle("is-active", isActive);
+      const cardHeader = createElement("div", "state-shape-card-header");
+      const titleGroup = createElement("div");
+      titleGroup.append(createElement("h5", null, item.title), createElement("p", null, item.pattern));
+      const status = createElement("span", "state-shape-action", isActive ? "current case" : humanizeAction(item.action));
+      cardHeader.append(titleGroup, status);
+      const svgWrap = createElement("div", "state-shape-svg");
+      svgWrap.append(createShapeAtlasSvg(item));
+      card.append(cardHeader, svgWrap, createElement("p", "microcopy", item.reading));
+      atlas.append(card);
+    });
 
     const legend = createElement("div", "manifold-legend");
     labels.forEach((label) => {
@@ -501,9 +593,9 @@
     const reading = createElement(
       "p",
       "microcopy",
-      "How to read it: a tight cluster means repeated passes agree; a line-like cloud means the case is mostly split between two routes; a broad cloud means evidence is scattered; and a long path means the preferred route changes over the sequence."
+      `The selected case currently reads as ${MAP_PATTERN_COPY[diagnostic.state] || "a decision cloud"} and maps to ${humanizeAction(diagnostic.workflowAction)}. The drawings are schematic: they teach the shape vocabulary, while the metrics above come from the editable probability rows.`
     );
-    container.append(header, frame, legend, reading);
+    container.append(header, atlas, legend, reading);
   }
 
   function renderPayload(container, scenario, labels, rows) {
