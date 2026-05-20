@@ -15,6 +15,7 @@ REQUIRED_FILES = [
     "robots.txt",
     "sitemap.xml",
     "llms.txt",
+    "google4a9ab19a7fbfc2f9.html",
     "examples/document-triage/demo_cases.json",
     "examples/document-triage/demo_results.json",
     "assets/document-triage-demo-overview.svg",
@@ -193,6 +194,12 @@ def main() -> None:
         "no clinical-validation claim",
     ]:
         require(phrase in llms, f"llms.txt missing required phrase: {phrase}")
+
+    google_verification = (ROOT / "google4a9ab19a7fbfc2f9.html").read_text(encoding="utf-8")
+    require(
+        google_verification.strip() == "google-site-verification: google4a9ab19a7fbfc2f9.html",
+        "Google Search Console verification file has unexpected contents",
+    )
 
     pdf = ROOT / "assets/decision-pga-decision-state-diagnostics.pdf"
     require(pdf.read_bytes().startswith(b"%PDF"), "PDF asset does not look like a PDF")
