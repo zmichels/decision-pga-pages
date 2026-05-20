@@ -1,11 +1,109 @@
 <!doctype html>
 <html lang="en">
   <head>
+    {% assign canonical_url = page.url | absolute_url %}
+    {% assign page_description = page.description | default: site.description %}
+    {% assign page_title = page.title | default: site.title %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ page.title }} | {{ site.title }}</title>
-    <meta name="description" content="{{ page.description | default: site.description }}">
+    <title>{{ page_title }} | {{ site.title }}</title>
+    <meta name="description" content="{{ page_description }}">
+    <meta name="author" content="Zachary D. Michels">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ '/sitemap.xml' | absolute_url }}">
+    <link rel="alternate" type="text/plain" title="llms.txt" href="{{ '/llms.txt' | absolute_url }}">
+    <meta property="og:site_name" content="{{ site.title }}">
+    <meta property="og:title" content="{{ page_title }}">
+    <meta property="og:description" content="{{ page_description }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:type" content="{% if page.schema_type == 'Article' or page.schema_type == 'TechArticle' %}article{% else %}website{% endif %}">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ page_title }}">
+    <meta name="twitter:description" content="{{ page_description }}">
     <link rel="stylesheet" href="{{ '/assets/styles.css?v=20260519-toolkit-pyramid' | relative_url }}">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": {{ "/" | absolute_url | append: "#website" | jsonify }},
+      "name": {{ site.title | jsonify }},
+      "url": {{ "/" | absolute_url | jsonify }},
+      "description": {{ site.description | jsonify }},
+      "publisher": {
+        "@type": "Person",
+        "name": "Zachary D. Michels"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://github.com/zmichels/Decision-PGA#software",
+      "name": "Decision-PGA",
+      "codeRepository": "https://github.com/zmichels/Decision-PGA",
+      "programmingLanguage": "Python",
+      "license": "https://github.com/zmichels/Decision-PGA/blob/main/LICENSE",
+      "description": "Open-source prototype for decision-state diagnostics over probability clouds in agent workflows.",
+      "keywords": [
+        "decision-state diagnostics",
+        "AI agents",
+        "uncertainty quantification",
+        "principal geodesic analysis",
+        "document extraction"
+      ],
+      "author": {
+        "@type": "Person",
+        "name": "Zachary D. Michels"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": {{ canonical_url | append: "#webpage" | jsonify }},
+      "url": {{ canonical_url | jsonify }},
+      "name": {{ page_title | jsonify }},
+      "description": {{ page_description | jsonify }},
+      "isPartOf": {
+        "@id": {{ "/" | absolute_url | append: "#website" | jsonify }}
+      },
+      "about": {
+        "@id": "https://github.com/zmichels/Decision-PGA#software"
+      }
+    }{% if page.schema_type == "Article" or page.schema_type == "TechArticle" %},
+    {
+      "@type": {{ page.schema_type | jsonify }},
+      "@id": {{ canonical_url | append: "#article" | jsonify }},
+      "headline": {{ page_title | jsonify }},
+      "description": {{ page_description | jsonify }},
+      "url": {{ canonical_url | jsonify }},
+      "datePublished": {{ page.date_published | default: "2026-05-19" | jsonify }},
+      "dateModified": {{ page.date_modified | default: page.date_published | default: "2026-05-19" | jsonify }},
+      "author": {
+        "@type": "Person",
+        "name": {{ page.author | default: "Zachary D. Michels" | jsonify }}
+      },
+      "mainEntityOfPage": {
+        "@id": {{ canonical_url | append: "#webpage" | jsonify }}
+      },
+      "about": {
+        "@id": "https://github.com/zmichels/Decision-PGA#software"
+      }
+    }{% elsif page.schema_type == "WebApplication" %},
+    {
+      "@type": "WebApplication",
+      "@id": {{ canonical_url | append: "#demo" | jsonify }},
+      "name": {{ page_title | jsonify }},
+      "url": {{ canonical_url | jsonify }},
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "description": {{ page_description | jsonify }},
+      "isAccessibleForFree": true,
+      "about": {
+        "@id": "https://github.com/zmichels/Decision-PGA#software"
+      }
+    }{% endif %}
+  ]
+}
+    </script>
   </head>
   <body>
     <header class="site-header">

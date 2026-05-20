@@ -3,6 +3,7 @@ layout: default
 title: Document Extraction Triage Demo
 description: A synthetic Decision-PGA demo for routing document extraction workflows by decision-state shape.
 permalink: /demo/
+schema_type: WebApplication
 ---
 
 # Document Extraction Triage Demo

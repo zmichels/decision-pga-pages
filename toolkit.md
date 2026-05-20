@@ -3,6 +3,10 @@ layout: default
 title: Agent Toolkit
 description: A practical Decision-PGA quickstart and diagnostic payload gallery for agent builders.
 permalink: /toolkit/
+schema_type: TechArticle
+author: Zachary D. Michels, PhD
+date_published: "2026-05-20"
+date_modified: "2026-05-20"
 ---
 
 # Decision-PGA Agent Toolkit

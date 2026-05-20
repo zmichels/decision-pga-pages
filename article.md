@@ -3,6 +3,10 @@ layout: default
 title: Decision-PGA and the Need for Decision-State Diagnostics
 description: A deliberately narrow prototype vocabulary for uncertainty shape in agentic AI workflows.
 permalink: /article/
+schema_type: Article
+author: Zachary D. Michels, PhD
+date_published: "2026-05-19"
+date_modified: "2026-05-19"
 ---
 
 # Decision-PGA and the Need for Decision-State Diagnostics

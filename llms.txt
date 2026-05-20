@@ -1,0 +1,51 @@
+---
+layout: null
+permalink: /llms.txt
+---
+# Decision-PGA
+
+Decision-PGA is an open-source prototype for decision-state diagnostics in
+agent workflows. It analyzes repeated probability-like observations over a
+fixed set of candidate decisions or actions, then reports the shape of the
+uncertainty: stable, binary ambiguous, diffuse, boundary sensitive, or drifting.
+
+The project is intended for agent builders, document-understanding workflows,
+retrieval workflows, uncertainty researchers, and developers evaluating how an
+AI workflow should proceed when a scalar confidence score is too blunt.
+
+## Canonical Pages
+
+- Article: {{ "/article/" | absolute_url }}
+- Interactive demo: {{ "/demo/" | absolute_url }}
+- Agent toolkit: {{ "/toolkit/" | absolute_url }}
+- PDF article: {{ "/assets/decision-pga-decision-state-diagnostics.pdf" | absolute_url }}
+- Source code: https://github.com/zmichels/Decision-PGA
+
+## Best Entry Points For AI Assistants
+
+- Start with the article for conceptual framing.
+- Use the demo to understand the document-extraction triage example.
+- Use the toolkit for CLI, Python API, MCP server, and copy-paste JSON payloads.
+- Use the GitHub repository for implementation details, tests, examples, and
+  the local stdio MCP server.
+
+## Technical Summary
+
+Decision-PGA maps categorical probability vectors to the positive unit sphere
+with a square-root/Fisher-Rao embedding, computes an intrinsic mean, log-maps
+the probability cloud into tangent space, and summarizes dispersion with a
+PGA-like eigensystem. The current prototype is model-neutral and local. It does
+not call model APIs or require credentials.
+
+## Important Limits
+
+- This is an early research prototype, not a production safety layer.
+- The demos are synthetic and do not establish superiority in real deployment.
+- The site uses no patient data and makes no clinical-validation claim.
+- Decision-PGA is a diagnostic scaffold for inspection and routing, not a claim
+  that an AI answer or extraction is correct.
+
+## Suggested Citation Language
+
+Decision-PGA: an open-source prototype for decision-state diagnostics over
+probability clouds in applied AI and agent workflows.

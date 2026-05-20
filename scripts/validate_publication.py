@@ -12,6 +12,9 @@ REQUIRED_FILES = [
     "article.md",
     "demo.md",
     "toolkit.md",
+    "robots.txt",
+    "sitemap.xml",
+    "llms.txt",
     "examples/document-triage/demo_cases.json",
     "examples/document-triage/demo_results.json",
     "assets/document-triage-demo-overview.svg",
@@ -114,6 +117,21 @@ def main() -> None:
 
     layout = (ROOT / "_layouts/default.html").read_text(encoding="utf-8")
     require("styles.css?v=20260519-toolkit-pyramid" in layout, "Layout should version the stylesheet")
+    for phrase in [
+        "rel=\"canonical\"",
+        "rel=\"sitemap\"",
+        "title=\"llms.txt\"",
+        "og:title",
+        "twitter:card",
+        "application/ld+json",
+        "SoftwareSourceCode",
+        "WebApplication",
+        "TechArticle",
+        "https://github.com/zmichels/Decision-PGA#software",
+        "decision-state diagnostics",
+        "principal geodesic analysis",
+    ]:
+        require(phrase in layout, f"Layout missing crawler metadata marker: {phrase}")
     styles = (ROOT / "assets/styles.css").read_text(encoding="utf-8")
     require(".panel a" in styles, "Stylesheet should include panel link wrapping")
     require("overflow-wrap: anywhere" in styles, "Panel content should wrap long filenames")
@@ -143,6 +161,38 @@ def main() -> None:
         "not a production safety layer",
     ]:
         require(phrase in toolkit, f"Toolkit page missing required phrase: {phrase}")
+
+    robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
+    for phrase in [
+        "User-agent: *",
+        "Allow: /",
+        "Sitemap: {{ \"/sitemap.xml\" | absolute_url }}",
+    ]:
+        require(phrase in robots, f"robots.txt missing required phrase: {phrase}")
+
+    sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
+    for phrase in [
+        "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">",
+        "{{ \"/\" | absolute_url }}",
+        "{{ \"/article/\" | absolute_url }}",
+        "{{ \"/demo/\" | absolute_url }}",
+        "{{ \"/toolkit/\" | absolute_url }}",
+        "{{ \"/assets/decision-pga-decision-state-diagnostics.pdf\" | absolute_url }}",
+    ]:
+        require(phrase in sitemap, f"sitemap.xml missing required phrase: {phrase}")
+
+    llms = (ROOT / "llms.txt").read_text(encoding="utf-8")
+    for phrase in [
+        "# Decision-PGA",
+        "Canonical Pages",
+        "Best Entry Points For AI Assistants",
+        "Technical Summary",
+        "Important Limits",
+        "Source code: https://github.com/zmichels/Decision-PGA",
+        "not a production safety layer",
+        "no clinical-validation claim",
+    ]:
+        require(phrase in llms, f"llms.txt missing required phrase: {phrase}")
 
     pdf = ROOT / "assets/decision-pga-decision-state-diagnostics.pdf"
     require(pdf.read_bytes().startswith(b"%PDF"), "PDF asset does not look like a PDF")
