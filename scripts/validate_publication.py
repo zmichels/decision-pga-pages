@@ -113,10 +113,14 @@ def main() -> None:
     )
 
     layout = (ROOT / "_layouts/default.html").read_text(encoding="utf-8")
-    require("styles.css?v=20260519-toolkit-wrap" in layout, "Layout should version the stylesheet")
+    require("styles.css?v=20260519-toolkit-pyramid" in layout, "Layout should version the stylesheet")
     styles = (ROOT / "assets/styles.css").read_text(encoding="utf-8")
     require(".panel a" in styles, "Stylesheet should include panel link wrapping")
     require("overflow-wrap: anywhere" in styles, "Panel content should wrap long filenames")
+    require(".toolkit-gallery" in styles, "Stylesheet should include toolkit gallery layout")
+    require(".example-link" in styles, "Stylesheet should include compact example link styling")
+    require("text-overflow: ellipsis" in styles, "Example links should not dangle over card edges")
+    require("white-space: nowrap" in styles, "Example links should stay on one line")
     require("https://github.com/zmichels/Decision-PGA" in layout, "Nav should link to the public code repo")
     require("Toolkit" in layout, "Nav should link to the toolkit page")
     for removed_nav in ["publication-plan", "Release Notes", "Plan"]:
@@ -133,6 +137,8 @@ def main() -> None:
         "Document extraction routing",
         "Multi-step agent drift",
         "Stable abstain decision",
+        "toolkit-gallery",
+        "example-link",
         "https://github.com/zmichels/Decision-PGA/blob/main/docs/agent-toolkit.md",
         "not a production safety layer",
     ]:

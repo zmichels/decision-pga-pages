@@ -57,7 +57,7 @@ The examples are synthetic, but the situations are meant to feel familiar to
 agent builders. The point is to see how similar-looking uncertainty can call for
 different next actions.
 
-<div class="grid">
+<div class="grid toolkit-gallery">
   <section class="panel">
     <h3>Tool/action ambiguity</h3>
     <p>
@@ -68,7 +68,7 @@ different next actions.
     <p>
       Expected state: <code>binary_ambiguity</code><br>
       Example:
-      <a href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/tool_action_ambiguity.json">tool_action_ambiguity.json</a>
+      <a class="example-link" href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/tool_action_ambiguity.json">tool_action_ambiguity.json</a>
     </p>
   </section>
   <section class="panel">
@@ -81,7 +81,7 @@ different next actions.
     <p>
       Expected state: <code>binary_ambiguity</code><br>
       Example:
-      <a href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/rag_evidence_conflict.json">rag_evidence_conflict.json</a>
+      <a class="example-link" href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/rag_evidence_conflict.json">rag_evidence_conflict.json</a>
     </p>
   </section>
   <section class="panel">
@@ -94,7 +94,7 @@ different next actions.
     <p>
       Expected state: <code>diffuse_uncertainty</code><br>
       Example:
-      <a href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/document_extraction_routing.json">document_extraction_routing.json</a>
+      <a class="example-link" href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/document_extraction_routing.json">document_extraction_routing.json</a>
     </p>
   </section>
   <section class="panel">
@@ -107,7 +107,7 @@ different next actions.
     <p>
       Expected state: <code>regime_shift</code><br>
       Example:
-      <a href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/multi_step_agent_drift.json">multi_step_agent_drift.json</a>
+      <a class="example-link" href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/multi_step_agent_drift.json">multi_step_agent_drift.json</a>
     </p>
   </section>
   <section class="panel">
@@ -120,7 +120,7 @@ different next actions.
     <p>
       Expected state: <code>stable</code><br>
       Example:
-      <a href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/abstain_defer_decision.json">abstain_defer_decision.json</a>
+      <a class="example-link" href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/abstain_defer_decision.json">abstain_defer_decision.json</a>
     </p>
   </section>
 </div>

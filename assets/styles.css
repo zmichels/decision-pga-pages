@@ -179,6 +179,22 @@ li {
   margin: 2rem 0;
 }
 
+.toolkit-gallery {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.toolkit-gallery .panel {
+  grid-column: span 2;
+}
+
+.toolkit-gallery .panel:nth-of-type(4) {
+  grid-column: 2 / span 2;
+}
+
+.toolkit-gallery .panel:nth-of-type(5) {
+  grid-column: 4 / span 2;
+}
+
 .panel {
   min-width: 0;
   border: 1px solid var(--line);
@@ -195,6 +211,19 @@ li {
 .panel a {
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+.panel a.example-link {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 .scenario-list {
@@ -889,6 +918,16 @@ pre {
 
   nav {
     justify-content: flex-start;
+  }
+
+  .toolkit-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .toolkit-gallery .panel,
+  .toolkit-gallery .panel:nth-of-type(4),
+  .toolkit-gallery .panel:nth-of-type(5) {
+    grid-column: auto;
   }
 
   .scenario-detail-grid {
