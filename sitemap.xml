@@ -6,15 +6,21 @@ permalink: /sitemap.xml
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>{{ "/" | absolute_url }}</loc>
-    <lastmod>2026-05-20</lastmod>
+    <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>{{ "/article/" | absolute_url }}</loc>
-    <lastmod>2026-05-19</lastmod>
+    <lastmod>2026-05-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>{{ "/telescoping/" | absolute_url }}</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>{{ "/demo/" | absolute_url }}</loc>
@@ -31,6 +37,12 @@ permalink: /sitemap.xml
   <url>
     <loc>{{ "/assets/decision-pga-decision-state-diagnostics.pdf" | absolute_url }}</loc>
     <lastmod>2026-05-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>{{ "/assets/telescoping-decision-pga.pdf" | absolute_url }}</loc>
+    <lastmod>2026-05-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

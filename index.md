@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Decision-PGA
-description: Article, demo, and open-source code for decision-state diagnostics in applied AI workflows.
+description: Article series, demo, and open-source code for decision-state diagnostics in applied AI workflows.
 ---
 
 <section class="hero">
@@ -10,11 +10,12 @@ description: Article, demo, and open-source code for decision-state diagnostics 
   <p class="lede">
     Decision-PGA is a prototype framework for describing the shape of
     uncertainty around AI decisions before a workflow acts. This site gathers
-    the article, a synthetic demo, the agent toolkit, the public code
-    repository, and a PDF copy.
+    the article series, a synthetic demo, the agent toolkit, the public code
+    repository, and PDF copies.
   </p>
   <div class="actions">
     <a class="button" href="{{ '/article/' | relative_url }}">Read the article</a>
+    <a class="button secondary" href="{{ '/telescoping/' | relative_url }}">Read the follow-up</a>
     <a class="button secondary" href="{{ '/demo/' | relative_url }}">Try the demo</a>
     <a class="button secondary" href="{{ '/toolkit/' | relative_url }}">Use the toolkit</a>
     <a class="button secondary" href="https://github.com/zmichels/Decision-PGA">View code</a>
@@ -31,8 +32,9 @@ description: Article, demo, and open-source code for decision-state diagnostics 
 ## What This Site Is For
 
 This site is a compact public entry point for Decision-PGA: the framing article,
-the synthetic document-triage demo, the agent toolkit, the open-source
-prototype repository, and a PDF version of the article.
+the Telescoping Decision-PGA companion perspective, the synthetic
+document-triage demo, the agent toolkit, the open-source prototype repository,
+and PDF versions of the articles.
 
 <div class="grid">
   <section class="panel">
@@ -40,6 +42,13 @@ prototype repository, and a PDF version of the article.
     <p>
       The article explains why workflow-oriented AI systems need diagnostics
       for the shape of decision uncertainty.
+    </p>
+  </section>
+  <section class="panel">
+    <h3><a href="{{ '/telescoping/' | relative_url }}">Telescoping Decision-PGA</a></h3>
+    <p>
+      The follow-up perspective shows how broad uncertainty clouds can contain
+      smaller local substructures and cross-document evidence bridges.
     </p>
   </section>
   <section class="panel">
@@ -75,7 +84,7 @@ prototype repository, and a PDF version of the article.
 
 ## Current Status
 
-- Article and PDF: available for public reading and critique.
+- Article series and PDFs: available for public reading and critique.
 - Demo: synthetic, non-clinical, and designed to build intuition.
 - Toolkit: copy-paste agent examples and a local MCP quickstart.
 - Code: public initial research release at

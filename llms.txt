@@ -16,14 +16,18 @@ AI workflow should proceed when a scalar confidence score is too blunt.
 ## Canonical Pages
 
 - Article: {{ "/article/" | absolute_url }}
+- Telescoping companion: {{ "/telescoping/" | absolute_url }}
 - Interactive demo: {{ "/demo/" | absolute_url }}
 - Agent toolkit: {{ "/toolkit/" | absolute_url }}
 - PDF article: {{ "/assets/decision-pga-decision-state-diagnostics.pdf" | absolute_url }}
+- Telescoping PDF: {{ "/assets/telescoping-decision-pga.pdf" | absolute_url }}
 - Source code: https://github.com/zmichels/Decision-PGA
 
 ## Best Entry Points For AI Assistants
 
 - Start with the article for conceptual framing.
+- Use the telescoping companion for uncertainty substructure and
+  cross-document bridge framing.
 - Use the demo to understand the document-extraction triage example.
 - Use the toolkit for CLI, Python API, MCP server, and copy-paste JSON payloads.
 - Use the GitHub repository for implementation details, tests, examples, and
