@@ -3,14 +3,16 @@
 This repository hosts the public GitHub Pages companion site for
 **Decision-PGA and the Need for Decision-State Diagnostics**.
 
-The site links the article, synthetic document-triage demo, agent toolkit page,
-PDF copy, and the public Decision-PGA prototype repository:
+The site links the article, the Telescoping Decision-PGA companion perspective,
+synthetic document-triage demo, agent toolkit page, PDF copies, and the public
+Decision-PGA prototype repository:
 <https://github.com/zmichels/Decision-PGA>.
 
 ## Contents
 
 - `index.md` - landing page for GitHub Pages
 - `article.md` - canonical article draft
+- `telescoping.md` - companion technical perspective on uncertainty substructure
 - `demo.md` - synthetic document extraction triage demo
 - `toolkit.md` - practical agent-builder quickstart and payload gallery
 - `examples/document-triage/demo_cases.json` - demo probability-cloud fixture
@@ -18,6 +20,9 @@ PDF copy, and the public Decision-PGA prototype repository:
 - `assets/document-triage-demo-overview.svg` - visual demo summary
 - `assets/decision-pga-diagnostic-loop.svg` - explanatory diagram
 - `assets/decision-pga-decision-state-diagnostics.pdf` - PDF copy
+- `assets/telescoping-decision-pga.pdf` - companion PDF copy
+- `assets/telescoping-zoom.svg` and `.png` - telescoping uncertainty figure
+- `assets/cross-document-bridge.svg` and `.png` - cross-document bridge figure
 - `scripts/build_pdf.py` - Chrome-based publication PDF generator
 
 Local prior drafts are kept under `drafts/`, which is intentionally ignored by
