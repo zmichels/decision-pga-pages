@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import html
+import argparse
 import re
 import shutil
 import subprocess
@@ -9,10 +10,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ARTICLE = ROOT / "article.md"
-OUTPUT = ROOT / "assets" / "decision-pga-decision-state-diagnostics.pdf"
 BUILD_DIR = ROOT / ".publication-build"
-HTML_OUTPUT = BUILD_DIR / "decision-pga-print.html"
 SITE_URL = "https://zmichels.github.io"
 SITE_BASEURL = "/decision-pga-pages"
 
@@ -40,6 +38,18 @@ def resolve_link_href(href: str) -> str:
     if match:
         return f"{SITE_URL}{SITE_BASEURL}{match.group(1)}"
     return href
+
+
+def resolve_asset_src(src: str) -> str:
+    match = re.fullmatch(r"\{\{\s*'([^']+)'\s*\|\s*relative_url\s*\}\}", src.strip())
+    if not match:
+        return src
+
+    asset_path = match.group(1).split("?", 1)[0].lstrip("/")
+    local_asset = ROOT / asset_path
+    if local_asset.exists():
+        return local_asset.resolve().as_uri()
+    return f"{SITE_URL}{SITE_BASEURL}{match.group(1)}"
 
 
 def inline_markup(text: str) -> str:
@@ -78,10 +88,9 @@ def table_to_html(lines: list[str]) -> str:
 
 
 def figure_to_html(block: str) -> str:
-    svg_uri = (ROOT / "assets" / "decision-pga-diagnostic-loop.svg").resolve().as_uri()
     block = re.sub(
-        r"\{\{\s*'/assets/decision-pga-diagnostic-loop\.svg(?:\?v=[^']*)?'\s*\|\s*relative_url\s*\}\}",
-        svg_uri,
+        r"src=\"([^\"]+)\"",
+        lambda match: f'src="{html.escape(resolve_asset_src(match.group(1)), quote=True)}"',
         block,
     )
     return block
@@ -182,16 +191,16 @@ def markdown_to_html(markdown: str) -> str:
     return "\n".join(out)
 
 
-def render_html(article_html: str) -> str:
+def render_html(article_html: str, title: str) -> str:
     return f"""<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Decision-PGA and the Need for Decision-State Diagnostics</title>
+    <title>{html.escape(title)}</title>
     <style>
       @page {{
         size: Letter;
-        margin: 0.78in 0.82in 0.84in 0.82in;
+        margin: 0.72in 0.78in 0.78in 0.78in;
       }}
 
       * {{
@@ -203,44 +212,47 @@ def render_html(article_html: str) -> str:
         color: #172033;
         background: white;
         font-family: Arial, Helvetica, sans-serif;
-        font-size: 10.6pt;
+        font-size: 10pt;
         font-weight: 400;
-        line-height: 1.48;
+        line-height: 1.42;
         text-rendering: optimizeLegibility;
       }}
 
       h1 {{
         margin: 0 0 0.16in;
         color: #111827;
-        font-size: 27pt;
-        line-height: 1.08;
+        font-size: 23pt;
+        line-height: 1.12;
         letter-spacing: 0;
+        max-width: 100%;
+        overflow-wrap: normal;
+        text-wrap: balance;
       }}
 
       h2 {{
-        margin: 0.34in 0 0.12in;
+        margin: 0.28in 0 0.10in;
         color: #111827;
-        font-size: 15.4pt;
+        font-size: 14.7pt;
         line-height: 1.2;
         break-after: avoid;
       }}
 
       h3 {{
-        margin: 0.26in 0 0.08in;
+        margin: 0.22in 0 0.07in;
         color: #111827;
-        font-size: 11.7pt;
+        font-size: 11.3pt;
         line-height: 1.22;
         break-after: avoid;
       }}
 
       p {{
-        margin: 0 0 0.12in;
+        margin: 0 0 0.105in;
         orphans: 3;
         widows: 3;
       }}
 
       .article-meta {{
-        margin: 0 0 0.31in;
+        margin: 0 0 0.25in;
         color: #5d687a;
         font-size: 10.4pt;
         font-weight: 650;
@@ -255,7 +267,7 @@ def render_html(article_html: str) -> str:
 
       ul,
       ol {{
-        margin: 0 0 0.16in 0.24in;
+        margin: 0 0 0.13in 0.24in;
         padding-left: 0.18in;
       }}
 
@@ -265,14 +277,16 @@ def render_html(article_html: str) -> str:
       }}
 
       .diagram-figure {{
-        margin: 0.24in 0 0.24in;
+        margin: 0.14in 0 0.18in;
         break-inside: avoid;
       }}
 
       .diagram-figure img {{
         display: block;
         width: 100%;
+        max-height: 3.2in;
         height: auto;
+        object-fit: contain;
         border: 1px solid #dbe1ea;
         background: #f7f8fb;
       }}
@@ -311,6 +325,16 @@ def render_html(article_html: str) -> str:
           width: auto;
           min-height: auto;
         }}
+
+        h2,
+        h3 {{
+          break-after: avoid;
+        }}
+
+        .diagram-figure,
+        .diagram-figure img {{
+          break-inside: avoid;
+        }}
       }}
     </style>
   </head>
@@ -334,10 +358,23 @@ def find_chrome() -> Path:
     raise SystemExit("Could not find Chrome or Chromium for PDF generation.")
 
 
-def build_pdf() -> None:
+def document_title(source: Path) -> str:
+    text = source.read_text(encoding="utf-8")
+    match = re.search(r"^title:\s*(.+)$", text, flags=re.M)
+    if match:
+        return match.group(1).strip().strip('"')
+    heading = re.search(r"^#\s+(.+)$", strip_front_matter(text), flags=re.M)
+    if heading:
+        return heading.group(1).strip()
+    return source.stem
+
+
+def build_pdf(source: Path, output: Path) -> None:
     BUILD_DIR.mkdir(exist_ok=True)
-    html_text = render_html(markdown_to_html(ARTICLE.read_text(encoding="utf-8")))
-    HTML_OUTPUT.write_text(html_text, encoding="utf-8")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    html_output = BUILD_DIR / f"{source.stem}-print.html"
+    html_text = render_html(markdown_to_html(source.read_text(encoding="utf-8")), document_title(source))
+    html_output.write_text(html_text, encoding="utf-8")
 
     chrome = find_chrome()
     command = [
@@ -348,15 +385,33 @@ def build_pdf() -> None:
         "--no-pdf-header-footer",
         "--run-all-compositor-stages-before-draw",
         "--virtual-time-budget=1000",
-        f"--print-to-pdf={OUTPUT}",
-        HTML_OUTPUT.resolve().as_uri(),
+        f"--print-to-pdf={output}",
+        html_output.resolve().as_uri(),
     ]
     completed = subprocess.run(command, cwd=ROOT, text=True, capture_output=True)
     if completed.returncode != 0:
         sys.stderr.write(completed.stderr)
         raise SystemExit(completed.returncode)
-    print(OUTPUT)
+    print(output)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Build a browser-rendered PDF from a site Markdown article.")
+    parser.add_argument(
+        "source",
+        nargs="?",
+        default="article.md",
+        help="Markdown source file relative to the site root.",
+    )
+    parser.add_argument(
+        "output",
+        nargs="?",
+        default="assets/decision-pga-decision-state-diagnostics.pdf",
+        help="PDF output path relative to the site root.",
+    )
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    build_pdf()
+    args = parse_args()
+    build_pdf((ROOT / args.source).resolve(), (ROOT / args.output).resolve())
