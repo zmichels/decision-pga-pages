@@ -241,7 +241,7 @@ def main() -> None:
 
     telescoping_pdf = ROOT / "assets/telescoping-decision-pga.pdf"
     require(telescoping_pdf.read_bytes().startswith(b"%PDF"), "Telescoping PDF asset does not look like a PDF")
-    require(telescoping_pdf.stat().st_size > 40_000, "Telescoping PDF asset is unexpectedly small")
+    require(telescoping_pdf.stat().st_size > 100_000, "Telescoping PDF asset is unexpectedly small")
     telescoping = (ROOT / "telescoping.md").read_text(encoding="utf-8")
     normalized_telescoping = " ".join(telescoping.split())
     for phrase in TELESCOPING_REQUIRED_PHRASES:
