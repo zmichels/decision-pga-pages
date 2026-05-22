@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_FILES = [
     "index.md",
     "article.md",
+    "telescoping.md",
     "demo.md",
     "toolkit.md",
     "robots.txt",
@@ -20,6 +21,11 @@ REQUIRED_FILES = [
     "examples/document-triage/demo_results.json",
     "assets/document-triage-demo-overview.svg",
     "assets/decision-pga-decision-state-diagnostics.pdf",
+    "assets/telescoping-decision-pga.pdf",
+    "assets/telescoping-zoom.svg",
+    "assets/telescoping-zoom.png",
+    "assets/cross-document-bridge.svg",
+    "assets/cross-document-bridge.png",
     "assets/decision-pga-diagnostic-loop.svg",
     "_config.yml",
     "_layouts/default.html",
@@ -56,6 +62,25 @@ ARTICLE_REQUIRED_PHRASES = [
     "https://www.fda.gov/medical-devices/software-medical-device-samd/clinical-decision-support-software-frequently-asked-questions-faqs",
     "https://healthit.gov/regulations/hti-rules/hti-1-final-rule/",
     "https://www.who.int/publications/i/item/9789240029200",
+]
+
+
+TELESCOPING_REQUIRED_PHRASES = [
+    "Telescoping Decision-PGA: Seeing The Smaller Shape Inside The Larger One",
+    "Zachary D. Michels, PhD",
+    "A Diagnostic Should Be Able To Zoom",
+    "What Decision-PGA Borrows From PGA",
+    "The Cloud May Contain Smaller Clouds",
+    "Telescoping a broad uncertainty state",
+    "assets/telescoping-zoom.svg",
+    "Bridging uncertainty across two source documents",
+    "assets/cross-document-bridge.svg",
+    "The Bridge Case: When Two Uncertainties Belong Together",
+    "source-backed bridge",
+    "human review",
+    "Telescoping As A Workflow Pattern",
+    "What To Build Next",
+    "Decision-PGA offers one modest, inspectable way to help them do that",
 ]
 
 
@@ -96,6 +121,8 @@ def main() -> None:
             f"Article missing required phrase/link: {phrase}",
         )
     require("Document Extraction Triage Demo" in article, "Article should link to the demo page")
+    require("Telescoping Decision-PGA" in article, "Article should link to the telescoping companion article")
+    require("{{ '/telescoping/' | relative_url }}" in article, "Article should use the relative companion article link")
     require("https://github.com/zmichels/Decision-PGA" in article, "Article should link to the public code repo")
     removed_terms = ["Ma" + "yo", "Ma" + "yo Clinic"]
     for term in removed_terms:
@@ -106,11 +133,14 @@ def main() -> None:
 
     index = (ROOT / "index.md").read_text(encoding="utf-8")
     require("Read the article" in index, "Landing page missing article call to action")
+    require("Read the follow-up" in index, "Landing page missing follow-up call to action")
     require("Try the demo" in index, "Landing page missing demo call to action")
     require("Use the toolkit" in index, "Landing page missing toolkit call to action")
     require("View code" in index, "Landing page missing code call to action")
     require("https://github.com/zmichels/Decision-PGA" in index, "Landing page missing public code repo link")
     require("Download PDF" in index, "Landing page missing PDF call to action")
+    require("Telescoping Decision-PGA" in index, "Landing page should mention the companion article")
+    require("{{ '/telescoping/' | relative_url }}" in index, "Landing page should link to the companion article")
     require(
         "assets/decision-pga-decision-state-diagnostics.pdf" in index,
         "Landing page should link to the current PDF asset",
@@ -142,6 +172,7 @@ def main() -> None:
     require("white-space: nowrap" in styles, "Example links should stay on one line")
     require("https://github.com/zmichels/Decision-PGA" in layout, "Nav should link to the public code repo")
     require("Toolkit" in layout, "Nav should link to the toolkit page")
+    require("Telescoping" in layout, "Nav should link to the telescoping companion article")
     for removed_nav in ["publication-plan", "Release Notes", "Plan"]:
         require(removed_nav not in layout, f"Layout should not expose old staging navigation: {removed_nav}")
 
@@ -176,9 +207,11 @@ def main() -> None:
         "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">",
         "{{ \"/\" | absolute_url }}",
         "{{ \"/article/\" | absolute_url }}",
+        "{{ \"/telescoping/\" | absolute_url }}",
         "{{ \"/demo/\" | absolute_url }}",
         "{{ \"/toolkit/\" | absolute_url }}",
         "{{ \"/assets/decision-pga-decision-state-diagnostics.pdf\" | absolute_url }}",
+        "{{ \"/assets/telescoping-decision-pga.pdf\" | absolute_url }}",
     ]:
         require(phrase in sitemap, f"sitemap.xml missing required phrase: {phrase}")
 
@@ -190,6 +223,7 @@ def main() -> None:
         "Technical Summary",
         "Important Limits",
         "Source code: https://github.com/zmichels/Decision-PGA",
+        "Telescoping companion",
         "not a production safety layer",
         "no clinical-validation claim",
     ]:
@@ -204,6 +238,29 @@ def main() -> None:
     pdf = ROOT / "assets/decision-pga-decision-state-diagnostics.pdf"
     require(pdf.read_bytes().startswith(b"%PDF"), "PDF asset does not look like a PDF")
     require(pdf.stat().st_size > 100_000, "PDF asset is unexpectedly small")
+
+    telescoping_pdf = ROOT / "assets/telescoping-decision-pga.pdf"
+    require(telescoping_pdf.read_bytes().startswith(b"%PDF"), "Telescoping PDF asset does not look like a PDF")
+    require(telescoping_pdf.stat().st_size > 40_000, "Telescoping PDF asset is unexpectedly small")
+    telescoping = (ROOT / "telescoping.md").read_text(encoding="utf-8")
+    normalized_telescoping = " ".join(telescoping.split())
+    for phrase in TELESCOPING_REQUIRED_PHRASES:
+        require(
+            phrase in telescoping or phrase in normalized_telescoping,
+            f"Telescoping article missing required phrase/link: {phrase}",
+        )
+    require("schema_type: TechArticle" in telescoping, "Telescoping article should be marked as TechArticle")
+    require("permalink: /telescoping/" in telescoping, "Telescoping article should use the public permalink")
+    require("{{ '/article/' | relative_url }}" in telescoping, "Telescoping article should link back to the original article")
+    require("{{ '/assets/telescoping-decision-pga.pdf' | relative_url }}" in telescoping, "Telescoping article should link to its PDF")
+    require("SME" not in telescoping and "SMEs" not in telescoping, "Telescoping article should avoid unexplained SME acronym")
+    for figure in [
+        ROOT / "assets/telescoping-zoom.svg",
+        ROOT / "assets/cross-document-bridge.svg",
+    ]:
+        svg_text = figure.read_text(encoding="utf-8")
+        require("<svg" in svg_text, f"Figure does not look like SVG: {figure.name}")
+        require("SME" not in svg_text and "SMEs" not in svg_text, f"Figure should avoid unexplained SME acronym: {figure.name}")
 
     demo = (ROOT / "demo.md").read_text(encoding="utf-8")
     for phrase in [

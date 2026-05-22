@@ -6,7 +6,7 @@ permalink: /article/
 schema_type: Article
 author: Zachary D. Michels, PhD
 date_published: "2026-05-19"
-date_modified: "2026-05-19"
+date_modified: "2026-05-22"
 ---
 
 # Decision-PGA and the Need for Decision-State Diagnostics
@@ -146,6 +146,11 @@ workflow choose a better next step when a human would otherwise only see
 A small companion page makes this operational shape concrete with synthetic
 document-extraction triage cases:
 [Document Extraction Triage Demo]({{ '/demo/' | relative_url }}).
+
+The follow-up technical perspective,
+[Telescoping Decision-PGA]({{ '/telescoping/' | relative_url }}), expands this
+idea by showing how broad uncertainty clouds can be examined for smaller local
+substructures and cross-document evidence bridges.
 
 The public prototype code is available at
 [github.com/zmichels/Decision-PGA](https://github.com/zmichels/Decision-PGA).
