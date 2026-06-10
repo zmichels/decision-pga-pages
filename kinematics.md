@@ -153,7 +153,7 @@ This should not be framed as a money argument. The more immediate cost of
 uncertainty is attention.
 
 Unresolved uncertainty consumes review attention, delays routing, and lets the
-wrong next action compound. quickly characterizing the trajectory can matter
+wrong next action compound. Quickly characterizing the trajectory can matter
 because a diagnostic does not need to decide the answer to be useful. It can
 still say whether the trace is moving smoothly, drifting persistently, or
 jerking across a boundary.

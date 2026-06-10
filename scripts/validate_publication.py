@@ -97,7 +97,7 @@ KINEMATICS_REQUIRED_PHRASES = [
     "RAG/tool whiplash",
     "Jerk Is A Review Signal",
     "jerk is a review signal",
-    "quickly characterizing the trajectory",
+    "Quickly characterizing the trajectory",
     "review attention",
     "uncertainty has shape",
     "shape has substructure",
