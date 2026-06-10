@@ -49,13 +49,15 @@ with the local Decision-PGA prototype.
 python3 scripts/build_demo_outputs.py
 ```
 
-## Rebuild PDF
+## Rebuild PDFs
 
-The PDF is generated from `article.md` with a local Chrome/Chromium print
-renderer so page breaks and margins are handled by a browser layout engine.
+The PDFs are generated from site Markdown with a local Chrome/Chromium print
+renderer so page breaks, margins, and figures are handled by a browser layout
+engine.
 
 ```bash
 python3 scripts/build_pdf.py
+python3 scripts/build_pdf.py telescoping.md assets/telescoping-decision-pga.pdf
 ```
 
 ## License
