@@ -6,3 +6,4 @@ vendor/
 drafts/
 .publication-build/
 .superpowers/
+.worktrees/
