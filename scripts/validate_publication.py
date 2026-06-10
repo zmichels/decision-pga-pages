@@ -184,6 +184,9 @@ def main() -> None:
     require("Download PDF" in index, "Landing page missing PDF call to action")
     require("Telescoping Decision-PGA" in index, "Landing page should mention the companion article")
     require("{{ '/telescoping/' | relative_url }}" in index, "Landing page should link to the companion article")
+    require("Read kinematics" in index, "Landing page missing kinematic call to action")
+    require("Kinematic Decision-PGA" in index, "Landing page should mention the kinematic companion")
+    require("{{ '/kinematics/' | relative_url }}" in index, "Landing page should link to the kinematic companion")
     require(
         "assets/decision-pga-decision-state-diagnostics.pdf" in index,
         "Landing page should link to the current PDF asset",
@@ -216,6 +219,8 @@ def main() -> None:
     require("https://github.com/zmichels/Decision-PGA" in layout, "Nav should link to the public code repo")
     require("Toolkit" in layout, "Nav should link to the toolkit page")
     require("Telescoping" in layout, "Nav should link to the telescoping companion article")
+    require("Kinematics" in layout, "Nav should link to the kinematic companion article")
+    require("{{ '/kinematics/' | relative_url }}" in layout, "Nav should use the relative kinematic article link")
     for removed_nav in ["publication-plan", "Release Notes", "Plan"]:
         require(removed_nav not in layout, f"Layout should not expose old staging navigation: {removed_nav}")
 

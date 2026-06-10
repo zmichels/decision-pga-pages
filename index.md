@@ -10,12 +10,13 @@ description: Article series, demo, and open-source code for decision-state diagn
   <p class="lede">
     Decision-PGA is a prototype framework for describing the shape of
     uncertainty around AI decisions before a workflow acts. This site gathers
-    the article series, a synthetic demo, the agent toolkit, the public code
-    repository, and PDF copies.
+    the article series, the kinematic trajectory companion, a synthetic demo,
+    the agent toolkit, the public code repository, and PDF copies.
   </p>
   <div class="actions">
     <a class="button" href="{{ '/article/' | relative_url }}">Read the article</a>
     <a class="button secondary" href="{{ '/telescoping/' | relative_url }}">Read the follow-up</a>
+    <a class="button secondary" href="{{ '/kinematics/' | relative_url }}">Read kinematics</a>
     <a class="button secondary" href="{{ '/demo/' | relative_url }}">Try the demo</a>
     <a class="button secondary" href="{{ '/toolkit/' | relative_url }}">Use the toolkit</a>
     <a class="button secondary" href="https://github.com/zmichels/Decision-PGA">View code</a>
@@ -32,9 +33,9 @@ description: Article series, demo, and open-source code for decision-state diagn
 ## What This Site Is For
 
 This site is a compact public entry point for Decision-PGA: the framing article,
-the Telescoping Decision-PGA companion perspective, the synthetic
-document-triage demo, the agent toolkit, the open-source prototype repository,
-and PDF versions of the articles.
+the Telescoping Decision-PGA companion perspective, the Kinematic Decision-PGA
+trajectory companion, the synthetic document-triage demo, the agent toolkit,
+the open-source prototype repository, and PDF versions of the articles.
 
 <div class="grid">
   <section class="panel">
@@ -49,6 +50,14 @@ and PDF versions of the articles.
     <p>
       The follow-up perspective shows how broad uncertainty clouds can contain
       smaller local substructures and cross-document evidence bridges.
+    </p>
+  </section>
+  <section class="panel">
+    <h3><a href="{{ '/kinematics/' | relative_url }}">Kinematic Decision-PGA</a></h3>
+    <p>
+      The kinematic companion explains how observed decision states can move
+      across retrieval, tool use, and final output, including RAG/tool whiplash
+      and jerk as review signals.
     </p>
   </section>
   <section class="panel">
@@ -85,6 +94,7 @@ and PDF versions of the articles.
 ## Current Status
 
 - Article series and PDFs: available for public reading and critique.
+- Kinematic trajectory page: companion perspective on velocity, drift, and jerk.
 - Demo: synthetic, non-clinical, and designed to build intuition.
 - Toolkit: copy-paste agent examples and a local MCP quickstart.
 - Code: public initial research release at
