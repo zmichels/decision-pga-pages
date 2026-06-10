@@ -17,6 +17,7 @@ AI workflow should proceed when a scalar confidence score is too blunt.
 
 - Article: {{ "/article/" | absolute_url }}
 - Telescoping companion: {{ "/telescoping/" | absolute_url }}
+- Kinematic companion: {{ "/kinematics/" | absolute_url }}
 - Interactive demo: {{ "/demo/" | absolute_url }}
 - Agent toolkit: {{ "/toolkit/" | absolute_url }}
 - PDF article: {{ "/assets/decision-pga-decision-state-diagnostics.pdf" | absolute_url }}
@@ -28,6 +29,8 @@ AI workflow should proceed when a scalar confidence score is too blunt.
 - Start with the article for conceptual framing.
 - Use the telescoping companion for uncertainty substructure and
   cross-document bridge framing.
+- Use the kinematic companion for observed trajectory diagnostics, RAG/tool
+  whiplash, and jerk as a review signal.
 - Use the demo to understand the document-extraction triage example.
 - Use the toolkit for CLI, Python API, MCP server, and copy-paste JSON payloads.
 - Use the GitHub repository for implementation details, tests, examples, and
@@ -40,6 +43,10 @@ with a square-root/Fisher-Rao embedding, computes an intrinsic mean, log-maps
 the probability cloud into tangent space, and summarizes dispersion with a
 PGA-like eigensystem. The current prototype is model-neutral and local. It does
 not call model APIs or require credentials.
+
+The `kinematic_trajectory` source type extends the diagnostic from static
+probability clouds to observed movement across workflow steps, including
+velocity, step kinetic energy, and jerk summaries.
 
 ## Important Limits
 

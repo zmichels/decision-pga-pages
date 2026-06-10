@@ -4,15 +4,20 @@ This repository hosts the public GitHub Pages companion site for
 **Decision-PGA and the Need for Decision-State Diagnostics**.
 
 The site links the article, the Telescoping Decision-PGA companion perspective,
-synthetic document-triage demo, agent toolkit page, PDF copies, and the public
-Decision-PGA prototype repository:
+the Kinematic Decision-PGA trajectory companion, synthetic document-triage
+demo, agent toolkit page, PDF copies, and the public Decision-PGA prototype
+repository:
 <https://github.com/zmichels/Decision-PGA>.
+
+The kinematic trajectory companion is `kinematics.md`, which focuses on
+observed motion across decision-state steps.
 
 ## Contents
 
 - `index.md` - landing page for GitHub Pages
 - `article.md` - canonical article draft
 - `telescoping.md` - companion technical perspective on uncertainty substructure
+- `kinematics.md` - companion article on velocity, drift, RAG/tool whiplash, and jerk
 - `demo.md` - synthetic document extraction triage demo
 - `toolkit.md` - practical agent-builder quickstart and payload gallery
 - `examples/document-triage/demo_cases.json` - demo probability-cloud fixture

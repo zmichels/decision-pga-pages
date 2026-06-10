@@ -11,6 +11,7 @@ REQUIRED_FILES = [
     "index.md",
     "article.md",
     "telescoping.md",
+    "kinematics.md",
     "demo.md",
     "toolkit.md",
     "robots.txt",
@@ -84,6 +85,35 @@ TELESCOPING_REQUIRED_PHRASES = [
 ]
 
 
+KINEMATICS_REQUIRED_PHRASES = [
+    "Kinematic Decision-PGA: Reading Motion in Decision States",
+    "Zachary D. Michels, PhD",
+    "June 10, 2026",
+    "observed probability-geometry motion",
+    "not hidden model physics",
+    "does not prove causal internal forces",
+    "does not decide whether the underlying answer is correct",
+    "ambient_tangent_delta",
+    "RAG/tool whiplash",
+    "Jerk Is A Review Signal",
+    "jerk is a review signal",
+    "Quickly characterizing the trajectory",
+    "review attention",
+    "uncertainty has shape",
+    "shape has substructure",
+    "shape has motion",
+    "kinematic_trajectory",
+    "decision-pga diagnose --pretty examples/agent/kinematic_trajectory_rag_tool_whiplash.json",
+    "canonical_path_probabilities",
+    "step_kinetic_energy",
+    "step_jerk",
+    "systemic_kinetic_energy",
+    "systemic_jerk",
+    "velocity_dispersion",
+    "primary_drift_labels",
+]
+
+
 DEMO_REQUIRED_ACTIONS = [
     "accept_extraction",
     "ask_for_clarification",
@@ -123,6 +153,8 @@ def main() -> None:
     require("Document Extraction Triage Demo" in article, "Article should link to the demo page")
     require("Telescoping Decision-PGA" in article, "Article should link to the telescoping companion article")
     require("{{ '/telescoping/' | relative_url }}" in article, "Article should use the relative companion article link")
+    require("Kinematic Decision-PGA" in article, "Article should link to the kinematic companion article")
+    require("{{ '/kinematics/' | relative_url }}" in article, "Article should use the relative kinematic article link")
     require("https://github.com/zmichels/Decision-PGA" in article, "Article should link to the public code repo")
     removed_terms = ["Ma" + "yo", "Ma" + "yo Clinic"]
     for term in removed_terms:
@@ -130,6 +162,19 @@ def main() -> None:
     placeholder_terms = ["TO" + "DO", "T" + "BD"]
     for term in placeholder_terms:
         require(term not in article, "Active article contains placeholder text")
+
+    kinematics = (ROOT / "kinematics.md").read_text(encoding="utf-8")
+    normalized_kinematics = " ".join(kinematics.split())
+    for phrase in KINEMATICS_REQUIRED_PHRASES:
+        require(
+            phrase in kinematics or phrase in normalized_kinematics,
+            f"Kinematic article missing required phrase/link: {phrase}",
+        )
+    require("schema_type: TechArticle" in kinematics, "Kinematic article should be marked as TechArticle")
+    require("permalink: /kinematics/" in kinematics, "Kinematic article should use the public permalink")
+    require("{{ '/article/' | relative_url }}" in kinematics, "Kinematic article should link back to the original article")
+    require("{{ '/telescoping/' | relative_url }}" in kinematics, "Kinematic article should link to the telescoping companion")
+    require("https://github.com/zmichels/Decision-PGA" in kinematics, "Kinematic article should link to the public code repo")
 
     index = (ROOT / "index.md").read_text(encoding="utf-8")
     require("Read the article" in index, "Landing page missing article call to action")
@@ -141,6 +186,9 @@ def main() -> None:
     require("Download PDF" in index, "Landing page missing PDF call to action")
     require("Telescoping Decision-PGA" in index, "Landing page should mention the companion article")
     require("{{ '/telescoping/' | relative_url }}" in index, "Landing page should link to the companion article")
+    require("Read kinematics" in index, "Landing page missing kinematic call to action")
+    require("Kinematic Decision-PGA" in index, "Landing page should mention the kinematic companion")
+    require("{{ '/kinematics/' | relative_url }}" in index, "Landing page should link to the kinematic companion")
     require(
         "assets/decision-pga-decision-state-diagnostics.pdf" in index,
         "Landing page should link to the current PDF asset",
@@ -173,6 +221,8 @@ def main() -> None:
     require("https://github.com/zmichels/Decision-PGA" in layout, "Nav should link to the public code repo")
     require("Toolkit" in layout, "Nav should link to the toolkit page")
     require("Telescoping" in layout, "Nav should link to the telescoping companion article")
+    require("Kinematics" in layout, "Nav should link to the kinematic companion article")
+    require("{{ '/kinematics/' | relative_url }}" in layout, "Nav should use the relative kinematic article link")
     for removed_nav in ["publication-plan", "Release Notes", "Plan"]:
         require(removed_nav not in layout, f"Layout should not expose old staging navigation: {removed_nav}")
 
@@ -193,6 +243,16 @@ def main() -> None:
         "not a production safety layer",
     ]:
         require(phrase in toolkit, f"Toolkit page missing required phrase: {phrase}")
+    for phrase in [
+        "Kinematic Decision-PGA",
+        "{{ '/kinematics/' | relative_url }}",
+        "Kinematic trajectory whiplash",
+        "kinematic_trajectory",
+        "RAG/tool whiplash",
+        "step_jerk",
+        "kinematic_trajectory_rag_tool_whiplash.json",
+    ]:
+        require(phrase in toolkit, f"Toolkit page missing kinematic phrase: {phrase}")
 
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
     for phrase in [
@@ -208,6 +268,7 @@ def main() -> None:
         "{{ \"/\" | absolute_url }}",
         "{{ \"/article/\" | absolute_url }}",
         "{{ \"/telescoping/\" | absolute_url }}",
+        "{{ \"/kinematics/\" | absolute_url }}",
         "{{ \"/demo/\" | absolute_url }}",
         "{{ \"/toolkit/\" | absolute_url }}",
         "{{ \"/assets/decision-pga-decision-state-diagnostics.pdf\" | absolute_url }}",
@@ -224,10 +285,21 @@ def main() -> None:
         "Important Limits",
         "Source code: https://github.com/zmichels/Decision-PGA",
         "Telescoping companion",
+        "Kinematic companion",
+        "{{ \"/kinematics/\" | absolute_url }}",
+        "kinematic_trajectory",
         "not a production safety layer",
         "no clinical-validation claim",
     ]:
         require(phrase in llms, f"llms.txt missing required phrase: {phrase}")
+
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    for phrase in [
+        "Kinematic Decision-PGA",
+        "kinematic trajectory companion",
+        "kinematics.md",
+    ]:
+        require(phrase in readme, f"README missing kinematic phrase: {phrase}")
 
     google_verification = (ROOT / "google4a9ab19a7fbfc2f9.html").read_text(encoding="utf-8")
     require(
@@ -252,6 +324,8 @@ def main() -> None:
     require("schema_type: TechArticle" in telescoping, "Telescoping article should be marked as TechArticle")
     require("permalink: /telescoping/" in telescoping, "Telescoping article should use the public permalink")
     require("{{ '/article/' | relative_url }}" in telescoping, "Telescoping article should link back to the original article")
+    require("{{ '/kinematics/' | relative_url }}" in telescoping, "Telescoping article should link to the kinematic companion")
+    require("shape has motion" in telescoping, "Telescoping article should point to the motion companion")
     require("{{ '/assets/telescoping-decision-pga.pdf' | relative_url }}" in telescoping, "Telescoping article should link to its PDF")
     require("SME" not in telescoping and "SMEs" not in telescoping, "Telescoping article should avoid unexplained SME acronym")
     for figure in [
