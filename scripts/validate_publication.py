@@ -268,6 +268,7 @@ def main() -> None:
         "{{ \"/\" | absolute_url }}",
         "{{ \"/article/\" | absolute_url }}",
         "{{ \"/telescoping/\" | absolute_url }}",
+        "{{ \"/kinematics/\" | absolute_url }}",
         "{{ \"/demo/\" | absolute_url }}",
         "{{ \"/toolkit/\" | absolute_url }}",
         "{{ \"/assets/decision-pga-decision-state-diagnostics.pdf\" | absolute_url }}",
@@ -284,10 +285,21 @@ def main() -> None:
         "Important Limits",
         "Source code: https://github.com/zmichels/Decision-PGA",
         "Telescoping companion",
+        "Kinematic companion",
+        "{{ \"/kinematics/\" | absolute_url }}",
+        "kinematic_trajectory",
         "not a production safety layer",
         "no clinical-validation claim",
     ]:
         require(phrase in llms, f"llms.txt missing required phrase: {phrase}")
+
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    for phrase in [
+        "Kinematic Decision-PGA",
+        "kinematic trajectory companion",
+        "kinematics.md",
+    ]:
+        require(phrase in readme, f"README missing kinematic phrase: {phrase}")
 
     google_verification = (ROOT / "google4a9ab19a7fbfc2f9.html").read_text(encoding="utf-8")
     require(
