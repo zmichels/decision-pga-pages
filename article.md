@@ -152,6 +152,11 @@ The follow-up technical perspective,
 idea by showing how broad uncertainty clouds can be examined for smaller local
 substructures and cross-document evidence bridges.
 
+A second companion,
+[Kinematic Decision-PGA]({{ '/kinematics/' | relative_url }}), follows the
+same line of thought across workflow steps: uncertainty has shape, shape has
+substructure, and shape has motion.
+
 The public prototype code is available at
 [github.com/zmichels/Decision-PGA](https://github.com/zmichels/Decision-PGA).
 

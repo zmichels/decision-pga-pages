@@ -19,7 +19,10 @@ date_modified: "2026-05-22"
 This companion perspective extends
 [Decision-PGA and the Need for Decision-State Diagnostics]({{ '/article/' | relative_url }})
 by focusing on how uncertainty clouds can contain smaller local structures and
-cross-document bridges. A PDF copy is available at
+cross-document bridges. The next companion,
+[Kinematic Decision-PGA]({{ '/kinematics/' | relative_url }}), follows the
+same diagnostic line into workflow motion: uncertainty has shape, shape has
+substructure, and shape has motion. A PDF copy is available at
 [assets/telescoping-decision-pga.pdf]({{ '/assets/telescoping-decision-pga.pdf' | relative_url }}).
 
 ## A Diagnostic Should Be Able To Zoom

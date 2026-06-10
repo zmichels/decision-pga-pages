@@ -24,6 +24,11 @@ of candidate actions, then returns a compact decision-state readout. It is
 local, deterministic, and model-neutral. It is not a production safety layer or
 a claim that an answer is correct.
 
+For trajectory-specific reading, see
+[Kinematic Decision-PGA]({{ '/kinematics/' | relative_url }}), which explains
+how velocity, drift, and jerk can characterize observed motion across RAG,
+tool-use, and final-output steps.
+
 <div class="actions">
   <a class="button" href="https://github.com/zmichels/Decision-PGA/blob/main/docs/agent-toolkit.md">Open full toolkit docs</a>
   <a class="button secondary" href="https://github.com/zmichels/Decision-PGA">View code</a>
@@ -112,6 +117,20 @@ different next actions.
       Expected state: <code>regime_shift</code><br>
       Example:
       <a class="example-link" href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/multi_step_agent_drift.json">multi_step_agent_drift.json</a>
+    </p>
+  </section>
+  <section class="panel">
+    <h3>Kinematic trajectory whiplash</h3>
+    <p>
+      A RAG/tool whiplash trace can consolidate toward drafting after retrieval,
+      then sharply deflect after a tool result. The useful signal is not only
+      the final action, but the transition that produced the jerk.
+    </p>
+    <p>
+      Source type: <code>kinematic_trajectory</code><br>
+      Inspect: <code>step_jerk</code><br>
+      Example:
+      <a class="example-link" href="https://github.com/zmichels/Decision-PGA/blob/main/examples/agent/kinematic_trajectory_rag_tool_whiplash.json">kinematic_trajectory_rag_tool_whiplash.json</a>
     </p>
   </section>
   <section class="panel">

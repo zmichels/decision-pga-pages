@@ -153,6 +153,8 @@ def main() -> None:
     require("Document Extraction Triage Demo" in article, "Article should link to the demo page")
     require("Telescoping Decision-PGA" in article, "Article should link to the telescoping companion article")
     require("{{ '/telescoping/' | relative_url }}" in article, "Article should use the relative companion article link")
+    require("Kinematic Decision-PGA" in article, "Article should link to the kinematic companion article")
+    require("{{ '/kinematics/' | relative_url }}" in article, "Article should use the relative kinematic article link")
     require("https://github.com/zmichels/Decision-PGA" in article, "Article should link to the public code repo")
     removed_terms = ["Ma" + "yo", "Ma" + "yo Clinic"]
     for term in removed_terms:
@@ -241,6 +243,16 @@ def main() -> None:
         "not a production safety layer",
     ]:
         require(phrase in toolkit, f"Toolkit page missing required phrase: {phrase}")
+    for phrase in [
+        "Kinematic Decision-PGA",
+        "{{ '/kinematics/' | relative_url }}",
+        "Kinematic trajectory whiplash",
+        "kinematic_trajectory",
+        "RAG/tool whiplash",
+        "step_jerk",
+        "kinematic_trajectory_rag_tool_whiplash.json",
+    ]:
+        require(phrase in toolkit, f"Toolkit page missing kinematic phrase: {phrase}")
 
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
     for phrase in [
@@ -300,6 +312,8 @@ def main() -> None:
     require("schema_type: TechArticle" in telescoping, "Telescoping article should be marked as TechArticle")
     require("permalink: /telescoping/" in telescoping, "Telescoping article should use the public permalink")
     require("{{ '/article/' | relative_url }}" in telescoping, "Telescoping article should link back to the original article")
+    require("{{ '/kinematics/' | relative_url }}" in telescoping, "Telescoping article should link to the kinematic companion")
+    require("shape has motion" in telescoping, "Telescoping article should point to the motion companion")
     require("{{ '/assets/telescoping-decision-pga.pdf' | relative_url }}" in telescoping, "Telescoping article should link to its PDF")
     require("SME" not in telescoping and "SMEs" not in telescoping, "Telescoping article should avoid unexplained SME acronym")
     for figure in [
